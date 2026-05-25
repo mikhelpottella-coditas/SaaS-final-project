@@ -2,9 +2,6 @@ package com.project.saas.security;
 
 
 
-import com.practise.restaurant_management.entity.RefreshToken;
-import com.practise.restaurant_management.entity.User;
-import com.practise.restaurant_management.repo.RefreshTokenRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

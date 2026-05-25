@@ -3,6 +3,8 @@ package com.project.saas.config;
 
 
 
+import com.project.saas.security.JwtFilter;
+import com.project.saas.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,13 +51,6 @@ public class SecurityConfig {
         http.csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->
                         auth.requestMatchers("/auth/**").permitAll()
-                                .requestMatchers(PUBLIC_URLS).permitAll()
-                                .requestMatchers("/admin/**").hasAnyRole(Role.SUPER_ADMIN.toString())
-                                .requestMatchers("/owner/**").hasAnyRole(Role.OWNER.toString())
-                                .requestMatchers("/manager/**").hasAnyRole(Role.MANAGER.toString(),Role.OWNER.toString())
-                                .requestMatchers("/kitchen/**").hasAnyRole(Role.HEAD_CHEF.toString(),Role.MANAGER.toString(),Role.OWNER.toString())
-                                .requestMatchers("/staff/**").hasAnyRole(Role.WAITER.toString(),Role.MANAGER.toString(),Role.OWNER.toString())
-                                .requestMatchers("/store/**").hasAnyRole(Role.STORE_KEEPER.toString(),Role.MANAGER.toString(),Role.OWNER.toString())
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
