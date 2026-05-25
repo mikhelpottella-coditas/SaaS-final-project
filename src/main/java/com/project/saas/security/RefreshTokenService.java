@@ -2,6 +2,10 @@ package com.project.saas.security;
 
 
 
+import com.project.saas.entity.master.RefreshToken;
+import com.project.saas.entity.master.User;
+import com.project.saas.repo.RefreshTokenRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,10 +14,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class RefreshTokenService {
 
-    @Autowired
-    private RefreshTokenRepo repo;
+
+    private final RefreshTokenRepository repo;
 
     public String createRefreshToken(User user) {
         RefreshToken token = new RefreshToken();
