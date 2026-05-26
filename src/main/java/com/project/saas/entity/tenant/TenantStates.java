@@ -18,14 +18,6 @@ public class TenantStates {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "m1_manager_id")
-    private TenantUser m1Manager;
-
-    @ManyToOne
-    @JoinColumn(name = "m2_manager_id")
-    private TenantUser m2Manager;
-
     @Column(name = "name",nullable = false)
     private String name;
 
@@ -34,6 +26,9 @@ public class TenantStates {
 
     @OneToMany(mappedBy = "state")
     private List<TenantDistrict > tenantDistrictList;
+
+    @OneToMany(mappedBy = "state")
+    private List<TenantStateManager>  tenantStateManagerList;
 
 
 }

@@ -3,6 +3,8 @@ package com.project.saas.entity.tenant;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -22,13 +24,14 @@ public class TenantCity {
     @Column(name = "code",nullable = false)
     private String code;
 
-    @ManyToOne
-    @JoinColumn(name = "personnel_id")
-    private TenantUser  personnel;
-
+    @OneToMany(mappedBy = "city")
+    private List<TenantCustomer> tenantCustomerList;
 
     @ManyToOne
     @JoinColumn(name = "district_id")
     private TenantDistrict district;
+
+    @OneToMany(mappedBy = "tenantCity")
+    private List<CityPersonnel> cityPersonnelList;
 
 }

@@ -9,5 +9,10 @@ public enum Role {
     ELECTRICIAN,
     BILLER,
     CUSTOMER,
-    CMR
+    CMR,
+    M1_MANAGER,
+    M2_MANAGER,
+    PERSONNEL,
+    OPERATIONAL_HEAD,
+    TENANT_ADMIN
 }

@@ -35,7 +35,7 @@ public class TenantUser {
     private String phone;
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
-    private List<UserRoles> userRoles;
+    private List<TenantUserRoles> tenantUserRolesList;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

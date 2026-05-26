@@ -29,6 +29,7 @@ public class Tenant {
     private String schemaName;
 
     @Column(name = "tenant_schema",unique = true,nullable = false)
+    @Enumerated(EnumType.STRING)
     private TenantStatus tenantStatus;
 
     @Column(name = "created_at",nullable = false)

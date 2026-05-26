@@ -4,6 +4,8 @@ import com.project.saas.entity.master.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -20,7 +22,13 @@ public class TenantCustomer {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "")
+    @Column(name = "address")
+    private String address;
+
+    @ManyToOne
+    @JoinColumn(name = "city_id")
+    private TenantCity  city;
+
 
 
 }
