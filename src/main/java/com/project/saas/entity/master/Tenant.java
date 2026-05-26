@@ -52,6 +52,12 @@ public class Tenant {
     @OneToMany(mappedBy = "tenant")
     private List<Meter> meterList;
 
+    @OneToMany(mappedBy = "tenant")
+    private List<TenantSubscriptionBill> tenantSubscriptionBillList;
 
+    @OneToMany(mappedBy = "tenant")
+    private List<TenantAvailableStates> tenantAvailableStatesList;
 
+    @OneToMany(mappedBy = "tenant")
+    private List<CustomerTenant> customerTenantList;
 }

@@ -1,13 +1,9 @@
-package com.project.saas.entity.master;
+package com.project.saas.entity.tenant;
 
+import com.project.saas.entity.master.UserRoles;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -17,9 +13,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users")
-public class User implements UserDetails{
+public class TenantUser {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
@@ -32,8 +30,6 @@ public class User implements UserDetails{
     @Column(name = "email",  unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password",  nullable = false)
-    private String password;
 
     @Column(name = "phone", nullable = false,unique = true)
     private String phone;
@@ -48,13 +44,5 @@ public class User implements UserDetails{
     private LocalDateTime updatedAt;
 
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-      return userRoles.stream().map(u-> new SimpleGrantedAuthority("ROLE_"+u.getRole().name())).toList();
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
-    }
 }
+
