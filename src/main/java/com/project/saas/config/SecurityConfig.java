@@ -3,6 +3,7 @@ package com.project.saas.config;
 
 
 
+import com.project.saas.enums.Role;
 import com.project.saas.security.JwtFilter;
 import com.project.saas.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -27,15 +28,6 @@ public class SecurityConfig {
     private final JwtFilter jwtFilter;
 
 
-    protected static final String[] PUBLIC_URLS = {
-            "/api/v1/auth/**",
-            "/v3/api-docs/**",
-            "/swagger-resources/**",
-            "/swagger-ui/**",
-            "/swagger-ui.html",
-            "/webjars/**"
-    };
-
     @Bean
     public AuthenticationManager authenticationManager(UserService userService, PasswordEncoder passwordEncoder){
 
@@ -51,6 +43,7 @@ public class SecurityConfig {
         http.csrf(csrf->csrf.disable())
                 .authorizeHttpRequests(auth->
                         auth.requestMatchers("/auth/**").permitAll()
+                                .requestMatchers("/tenant/**").hasAnyRole(Role.ADMIN.name())
                         .anyRequest().permitAll())
                 .httpBasic(Customizer.withDefaults())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

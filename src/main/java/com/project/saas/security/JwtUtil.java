@@ -1,6 +1,7 @@
 package com.project.saas.security;
 
 
+import com.project.saas.entity.master.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -26,23 +27,22 @@ public class JwtUtil {
 
 
 
-
-
-
-    public String generateToken(String username, String email) {
+    public String generateToken(User user) {
 
         Map<String, String> claims = new HashMap<>();
-        claims.put("email", email);
-        claims.put("username", username);
+        claims.put("email", user.getEmail());
+        claims.put("username", user.getEmail());
+
+        String tenant = user.getTenant()==null?"public":user.getTenant().getName();
 
 
         return Jwts.builder()
                 .claims()
-                .subject(username)
+                .subject(user.getEmail())
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + (1000 * 60 * 30)))
                 .and()
-                .claim("email", email)
+                .claim("tenant", tenant)
                 .signWith(Keys.hmacShaKeyFor(secretString.getBytes()), Jwts.SIG.HS256)
                 .compact();
     }

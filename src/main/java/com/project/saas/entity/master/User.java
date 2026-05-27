@@ -7,6 +7,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class User implements UserDetails{
     @Column(name = "phone", nullable = false,unique = true)
     private String phone;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)
     private List<UserRoles> userRoles;
 
     @Column(name = "created_at")
@@ -46,6 +47,10 @@ public class User implements UserDetails{
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tenant_id",referencedColumnName = "id")
+    private Tenant tenant;
 
 
     @Override
@@ -57,4 +62,12 @@ public class User implements UserDetails{
     public String getUsername() {
         return email;
     }
+
+
+    public void addUserRole(UserRoles userRole){
+        if(userRoles == null) userRoles = new ArrayList<>();
+        userRoles.add(userRole);
+        userRole.setUser(this);
+    }
+
 }

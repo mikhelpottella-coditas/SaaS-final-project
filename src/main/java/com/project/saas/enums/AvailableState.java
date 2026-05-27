@@ -29,6 +29,6 @@ public enum AvailableState {
     TRIPURA,
     UTTAR_PRADESH,
     UTTARAKHAND,
-    WEST_BENGAL
+    WEST_BENGAL,
 
 }
