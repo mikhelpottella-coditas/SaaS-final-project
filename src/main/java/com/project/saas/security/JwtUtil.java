@@ -1,10 +1,10 @@
 package com.project.saas.security;
 
 
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -14,50 +14,59 @@ import java.util.Map;
 
 @Component
 public class JwtUtil {
+    private String secretString;
 
-    private final byte[] secret = "asdfghjklqwertyuiop123456789asdfghjklzxcvbnm".getBytes();
+    public JwtUtil(@Value("${secret}")
+                     String secretString) {
+
+        this.secretString = secretString;
+
+    }
 
 
-    public String generateToken(String username,String email){
 
-        Map<String,String> claims = new HashMap<>();
-        claims.put("email",email);
-        claims.put("username",username);
+
+
+
+
+    public String generateToken(String username, String email) {
+
+        Map<String, String> claims = new HashMap<>();
+        claims.put("email", email);
+        claims.put("username", username);
 
 
         return Jwts.builder()
                 .claims()
                 .subject(username)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis()+(1000*60*30)))
+                .expiration(new Date(System.currentTimeMillis() + (1000 * 60 * 30)))
                 .and()
-                .claim("email",email)
-                .signWith(Keys.hmacShaKeyFor(secret),Jwts.SIG.HS256)
+                .claim("email", email)
+                .signWith(Keys.hmacShaKeyFor(secretString.getBytes()), Jwts.SIG.HS256)
                 .compact();
     }
 
 
-
-    public Claims extractClaims(String token){
+    public Claims extractClaims(String token) {
         return Jwts.parser()
-                .verifyWith(Keys.hmacShaKeyFor(secret))
+                .verifyWith(Keys.hmacShaKeyFor(secretString.getBytes()))
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
     }
 
-    public String returnSubject(String token){
-        System.out.println(extractClaims(token).getSubject());
+    public String returnSubject(String token) {
         return extractClaims(token).getSubject();
     }
 
 
-    public Boolean validateToken(UserDetails userDetails, String token){
-        String username=  extractClaims(token).getSubject();
-        return (username.equals(userDetails.getUsername())&& !isExpired(token));
+    public boolean validateToken(UserDetails userDetails, String token) {
+        String username = extractClaims(token).getSubject();
+        return (username.equals(userDetails.getUsername()) && !isExpired(token));
     }
 
-    public boolean isExpired(String token){
+    public boolean isExpired(String token) {
         return extractClaims(token).getExpiration().before(new Date());
     }
 
