@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -14,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "tenants")
+@Table(name = "tenants",schema = "public")
 public class Tenant {
 
     @Id
@@ -38,17 +37,11 @@ public class Tenant {
     private LocalDateTime updatedAt;
 
 
-    @OneToOne
-    @JoinColumn(name = "operational_head_id",nullable = false)
-    private User operationalHead;
-
-    @OneToOne
-    @JoinColumn(name = "point_of_contact_id",nullable = false)
-    private User pointOfContact;
-
     @Column(name = "subscription_amount",nullable = false)
     private Double subscriptionAmount;
 
+    @OneToOne(mappedBy = "tenant",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private OperatingTenant operatingTenant;
 
     @OneToMany(mappedBy = "tenant")
     private List<Meter> meterList;

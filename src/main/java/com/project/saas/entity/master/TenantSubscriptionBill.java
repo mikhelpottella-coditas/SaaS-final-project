@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tenant_subscription_bills")
+@Table(name = "tenant_subscription_bills",schema = "public")
 public class TenantSubscriptionBill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

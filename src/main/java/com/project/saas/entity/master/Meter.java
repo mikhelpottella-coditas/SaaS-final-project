@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "meters")
+@Table(name = "meters",schema = "public")
 public class Meter {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

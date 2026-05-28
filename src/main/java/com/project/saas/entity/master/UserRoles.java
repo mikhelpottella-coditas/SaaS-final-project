@@ -10,7 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_roles")
+@Table(name = "user_roles",schema = "public")
 public class UserRoles {
 
     @Id

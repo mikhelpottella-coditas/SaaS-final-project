@@ -3,7 +3,10 @@ package com.project.saas.security;
 
 
 
+import com.project.saas.config.tenantConfig.SchemaMultiTenantConnectionProvider;
+import com.project.saas.config.tenantConfig.TenantContext;
 import com.project.saas.service.UserService;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,6 +44,9 @@ public class JwtFilter extends OncePerRequestFilter {
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails user = userService.loadUserByUsername(username);
             if (Boolean.TRUE.equals(jwtUtil.validateToken(user, token))) {
+
+                Claims claims = jwtUtil.extractClaims(token);
+
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                         new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
@@ -49,6 +55,9 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request,response);
+
+
+        TenantContext.clear();
     }
 
 }

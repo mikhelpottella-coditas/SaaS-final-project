@@ -1,8 +1,8 @@
 package com.project.saas.config;
 
 
-
-
+import com.project.saas.config.tenantConfig.TenantFilter;
+import com.project.saas.entity.master.Tenant;
 import com.project.saas.enums.Role;
 import com.project.saas.security.JwtFilter;
 import com.project.saas.service.UserService;
@@ -26,10 +26,11 @@ public class SecurityConfig {
 
     private final UserService userService;
     private final JwtFilter jwtFilter;
+    private final TenantFilter tenantFilter;
 
 
     @Bean
-    public AuthenticationManager authenticationManager(UserService userService, PasswordEncoder passwordEncoder){
+    public AuthenticationManager authenticationManager(UserService userService, PasswordEncoder passwordEncoder) {
 
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
@@ -39,14 +40,15 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http){
-        http.csrf(csrf->csrf.disable())
-                .authorizeHttpRequests(auth->
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+        http.csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/auth/**").permitAll()
-                                .requestMatchers("/tenant/**").hasAnyRole(Role.ADMIN.name())
-                        .anyRequest().permitAll())
+                                .requestMatchers("/operational-head/**").hasAnyRole(Role.OPERATIONAL_HEAD.name())
+                                .anyRequest().permitAll())
                 .httpBasic(Customizer.withDefaults())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(tenantFilter, JwtFilter.class)
                 .userDetailsService(userService);
 
         return http.build();

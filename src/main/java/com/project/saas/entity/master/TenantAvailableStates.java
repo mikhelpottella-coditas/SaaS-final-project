@@ -10,6 +10,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(schema = "public")
 public class TenantAvailableStates {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

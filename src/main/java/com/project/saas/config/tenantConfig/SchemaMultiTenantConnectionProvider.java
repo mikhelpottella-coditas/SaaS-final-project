@@ -1,11 +1,17 @@
 package com.project.saas.config.tenantConfig;
 
 
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.sql.DataSource;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -59,6 +65,17 @@ public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectio
     @Override
     public <T> T unwrap(Class<T> unwrapType) {
         return null;
+    }
+
+    @Component
+    public static class TenantFilter extends OncePerRequestFilter {
+        @Override
+        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+            String tenant = request.getHeader("tenant");
+            TenantContext.setTenant(tenant);
+            filterChain.doFilter(request,response);
+        }
     }
 }
 

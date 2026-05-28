@@ -15,9 +15,7 @@ public class TenantController {
 
     private final TenantService tenantService;
 
-    @PostMapping("/{tenantName}")
-    public ResponseEntity<String> addTenant(@PathVariable String tenantName) {
-        return ResponseEntity.ok(tenantService.addTenant(tenantName));
-    }
+
+
 
 }

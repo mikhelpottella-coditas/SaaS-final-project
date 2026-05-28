@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "areas")
+@Table(name = "areas",schema = "public")
 public class Area {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
