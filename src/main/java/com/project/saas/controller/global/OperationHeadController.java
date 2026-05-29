@@ -37,9 +37,6 @@ public class OperationHeadController {
     public ResponseEntity<String> tenantUpdate( @RequestBody TenantRequestDto tenantRequestDto,@PathVariable Long id){
         return ResponseEntity.ok(tenantService.update(tenantRequestDto,id));
     }
-
-
-
-
+    
 
 }
