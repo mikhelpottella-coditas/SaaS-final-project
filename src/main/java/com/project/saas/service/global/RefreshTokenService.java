@@ -1,5 +1,6 @@
-package com.project.saas.service;
+package com.project.saas.service.global;
 
+import com.project.saas.config.tenantConfig.TenantContext;
 import com.project.saas.entity.master.RefreshToken;
 import com.project.saas.entity.master.User;
 import com.project.saas.repo.RefreshTokenRepository;
@@ -9,8 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -27,7 +27,7 @@ public class RefreshTokenService {
         RefreshToken token = new RefreshToken();
         token.setToken(UUID.randomUUID().toString());
         token.setUser(user);
-        token.setExpiryDate(Instant.now().plus(7, ChronoUnit.DAYS));
+        token.setExpiryDate(LocalDateTime.now().plusDays(1));
 
         refreshTokenRepository.save(token);
         return token.getToken();
@@ -38,10 +38,11 @@ public class RefreshTokenService {
         RefreshToken token = refreshTokenRepository.findById(refreshToken)
                 .orElseThrow();
 
-        if (token.getExpiryDate().isBefore(Instant.now())) {
+        String tenant = TenantContext.getTenant()==null?"public":TenantContext.getTenant();
+        if (token.getExpiryDate().isBefore(LocalDateTime.now())) {
             throw new RuntimeException("Expired");
         }
-        String newAccess = jwtUtil.generateToken(token.getUser()    );
+        String newAccess = jwtUtil.generateToken(token.getUser().getEmail(),tenant );
         log.info("refreshing the token with the id : {}",newAccess);
         return "access token: "+newAccess;
     }

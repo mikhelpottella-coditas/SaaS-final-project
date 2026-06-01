@@ -10,8 +10,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "user_roles")
-public class TenantUserRoles {
+@Table(name = "tenant_user_roles")
+public class  TenantUserRoles {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,12 +1,10 @@
-package com.project.saas.entity.master;
+package com.project.saas.entity.tenant;
 
-import com.project.saas.entity.tenant.TenantUser;
+import com.project.saas.entity.master.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -14,14 +12,17 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(schema = "public")
-public class RefreshToken {
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class TenantRefreshToken {
 
     @Id
     private String token;
 
     @ManyToOne
-    private User user;
+    private TenantUser tenantUser;
 
     private LocalDateTime expiryDate;
+
 }

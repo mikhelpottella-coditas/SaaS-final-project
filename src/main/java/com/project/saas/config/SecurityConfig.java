@@ -2,10 +2,9 @@ package com.project.saas.config;
 
 
 import com.project.saas.config.tenantConfig.TenantFilter;
-import com.project.saas.entity.master.Tenant;
 import com.project.saas.enums.Role;
 import com.project.saas.security.JwtFilter;
-import com.project.saas.service.UserService;
+import com.project.saas.service.CustomUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,19 +23,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserService userService;
+    private final CustomUserService userService;
     private final JwtFilter jwtFilter;
     private final TenantFilter tenantFilter;
 
 
     @Bean
-    public AuthenticationManager authenticationManager(UserService userService, PasswordEncoder passwordEncoder) {
-
+    public AuthenticationManager authenticationManager(CustomUserService userService, PasswordEncoder passwordEncoder) {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider(userService);
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder);
-
         return new ProviderManager(daoAuthenticationProvider);
-
     }
 
     @Bean
@@ -45,6 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/operational-head/**").hasAnyRole(Role.OPERATIONAL_HEAD.name())
+                                .requestMatchers("/tenant/m1-manager/**").hasAnyRole(Role.M1_MANAGER.name())
                                 .anyRequest().permitAll())
                 .httpBasic(Customizer.withDefaults())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

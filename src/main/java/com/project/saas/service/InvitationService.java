@@ -35,6 +35,7 @@ public class InvitationService {
 
         Invitation invite = Invitation.builder()
                 .issuedAt(LocalDateTime.now())
+                .issuedTo(issuedTo)
                 .invitationToken(UUID.randomUUID().toString())
                 .role(role)
                 .issuedBy(user)
@@ -48,33 +49,52 @@ public class InvitationService {
 
         mailMessage.setFrom("mikhel.pottella@coditas.com");
         mailMessage.setTo(issuedTo);
-        mailMessage.setSubject("Invitation to on the application as a owner");
+        mailMessage.setSubject("Invitation to on the application as a "+role.name());
         mailMessage.setText(message + "\n**this link will expire in next 48hrs \n invitation link : https://santa-disobey-washtub.ngrok-free.dev" + path + invite.getInvitationToken());
 
         javaMailSender.send(mailMessage);
         log.info("Invitation to on the application as a owner");
         return "invitation sent successfully";
-
-
     }
 
-    public String inviteOperationHead(@Valid InvitationRequestDto request) {
-        log.info("invite owner successfully");
-        return inviteUser(request.issuedTo(), Role.OPERATIONAL_HEAD,request.message(),"/auth/register/operational-head");
-    }
 
-    public Boolean validate(String email, UUID token) {
-        Invitation invite = inviteRepo.findByinvitationToken(token);
+    public Boolean validate(String email, String token) {
+        Invitation invite = inviteRepo.findByInvitationToken(token);
         log.info("validating the user token ");
         return email.equals(invite.getIssuedTo());
     }
 
-
-//
-//    public String invite(@Valid InvitationRequestDto request) {
-//        inviteUser(request, "/auth/register/manager/");
-//        return "invitation sent successful";
-//    }
+    public String inviteOperationHead(@Valid InvitationRequestDto request) {
+        log.info("invite operational head successfully");
+        return inviteUser(request.issuedTo(), Role.OPERATIONAL_HEAD,request.message(),"/auth/register/operational-head/");
+    }
 
 
+    public String inviteManagement(InvitationRequestDto invitationRequestDto) {
+        log.info("invite management successfully");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.MANAGEMENT_STAFF, invitationRequestDto.message(), "/auth/register/management-staff/");
+    }
+
+
+    public String inviteSalesPoint(@Valid InvitationRequestDto invitationRequestDto) {
+        log.info("invite sales-point successfully");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.SALES_POINT, invitationRequestDto.message(), "/auth/register/sales-point/");
+    }
+
+
+    public String inviteStateManager(@Valid InvitationRequestDto invitationRequestDto) {
+        log.info("invite to state management staff is successful");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.STATE_MANAGEMENT_STAFF, invitationRequestDto.message(), "/auth/register/state-management/");
+    }
+
+    public String inviteDistrictManager(@Valid InvitationRequestDto invitationRequestDto) {
+        log.info("invite to state management staff is successful");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.DISTRICT_MANAGEMENT_STAFF, invitationRequestDto.message(), "/auth/register/state-management/");
+    }
+
+    public String inviteOperationHeadAsAdmin(InvitationRequestDto invitationRequestDto) {
+        log.info("invite to admin of a provider is successful");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.TENANT_ADMIN, invitationRequestDto.message(), "/tenant/auth/register/admin/");
+
+    }
 }

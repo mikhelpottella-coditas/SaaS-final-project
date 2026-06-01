@@ -1,9 +1,16 @@
 package com.project.saas.entity.tenant;
 
+import com.project.saas.entity.master.EndUser;
 import com.project.saas.entity.master.UserRoles;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -12,8 +19,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
-public class TenantUser {
+@Table(name = "tenant_users")
+public class TenantUser implements UserDetails, EndUser {
 
 
     @Id
@@ -30,11 +37,13 @@ public class TenantUser {
     @Column(name = "email",  unique = true, nullable = false)
     private String email;
 
+    @Column(name = "password",nullable = false)
+    private String password;
 
     @Column(name = "phone", nullable = false,unique = true)
     private String phone;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)
     private List<TenantUserRoles> tenantUserRolesList;
 
     @Column(name = "created_at")
@@ -44,5 +53,22 @@ public class TenantUser {
     private LocalDateTime updatedAt;
 
 
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return tenantUserRolesList.stream().map(u-> new SimpleGrantedAuthority("ROLE_"+u.getRole().name())).toList();
+
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    public void addTenantUser(TenantUserRoles userRoles){
+        if(tenantUserRolesList == null) tenantUserRolesList = new ArrayList<>();
+        tenantUserRolesList.add(userRoles);
+        userRoles.setUser(this);
+    }
 }
 

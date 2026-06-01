@@ -1,10 +1,8 @@
-package com.project.saas.controller;
+package com.project.saas.controller.global;
 
 
 import com.project.saas.dto.request_dto.TenantRequestDto;
-import com.project.saas.dto.request_dto.UserRequestDto;
 import com.project.saas.service.TenantService;
-import com.project.saas.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/operational-head")
+@RequestMapping("/global/operational-head")
 public class OperationHeadController {
 
     private final TenantService tenantService;
@@ -37,6 +35,7 @@ public class OperationHeadController {
     public ResponseEntity<String> tenantUpdate( @RequestBody TenantRequestDto tenantRequestDto,@PathVariable Long id){
         return ResponseEntity.ok(tenantService.update(tenantRequestDto,id));
     }
-    
+
+
 
 }

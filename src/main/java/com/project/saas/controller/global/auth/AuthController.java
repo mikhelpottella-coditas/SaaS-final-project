@@ -1,9 +1,9 @@
-package com.project.saas.controller.auth;
+package com.project.saas.controller.global.auth;
 
 import com.project.saas.config.tenantConfig.TenantContext;
 import com.project.saas.dto.request_dto.LoginRequestDto;
 import com.project.saas.dto.request_dto.UserRequestDto;
-import com.project.saas.service.RefreshTokenService;
+import com.project.saas.service.global.RefreshTokenService;
 import com.project.saas.service.UserRegisterService;
 import com.project.saas.service.UserService;
 import com.project.saas.service.tenant.TenantUserService;
@@ -14,11 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
-
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
+@RequestMapping("global/auth")
 @Slf4j
 public class AuthController {
 
@@ -44,9 +42,16 @@ public class AuthController {
             description = "the user will login into the application by providing the user name and password and in return they get the access token and refresh token"
     )
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginRequestDto loginRequestDto){
+    public ResponseEntity<String> globalLogin(@Valid @RequestBody LoginRequestDto loginRequestDto){
         log.info("trying to switch the db schema {}",TenantContext.getTenant());
         return ResponseEntity.ok(userService.validateLogin(loginRequestDto));
+    }
+
+
+
+    @PostMapping("/refresh-token/{refreshToken}")
+    public String refresh(@PathVariable String refreshToken) {
+        return refreshTokenService.refresh(refreshToken);
     }
 
     @Operation(
@@ -69,9 +74,10 @@ public class AuthController {
         return  ResponseEntity.status(201).body(userRegisterService.saveSalesPoint(user,invitation));
     }
 
-    @PostMapping("/refresh-token/{refreshToken}")
-    public String refresh(@PathVariable String refreshToken) {
-        return refreshTokenService.refresh(refreshToken);
+
+    @PostMapping("/register/state-management/{invitation}")
+    public ResponseEntity<String> sateManagementRegister(@Valid @RequestBody UserRequestDto user,@PathVariable String invitation){
+        return  ResponseEntity.status(201).body(userRegisterService.saveStateManagement(user,invitation));
     }
 
 

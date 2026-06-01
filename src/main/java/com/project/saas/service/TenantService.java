@@ -1,5 +1,6 @@
 package com.project.saas.service;
 
+import com.project.saas.dto.request_dto.InvitationRequestDto;
 import com.project.saas.dto.request_dto.TenantRequestDto;
 import com.project.saas.entity.master.OperatingTenant;
 import com.project.saas.entity.master.Tenant;
@@ -23,7 +24,6 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class TenantService {
 
 
@@ -32,6 +32,7 @@ public class TenantService {
     private final UserService userService;
     private final DataSource dataSource;
     private final TenantRepo tenantRepo;
+    private final InvitationService invitationService;
 
 
     public void addTenant(String tenantName) {
@@ -86,6 +87,12 @@ public class TenantService {
 
         this.addTenant(tenant.getSchemaName());
 
+
+        InvitationRequestDto invitationRequestDto = new InvitationRequestDto(user.getEmail(), "welcome to the application. please register yourself as an admin with the following link: ");
+
+       String inviteResponse =  invitationService.inviteOperationHeadAsAdmin(invitationRequestDto);
+        log.info(inviteResponse);
+
         return "Schema registered successfully";
 
     }
@@ -99,5 +106,13 @@ public class TenantService {
         tenantRepo.save(tenant);
         log.info("the tenant with id : {} id updated successfully", tenant.getId());
         return "tenant update successful";
+    }
+
+    public Tenant getByName(String tenant) {
+        return tenantRepo.findTenantByName(tenant).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND, "the tenant not found"));
+    }
+
+    public void save(Tenant tenant) {
+        tenantRepo.save(tenant);
     }
 }

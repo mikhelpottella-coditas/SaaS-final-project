@@ -1,24 +1,21 @@
 package com.project.saas.config.tenantConfig;
 
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.cfg.MultiTenancySettings;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
+import org.springframework.boot.hibernate.autoconfigure.HibernatePropertiesCustomizer;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.sql.DataSource;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
-public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectionProvider<String> {
-    private final DataSource dataSource;
+public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectionProvider<String>, HibernatePropertiesCustomizer {
+        private final DataSource dataSource;
 
     @Override
     public Connection getAnyConnection() throws SQLException {
@@ -34,6 +31,7 @@ public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectio
     public Connection getConnection(String tenantIdentifier) throws SQLException {
         Connection connection = getAnyConnection();
         try {
+            System.out.println("from connection provider: " + tenantIdentifier);
             connection.setSchema(tenantIdentifier);
         } catch (SQLException exception) {
             throw new SQLException("There is an SQL exception occurred.");
@@ -44,8 +42,7 @@ public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectio
     @Override
     public void releaseConnection(String tenantIdentifier, Connection connection) throws SQLException {
         try {
-            connection.createStatement()
-                    .execute("USE " + tenantIdentifier);
+             connection.setSchema("public");
         } catch (SQLException exception) {
             throw new SQLException("There is an SQL exception occurred at releaseConnection() method execution");
         }
@@ -67,15 +64,9 @@ public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectio
         return null;
     }
 
-    @Component
-    public static class TenantFilter extends OncePerRequestFilter {
-        @Override
-        protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
-            String tenant = request.getHeader("tenant");
-            TenantContext.setTenant(tenant);
-            filterChain.doFilter(request,response);
-        }
+    @Override
+    public void customize(Map<String, Object> hibernateProperties) {
+        hibernateProperties.put(MultiTenancySettings.MULTI_TENANT_CONNECTION_PROVIDER, this);
     }
 }
 
