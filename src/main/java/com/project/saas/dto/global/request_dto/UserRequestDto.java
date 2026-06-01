@@ -1,4 +1,4 @@
-package com.project.saas.dto.request_dto;
+package com.project.saas.dto.global.request_dto;
 
 import com.project.saas.entity.master.UserRoles;
 import jakarta.validation.constraints.Email;

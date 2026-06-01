@@ -1,8 +1,10 @@
 package com.project.saas.service.global;
 
-import com.project.saas.dto.responceDto.UserResponseDto;
+import com.project.saas.dto.global.request_dto.UserRequestDto;
+import com.project.saas.dto.global.responceDto.UserResponseDto;
 import com.project.saas.entity.master.User;
 import com.project.saas.enums.Role;
+import com.project.saas.exception.CustomException;
 import com.project.saas.repo.UserRepository;
 import com.project.saas.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -10,8 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -20,7 +25,7 @@ import java.util.List;
 public class ManagerUserService {
 
 
-
+    private final UserRepository userRepository;
 
     private final UserService userService;
 
@@ -47,4 +52,17 @@ public class ManagerUserService {
         log.info("getting all the user who belong to the particular role District manager");
         return getAllUsers(page, size, sortBy, ascending, Role.CITY_MANAGEMENT_STAFF);
     }
+
+    public String updateProfile(UserRequestDto userRequestDto) {
+        User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()-> new CustomException(HttpStatus.BAD_REQUEST, "invalid request"));
+        if(userRequestDto.firstName() != null) user.setFirstName(userRequestDto.firstName());
+        if(userRequestDto.lastName() != null) user.setLastName(userRequestDto.lastName());
+        user.setUpdatedAt(LocalDateTime.now());
+        userRepository.save(user);
+        return "profile updated successfully";
+    }
+
+
+
+
 }

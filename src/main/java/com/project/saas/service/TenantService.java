@@ -1,14 +1,14 @@
 package com.project.saas.service;
 
-import com.project.saas.dto.request_dto.InvitationRequestDto;
-import com.project.saas.dto.request_dto.TenantRequestDto;
+import com.project.saas.dto.global.request_dto.InvitationRequestDto;
+import com.project.saas.dto.global.request_dto.TenantRequestDto;
+import com.project.saas.dto.global.responceDto.TenantResponseDto;
 import com.project.saas.entity.master.OperatingTenant;
 import com.project.saas.entity.master.Tenant;
 import com.project.saas.entity.master.User;
 import com.project.saas.enums.TenantStatus;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.TenantRepo;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +59,11 @@ public class TenantService {
     }
 
 
+    public Tenant getById(Long id){
+        return tenantRepo.findById(id).orElseThrow(()-> new CustomException(HttpStatus.BAD_REQUEST,"Tenant not found"));
+    }
+
+
     public String tenantRegistration(@Valid TenantRequestDto tenantRequestDto) {
 
         if (tenantRepo.existsTenantByName(tenantRequestDto.name()))
@@ -65,7 +71,7 @@ public class TenantService {
 
         User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() ->
                 new CustomException(HttpStatus.UNAUTHORIZED, "the user is not authorized"));
-
+        User salesPoint = userService.findById(tenantRequestDto.salesPointId());
 
         log.info("Creating tenant by the operational head : {}", user.getUsername());
         Tenant tenant = Tenant.builder()
@@ -79,7 +85,7 @@ public class TenantService {
 
 
         log.info("setting the operation head to the tenant");
-        OperatingTenant operatingTenant = OperatingTenant.builder().user(user).tenant(tenant).build();
+        OperatingTenant operatingTenant = OperatingTenant.builder().user(user).tenant(tenant).salesPoint(salesPoint).build();
 
         tenant.setOperatingTenant(operatingTenant);
 
@@ -114,5 +120,25 @@ public class TenantService {
 
     public void save(Tenant tenant) {
         tenantRepo.save(tenant);
+    }
+
+    public List<TenantResponseDto> getAll() {
+        List<Tenant> tenants = tenantRepo.findAll();
+        return tenants.stream().map(tenant -> new TenantResponseDto(tenant.getId(), tenant.getName(), tenant.getSchemaName(), tenant.getTenantStatus(), tenant.getCreatedAt(), tenant.getUpdatedAt(), tenant.getSubscriptionAmount(), tenant.getOperatingTenant().getUser().getId())).toList();
+    }
+
+    public TenantResponseDto getTenantRequestDtoById(Long id) {
+        Tenant tenant = getById(id);
+        return new TenantResponseDto(tenant.getId(), tenant.getName(),
+                tenant.getSchemaName(), tenant.getTenantStatus(),
+                tenant.getCreatedAt(), tenant.getUpdatedAt(),
+                tenant.getSubscriptionAmount(),
+                tenant.getOperatingTenant().getUser().getId());
+    }
+
+    public List<TenantResponseDto> getBySalesPoint() {
+        User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()-> new CustomException(HttpStatus.UNAUTHORIZED, "the user is not authorized"));
+        List<Tenant> tenantList = tenantRepo.findTenantByOperatingTenant_SalesPoint_Id(user.getId());
+        return tenantList.stream().map(tenant -> new TenantResponseDto(tenant.getId(), tenant.getName(), tenant.getSchemaName(), tenant.getTenantStatus(), tenant.getCreatedAt(), tenant.getUpdatedAt(), tenant.getSubscriptionAmount(), tenant.getOperatingTenant().getUser().getId())).toList();
     }
 }

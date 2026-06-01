@@ -1,6 +1,6 @@
 package com.project.saas.service.global;
 
-import com.project.saas.dto.responceDto.UserResponseDto;
+import com.project.saas.dto.global.responceDto.UserResponseDto;
 import com.project.saas.entity.master.User;
 import com.project.saas.enums.Role;
 import com.project.saas.service.UserService;

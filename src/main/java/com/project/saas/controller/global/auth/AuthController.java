@@ -1,8 +1,9 @@
 package com.project.saas.controller.global.auth;
 
 import com.project.saas.config.tenantConfig.TenantContext;
-import com.project.saas.dto.request_dto.LoginRequestDto;
-import com.project.saas.dto.request_dto.UserRequestDto;
+import com.project.saas.dto.global.request_dto.ChangePasswordRequestDto;
+import com.project.saas.dto.global.request_dto.LoginRequestDto;
+import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.service.global.RefreshTokenService;
 import com.project.saas.service.UserRegisterService;
 import com.project.saas.service.UserService;
@@ -53,6 +54,15 @@ public class AuthController {
     public String refresh(@PathVariable String refreshToken) {
         return refreshTokenService.refresh(refreshToken);
     }
+
+
+    @PutMapping("/change-password")
+    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequestDto changePasswordRequestDto) {
+        return ResponseEntity.ok(userService.changePassword(changePasswordRequestDto));
+    }
+
+
+
 
     @Operation(
             summary = "registration for operation head",

@@ -1,8 +1,11 @@
 package com.project.saas.controller.global;
 
 
-import com.project.saas.dto.request_dto.TenantRequestDto;
+import com.project.saas.dto.global.request_dto.TenantRequestDto;
+import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.service.TenantService;
+import com.project.saas.service.global.SalesPointService;
+import com.project.saas.service.global.UserCrudService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +18,14 @@ import org.springframework.web.bind.annotation.*;
 public class OperationHeadController {
 
     private final TenantService tenantService;
+    private final UserCrudService userCrudService;
+
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<String> updateProfile(@PathVariable Long id,@RequestBody UserRequestDto userRequestDto) {
+        return ResponseEntity.ok(userCrudService.updateProfile(id,userRequestDto));
+    }
+
 
     @PostMapping("/tenant/register")
     @Operation(

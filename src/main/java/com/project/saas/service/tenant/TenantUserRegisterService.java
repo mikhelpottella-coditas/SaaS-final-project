@@ -1,6 +1,6 @@
 package com.project.saas.service.tenant;
 
-import com.project.saas.dto.request_dto.UserRequestDto;
+import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.entity.tenant.TenantUser;
 import com.project.saas.entity.tenant.TenantUserRoles;
 import com.project.saas.enums.Role;

@@ -20,6 +20,11 @@ public class OperatingTenant {
     @JoinColumn(name = "user_id")
     private User user;
 
+
+    @OneToOne
+    @JoinColumn(name = "sales_point")
+    private User salesPoint;
+
     @OneToOne
     @JoinColumn(name = "operating_tenant")
     private Tenant tenant;

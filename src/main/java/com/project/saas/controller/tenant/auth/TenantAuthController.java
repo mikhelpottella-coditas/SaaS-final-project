@@ -1,7 +1,7 @@
 package com.project.saas.controller.tenant.auth;
 
-import com.project.saas.dto.request_dto.LoginRequestDto;
-import com.project.saas.dto.request_dto.UserRequestDto;
+import com.project.saas.dto.global.request_dto.LoginRequestDto;
+import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.service.tenant.TenantUserRegisterService;
 import com.project.saas.service.tenant.TenantUserService;
 import jakarta.validation.Valid;

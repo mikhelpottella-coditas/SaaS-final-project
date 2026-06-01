@@ -1,4 +1,4 @@
-package com.project.saas.dto.responceDto;
+package com.project.saas.dto.global.responceDto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

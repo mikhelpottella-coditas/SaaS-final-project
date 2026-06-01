@@ -1,6 +1,6 @@
 package com.project.saas.service;
 
-import com.project.saas.dto.request_dto.InvitationRequestDto;
+import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.entity.master.Invitation;
 import com.project.saas.entity.master.User;
 import com.project.saas.enums.Role;

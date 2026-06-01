@@ -1,17 +1,13 @@
 package com.project.saas.controller.global.admin;
 
 
-import com.project.saas.dto.request_dto.ChangePasswordRequestDto;
-import com.project.saas.dto.request_dto.InvitationRequestDto;
-import com.project.saas.dto.request_dto.UserRequestDto;
-import com.project.saas.dto.responceDto.UserResponseDto;
-import com.project.saas.entity.tenant.TenantStates;
-import com.project.saas.entity.tenant.TenantUserRoles;
+import com.project.saas.dto.global.request_dto.InvitationRequestDto;
+import com.project.saas.dto.global.request_dto.UserRequestDto;
+import com.project.saas.dto.global.responceDto.UserResponseDto;
 import com.project.saas.enums.TenantStatus;
 import com.project.saas.service.InvitationService;
 import com.project.saas.service.global.AdminService;
 import com.project.saas.service.global.GlobalManagementService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +23,9 @@ public class GlobalAdminController {
     private final InvitationService invitationService;
     private final GlobalManagementService managementService;
 
+
+
+
     @PutMapping("/{id}")
     public ResponseEntity<String> updateAdminProfile(@PathVariable Long id,@RequestBody UserRequestDto userRequestDto) {
         return ResponseEntity.ok(adminService.updateAdminProfile(id,userRequestDto));
@@ -37,12 +36,6 @@ public class GlobalAdminController {
     @PutMapping("/{tenantName}/{status}")
     public ResponseEntity<String> activateTenant(@PathVariable String tenantName,@PathVariable TenantStatus status) {
         return ResponseEntity.ok(adminService.activateTenant(tenantName,status));
-    }
-
-
-    @PutMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequestDto changePasswordRequestDto) {
-        return ResponseEntity.ok(adminService.changePassword(changePasswordRequestDto));
     }
 
 

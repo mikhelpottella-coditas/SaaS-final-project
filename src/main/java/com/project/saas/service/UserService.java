@@ -1,8 +1,9 @@
 package com.project.saas.service;
 
 import com.project.saas.config.tenantConfig.TenantContext;
-import com.project.saas.dto.request_dto.LoginRequestDto;
-import com.project.saas.dto.request_dto.UserRequestDto;
+import com.project.saas.dto.global.request_dto.ChangePasswordRequestDto;
+import com.project.saas.dto.global.request_dto.LoginRequestDto;
+import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.entity.master.User;
 import com.project.saas.entity.master.UserRoles;
 import com.project.saas.enums.Role;
@@ -13,6 +14,7 @@ import com.project.saas.security.JwtUtil;
 import com.project.saas.service.global.RefreshTokenService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -44,21 +46,26 @@ public class UserService {
         return Optional.ofNullable(userRepository.findByEmail(username));
     }
 
+    public User findById(Long id) {
+        return userRepository.findById(id).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "the user is not found"));
+    }
+
+    public List<User> getByRole(Role role, Pageable pageable) {
+        return userRepository.findUsersByUserRoles(role,pageable).getContent();
+    }
+
+
 
     public String validateLogin(@Valid LoginRequestDto loginRequestDto) {
 
-
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequestDto.email(), loginRequestDto.password());
-
         Authentication authentication = authenticationManager.authenticate(token);
 
         if(authentication.isAuthenticated()){
             User user = (User) authentication.getPrincipal();
             String tenant = TenantContext.getTenant()==null?"public":TenantContext.getTenant();
 
-
             String result = "access token : "+ jwtUtil.generateToken(loginRequestDto.email(),tenant) + "\n refresh token : " + refreshTokenService.createRefreshToken(user) ;
-
             log.info("User logged in successfully");
             return result;
 
@@ -80,18 +87,22 @@ public class UserService {
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-
         UserRoles userRoles = new UserRoles();
         userRoles.setRole(Role.OPERATIONAL_HEAD);
         user.addUserRole(userRoles);
-
         userRepository.save(user);
-
         return "user successfully saved";
     }
 
-    public List<User> getByRole(Role role, Pageable pageable) {
-        return userRepository.findUsersByUserRoles(role,pageable).getContent();
+
+
+    public String changePassword(ChangePasswordRequestDto changePasswordRequestDto) {
+        User user = findByUsername(changePasswordRequestDto.email()).orElseThrow(()-> new  CustomException(HttpStatus.NOT_FOUND, "the user is not found to change"));
+        if(!passwordEncoder.matches(changePasswordRequestDto.oldPassword(), user.getPassword())) throw  new CustomException(HttpStatus.BAD_REQUEST, "wrong password !!!");
+        user.setPassword(changePasswordRequestDto.newPassword());
+        userRepository.save(user);
+        log.info("password changed successfully for the email : {}",changePasswordRequestDto.email());
+        return "password changed successfully";
     }
 
 

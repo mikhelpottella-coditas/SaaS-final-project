@@ -1,9 +1,8 @@
 package com.project.saas.service.tenant;
 
 import com.project.saas.config.tenantConfig.TenantContext;
-import com.project.saas.dto.request_dto.LoginRequestDto;
-import com.project.saas.dto.request_dto.UserRequestDto;
-import com.project.saas.entity.master.EndUser;
+import com.project.saas.dto.global.request_dto.LoginRequestDto;
+import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.entity.tenant.TenantUser;
 import com.project.saas.entity.tenant.TenantUserRoles;
 import com.project.saas.enums.Role;
@@ -17,8 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

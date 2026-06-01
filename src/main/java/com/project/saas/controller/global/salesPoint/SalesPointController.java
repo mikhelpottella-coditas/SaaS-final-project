@@ -1,13 +1,20 @@
 package com.project.saas.controller.global.salesPoint;
 
-import com.project.saas.dto.request_dto.InvitationRequestDto;
+import com.project.saas.dto.global.request_dto.InvitationRequestDto;
+import com.project.saas.dto.global.request_dto.UserRequestDto;
+import com.project.saas.dto.global.responceDto.TenantResponseDto;
 import com.project.saas.enums.TenantStatus;
 import com.project.saas.service.InvitationService;
+import com.project.saas.service.TenantService;
 import com.project.saas.service.global.AdminService;
+import com.project.saas.service.global.SalesPointService;
+import com.project.saas.service.global.UserCrudService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/global/sales-point")
@@ -16,6 +23,13 @@ public class SalesPointController {
 
     private final InvitationService invitationService;
     private final AdminService adminService;
+    private final TenantService tenantService;
+    private final UserCrudService userCrudService;
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateProfile(@PathVariable Long id,@RequestBody UserRequestDto userRequestDto) {
+        return ResponseEntity.ok(userCrudService.updateProfile(id,userRequestDto));
+    }
 
     @PostMapping("/invite/operational-head")
     public ResponseEntity<String> inviteOperationalHead(@Valid @RequestBody InvitationRequestDto invitationRequestDto){
@@ -26,6 +40,24 @@ public class SalesPointController {
     public ResponseEntity<String> activateTenant(@PathVariable String tenantName,@PathVariable TenantStatus status) {
         return ResponseEntity.ok(adminService.activateTenant(tenantName,status));
     }
+
+
+    @GetMapping("/all/tenant")
+    public ResponseEntity<List<TenantResponseDto>> getAllTenants(){
+        return ResponseEntity.ok(tenantService.getAll());
+    }
+
+    @GetMapping("/tenant-under-me")
+    private ResponseEntity<List<TenantResponseDto>> getTenantUnderMe(){
+        return ResponseEntity.ok(tenantService.getBySalesPoint());
+    }
+
+    @GetMapping("/tenant/{id}")
+    public ResponseEntity<TenantResponseDto> getTenant(@PathVariable Long id){
+        return ResponseEntity.ok(tenantService.getTenantRequestDtoById(id));
+    }
+
+
 
 
 
