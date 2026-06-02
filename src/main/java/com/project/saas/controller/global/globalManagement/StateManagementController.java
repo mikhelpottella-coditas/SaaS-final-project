@@ -50,4 +50,14 @@ public class StateManagementController{
         return ResponseEntity.ok(districtService.getAllDistrictHeads());
     }
 
+    @GetMapping("/district-head/{id}")
+    public ResponseEntity<UserResponseDto> getDistrictHead(@PathVariable Long id){
+        return ResponseEntity.ok(districtService.getDistrictHeadById(id));
+    }
+
+    @PatchMapping("/assign-district/{districtId}/district-head/{headId}")
+    public ResponseEntity<String> assignDistrictHead(@PathVariable Long districtId,@PathVariable Long headId){
+        return ResponseEntity.ok(districtService.assignDistrictHead(districtId,headId));
+    }
+
 }
