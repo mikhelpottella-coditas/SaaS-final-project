@@ -1,18 +1,14 @@
 package com.project.saas.service.tenant;
 
 import com.project.saas.config.tenantConfig.TenantContext;
-import com.project.saas.entity.master.RefreshToken;
-import com.project.saas.entity.master.User;
 import com.project.saas.entity.tenant.TenantRefreshToken;
 import com.project.saas.entity.tenant.TenantUser;
 import com.project.saas.exception.CustomException;
-import com.project.saas.repo.RefreshTokenRepository;
 import com.project.saas.repo.tenant.TenantRefreshTokenRepo;
 import com.project.saas.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

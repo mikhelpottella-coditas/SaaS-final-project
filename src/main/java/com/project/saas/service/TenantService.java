@@ -3,12 +3,11 @@ package com.project.saas.service;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.dto.global.request_dto.TenantRequestDto;
 import com.project.saas.dto.global.responceDto.TenantResponseDto;
-import com.project.saas.entity.master.OperatingTenant;
-import com.project.saas.entity.master.Tenant;
-import com.project.saas.entity.master.User;
+import com.project.saas.entity.master.*;
 import com.project.saas.enums.TenantStatus;
 import com.project.saas.exception.CustomException;
-import com.project.saas.repo.TenantRepo;
+import com.project.saas.repo.global.StateRepo;
+import com.project.saas.repo.global.TenantRepo;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
@@ -34,12 +33,8 @@ public class TenantService {
     private final DataSource dataSource;
     private final TenantRepo tenantRepo;
     private final InvitationService invitationService;
+    private final StateRepo stateRepo;
 
-
-    public void addTenant(String tenantName) {
-        createSchema(tenantName);
-        runMigration(tenantName);
-    }
 
     public void createSchema(String schema) {
         jdbcTemplate.execute(
@@ -71,6 +66,10 @@ public class TenantService {
 
         User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(() ->
                 new CustomException(HttpStatus.UNAUTHORIZED, "the user is not authorized"));
+
+        createSchema(tenantRequestDto.name());
+        runMigration(tenantRequestDto.name());
+
         User salesPoint = userService.findById(tenantRequestDto.salesPointId());
 
         log.info("Creating tenant by the operational head : {}", user.getUsername());
@@ -89,9 +88,14 @@ public class TenantService {
 
         tenant.setOperatingTenant(operatingTenant);
 
+        tenantRequestDto.availableStatesList().forEach(state -> {
+            TenantAvailableStates tenantAvailableStates = TenantAvailableStates.builder().availableState(state).build();
+            tenant.addState(tenantAvailableStates);
+        });
+
+
         tenantRepo.save(tenant);
 
-        this.addTenant(tenant.getSchemaName());
 
 
         InvitationRequestDto invitationRequestDto = new InvitationRequestDto(user.getEmail(), "welcome to the application. please register yourself as an admin with the following link: ");
@@ -141,4 +145,5 @@ public class TenantService {
         List<Tenant> tenantList = tenantRepo.findTenantByOperatingTenant_SalesPoint_Id(user.getId());
         return tenantList.stream().map(tenant -> new TenantResponseDto(tenant.getId(), tenant.getName(), tenant.getSchemaName(), tenant.getTenantStatus(), tenant.getCreatedAt(), tenant.getUpdatedAt(), tenant.getSubscriptionAmount(), tenant.getOperatingTenant().getUser().getId())).toList();
     }
+
 }

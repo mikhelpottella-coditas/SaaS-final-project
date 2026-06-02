@@ -3,7 +3,7 @@ package com.project.saas.service.global;
 import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.entity.master.User;
 import com.project.saas.exception.CustomException;
-import com.project.saas.repo.UserRepository;
+import com.project.saas.repo.global.UserRepository;
 import com.project.saas.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

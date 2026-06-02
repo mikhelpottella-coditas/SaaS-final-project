@@ -5,7 +5,7 @@ import com.project.saas.entity.master.Tenant;
 import com.project.saas.entity.master.User;
 import com.project.saas.enums.TenantStatus;
 import com.project.saas.exception.CustomException;
-import com.project.saas.repo.UserRepository;
+import com.project.saas.repo.global.UserRepository;
 import com.project.saas.service.TenantService;
 import com.project.saas.service.UserService;
 import lombok.RequiredArgsConstructor;

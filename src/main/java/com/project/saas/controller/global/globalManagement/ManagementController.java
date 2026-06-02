@@ -1,6 +1,7 @@
 package com.project.saas.controller.global.globalManagement;
 
 
+import com.project.saas.dto.global.request_dto.StateRequestDto;
 import com.project.saas.dto.global.request_dto.AssignStateRequestDto;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.dto.global.request_dto.UserRequestDto;
@@ -32,6 +33,11 @@ public class ManagementController {
     @PatchMapping("/profile/update")
     public ResponseEntity<String>  updateProfile(@RequestBody UserRequestDto userRequestDto) {
         return ResponseEntity.ok(managerUserService.updateProfile(userRequestDto));
+    }
+
+    @PostMapping("/createState")
+    public ResponseEntity<String> createState(@RequestBody StateRequestDto stateRequestDto){
+        return ResponseEntity.ok(stateService.createState(stateRequestDto));
     }
 
     @PostMapping("/assign-state")

@@ -1,4 +1,4 @@
-package com.project.saas.repo;
+package com.project.saas.repo.global;
 
 import com.project.saas.entity.master.Tenant;
 import org.springframework.data.jpa.repository.JpaRepository;

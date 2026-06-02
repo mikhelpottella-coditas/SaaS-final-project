@@ -1,4 +1,4 @@
-package com.project.saas.repo;
+package com.project.saas.repo.global;
 
 import com.project.saas.entity.master.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;

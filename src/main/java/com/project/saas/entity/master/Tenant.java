@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -49,9 +50,20 @@ public class Tenant {
     @OneToMany(mappedBy = "tenant")
     private List<TenantSubscriptionBill> tenantSubscriptionBillList;
 
-    @OneToMany(mappedBy = "tenant")
+    @OneToMany(mappedBy = "tenant",fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<TenantAvailableStates> tenantAvailableStatesList;
 
     @OneToMany(mappedBy = "tenant")
     private List<CustomerTenant> customerTenantList;
+
+
+
+
+    public void addState(TenantAvailableStates tenantAvailableStates){
+        if(tenantAvailableStatesList==null) tenantAvailableStatesList = new ArrayList<>();
+        tenantAvailableStatesList.add(tenantAvailableStates);
+        tenantAvailableStates.setTenant(this);
+    }
+
+
 }

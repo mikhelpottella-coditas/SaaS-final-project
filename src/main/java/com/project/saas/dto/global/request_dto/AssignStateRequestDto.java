@@ -10,9 +10,6 @@ public record AssignStateRequestDto(
         String name,
 
 
-        @NotBlank(message = "please give the code of the city")
-        String code,
-
         @NotNull(message = "please give the id of the manager whom you want assign")
         Long managerId
 ) {

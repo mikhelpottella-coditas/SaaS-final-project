@@ -1,7 +1,6 @@
-package com.project.saas.repo;
+package com.project.saas.repo.global;
 
 import com.project.saas.entity.master.UserRoles;
-import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

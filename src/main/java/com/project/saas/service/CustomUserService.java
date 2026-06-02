@@ -1,7 +1,7 @@
 package com.project.saas.service;
 
 import com.project.saas.config.tenantConfig.TenantContext;
-import com.project.saas.repo.UserRepository;
+import com.project.saas.repo.global.UserRepository;
 import com.project.saas.repo.tenant.TenantUserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

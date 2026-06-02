@@ -3,7 +3,7 @@ package com.project.saas.service.global;
 import com.project.saas.config.tenantConfig.TenantContext;
 import com.project.saas.entity.master.RefreshToken;
 import com.project.saas.entity.master.User;
-import com.project.saas.repo.RefreshTokenRepository;
+import com.project.saas.repo.global.RefreshTokenRepository;
 import com.project.saas.security.JwtUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
