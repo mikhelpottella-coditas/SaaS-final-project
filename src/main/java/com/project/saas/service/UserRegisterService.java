@@ -1,9 +1,8 @@
 package com.project.saas.service;
 
 import com.project.saas.dto.global.request_dto.UserRequestDto;
+import com.project.saas.entity.master.Invitation;
 import com.project.saas.entity.master.User;
-import com.project.saas.entity.master.UserRoles;
-import com.project.saas.enums.Role;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.UserRepository;
 import jakarta.validation.Valid;
@@ -39,66 +38,113 @@ public class UserRegisterService {
     }
 
 
-    public String saveOperationalHead(@Valid UserRequestDto userDto, String invitation) {
+//    public String saveOperationalHead(@Valid UserRequestDto userDto, String invitation) {
+//
+//        if (Boolean.FALSE.equals(invitationService.validate(userDto.email(), invitation)))
+//            throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid invitation");
+//
+//        User user = userBuilder(userDto);
+//
+//        UserRoles userRoles = new UserRoles();
+//        userRoles.setRole(Role.OPERATIONAL_HEAD);
+//        user.addUserRole(userRoles);
+//
+//        userRepository.save(user);
+//
+//        return "operational head successfully saved";
+//    }
+//
+//
+//    public String saveManagementStaff(@Valid UserRequestDto userDto, String invitation) {
+//
+//        if (Boolean.FALSE.equals(invitationService.validate(userDto.email(), invitation)))
+//            throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid invitation");
+//
+//        User user = userBuilder(userDto);
+//
+//        UserRoles userRoles = new UserRoles();
+//        userRoles.setRole(Role.MANAGEMENT_STAFF);
+//        user.addUserRole(userRoles);
+//
+//        userRepository.save(user);
+//        log.info("management registration successful with the name : {}", userDto.firstName());
+//        return "management staff registration successfully saved";
+//    }
+//
+//    public String saveSalesPoint(@Valid UserRequestDto userDto, String invitation) {
+//
+//
+//        if (Boolean.FALSE.equals(invitationService.validate(userDto.email(), invitation)))
+//            throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid invitation");
+//
+//        User user = userBuilder(userDto);
+//        UserRoles userRoles = new UserRoles();
+//        userRoles.setRole(Role.SALES_POINT);
+//        user.addUserRole(userRoles);
+//        userRepository.save(user);
+//        log.info("sales point registration successful with the name : {}", userDto.firstName());
+//        return "sales point staff registration successfully saved";
+//    }
+//
+//    public String saveStateManagement(@Valid UserRequestDto userDto, String invitation) {
+//        if (Boolean.FALSE.equals(invitationService.validate(userDto.email(), invitation)))
+//            throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid invitation");
+//
+//        User user = userBuilder(userDto);
+//
+//        UserRoles userRoles = new UserRoles();
+//        userRoles.setRole(Role.STATE_MANAGEMENT_STAFF);
+//        user.addUserRole(userRoles);
+//
+//        userRepository.save(user);
+//        log.info("state-head registration successful with the name : {}", userDto.firstName());
+//        return "state-head registration successfully saved";
+//    }
+//
+//    public String saveDistrictManagement(@Valid UserRequestDto userDto, String invitation) {
+//        if (Boolean.FALSE.equals(invitationService.validate(userDto.email(), invitation)))
+//            throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid invitation");
+//
+//        User user = userBuilder(userDto);
+//
+//        UserRoles userRoles = new UserRoles();
+//        userRoles.setRole(Role.DISTRICT_MANAGEMENT_STAFF);
+//        user.addUserRole(userRoles);
+//
+//        userRepository.save(user);
+//        log.info("district-head registration successful with the name : {}", userDto.firstName());
+//        return "district head registration successfully saved";
+//
+//    }
+//
+//
+//    public String saveCityManagement(@Valid UserRequestDto userDto, String invitation) {
+//        if (Boolean.FALSE.equals(invitationService.validate(userDto.email(), invitation)))
+//            throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid invitation");
+//
+//        User user = userBuilder(userDto);
+//
+//        UserRoles userRoles = new UserRoles();
+//        userRoles.setRole(Role.CITY_MANAGEMENT_STAFF);
+//        user.addUserRole(userRoles);
+//
+//        userRepository.save(user);
+//        log.info("city-head registration successful with the name : {}", userDto.firstName());
+//        return "city head registration successfully saved";
+//
+//    }
 
+    public String saveUser(@Valid UserRequestDto userDto, String invitation) {
         if (Boolean.FALSE.equals(invitationService.validate(userDto.email(), invitation)))
             throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid invitation");
+        Invitation invite = invitationService.getInvite(invitation);
 
         User user = userBuilder(userDto);
 
-        UserRoles userRoles = new UserRoles();
-        userRoles.setRole(Role.OPERATIONAL_HEAD);
-        user.addUserRole(userRoles);
+        user.setRole(invite.getRole());
 
         userRepository.save(user);
-
-        return "operational head successfully saved";
-    }
-
-
-    public String saveManagementStaff(@Valid UserRequestDto userDto, String invitation) {
-
-        if (Boolean.FALSE.equals(invitationService.validate(userDto.email(), invitation)))
-            throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid invitation");
-
-        User user = userBuilder(userDto);
-
-        UserRoles userRoles = new UserRoles();
-        userRoles.setRole(Role.MANAGEMENT_STAFF);
-        user.addUserRole(userRoles);
-
-        userRepository.save(user);
-        log.info("management registration successful with the name : {}", userDto.firstName());
-        return "management staff registration successfully saved";
-    }
-
-    public String saveSalesPoint(@Valid UserRequestDto userDto, String invitation) {
-
-
-        if (Boolean.FALSE.equals(invitationService.validate(userDto.email(), invitation)))
-            throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid invitation");
-
-        User user = userBuilder(userDto);
-        UserRoles userRoles = new UserRoles();
-        userRoles.setRole(Role.SALES_POINT);
-        user.addUserRole(userRoles);
-        userRepository.save(user);
-        log.info("sales point registration successful with the name : {}", userDto.firstName());
-        return "sales point staff registration successfully saved";
-    }
-
-    public String saveStateManagement(@Valid UserRequestDto userDto, String invitation) {
-        if (Boolean.FALSE.equals(invitationService.validate(userDto.email(), invitation)))
-            throw new CustomException(HttpStatus.BAD_REQUEST, "Invalid invitation");
-
-        User user = userBuilder(userDto);
-
-        UserRoles userRoles = new UserRoles();
-        userRoles.setRole(Role.STATE_MANAGEMENT_STAFF);
-        user.addUserRole(userRoles);
-
-        userRepository.save(user);
-        log.info("sales point registration successful with the name : {}", userDto.firstName());
-        return "sales point staff registration successfully saved";
+        log.info("registration successful with the name : {}", userDto.firstName());
+        return "registration successful";
     }
 }

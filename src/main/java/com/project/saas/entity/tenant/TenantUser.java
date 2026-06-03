@@ -1,7 +1,7 @@
 package com.project.saas.entity.tenant;
 
 import com.project.saas.entity.master.EndUser;
-import com.project.saas.entity.master.UserRoles;
+import com.project.saas.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -43,8 +43,7 @@ public class TenantUser implements UserDetails, EndUser {
     @Column(name = "phone", nullable = false,unique = true)
     private String phone;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)
-    private List<TenantUserRoles> tenantUserRolesList;
+    private Role role;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -53,11 +52,9 @@ public class TenantUser implements UserDetails, EndUser {
     private LocalDateTime updatedAt;
 
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return tenantUserRolesList.stream().map(u-> new SimpleGrantedAuthority("ROLE_"+u.getRole().name())).toList();
-
+        return List.of(new SimpleGrantedAuthority("ROLE_"+role.name()));
     }
 
     @Override
@@ -65,10 +62,6 @@ public class TenantUser implements UserDetails, EndUser {
         return email;
     }
 
-    public void addTenantUser(TenantUserRoles userRoles){
-        if(tenantUserRolesList == null) tenantUserRolesList = new ArrayList<>();
-        tenantUserRolesList.add(userRoles);
-        userRoles.setUser(this);
-    }
+
 }
 

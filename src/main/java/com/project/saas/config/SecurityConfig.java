@@ -42,6 +42,7 @@ public class SecurityConfig {
                         auth.requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/operational-head/**").hasAnyRole(Role.OPERATIONAL_HEAD.name())
                                 .requestMatchers("/tenant/m1-manager/**").hasAnyRole(Role.M1_MANAGER.name())
+                                .requestMatchers("/user/**").authenticated()
                                 .anyRequest().permitAll())
                 .httpBasic(Customizer.withDefaults())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

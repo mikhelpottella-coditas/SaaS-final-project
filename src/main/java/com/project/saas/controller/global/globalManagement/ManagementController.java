@@ -12,6 +12,7 @@ import com.project.saas.service.TenantService;
 import com.project.saas.service.global.ManagerUserService;
 import com.project.saas.service.global.StateManagerService;
 import com.project.saas.service.global.StateService;
+import com.project.saas.service.global.UserCrudService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +27,13 @@ public class ManagementController {
 
     private final InvitationService invitationService;
     private final ManagerUserService managerUserService;
+    private final UserCrudService userCrudService;
     private final StateManagerService stateManagerService;
     private final StateService stateService;
     private final TenantService tenantService;
 
-    @PatchMapping("/profile/update")
-    public ResponseEntity<String>  updateProfile(@RequestBody UserRequestDto userRequestDto) {
-        return ResponseEntity.ok(managerUserService.updateProfile(userRequestDto));
-    }
+
+
 
     @PostMapping("/createState")
     public ResponseEntity<String> createState(@RequestBody StateRequestDto stateRequestDto){
@@ -43,6 +43,11 @@ public class ManagementController {
     @PostMapping("/assign-state")
     public ResponseEntity<String> assignState(@RequestBody AssignStateRequestDto assignStateRequestDto){
         return ResponseEntity.ok(stateService.assignState(assignStateRequestDto));
+    }
+
+    @PostMapping("/update/state-head")
+    public ResponseEntity<String> updateStateHead(@RequestBody AssignStateRequestDto assignStateRequestDto){
+        return ResponseEntity.ok(stateService.updateStateHead(assignStateRequestDto));
     }
 
     @GetMapping("/all/state-managers")
@@ -76,14 +81,6 @@ public class ManagementController {
     }
 
 
-
-
-
-    @PostMapping("/invite/operational-head")
-    public ResponseEntity<String> inviteOperationalHead(@Valid @RequestBody InvitationRequestDto invitationRequestDto){
-        return ResponseEntity.ok(invitationService.inviteOperationHead(invitationRequestDto));
-    }
-
     @PostMapping("/invite/sales-point")
     public ResponseEntity<String> inviteSalesPoint(@Valid @RequestBody InvitationRequestDto invitationRequestDto){
         return ResponseEntity.ok(invitationService.inviteSalesPoint(invitationRequestDto));
@@ -93,23 +90,4 @@ public class ManagementController {
     public ResponseEntity<String> inviteStateManger(@Valid @RequestBody InvitationRequestDto invitationRequestDto){
         return ResponseEntity.ok(invitationService.inviteStateManager(invitationRequestDto));
     }
-
-    @PatchMapping("/update/state-manager/{id}")
-    public ResponseEntity<String> updateStateHead(@PathVariable Long id,@RequestBody UserRequestDto userRequestDto) {
-        return ResponseEntity.ok(stateManagerService.updateProfile(id,userRequestDto));
-    }
-
-
-    @GetMapping("/all/tenant")
-    public ResponseEntity<List<TenantResponseDto>> getAllTenants(){
-        return ResponseEntity.ok(tenantService.getAll());
-    }
-
-    @GetMapping("/tenant/{id}")
-    public ResponseEntity<TenantResponseDto> getTenant(@PathVariable Long id){
-        return ResponseEntity.ok(tenantService.getTenantRequestDtoById(id));
-    }
-
-
-
 }

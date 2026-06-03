@@ -5,7 +5,6 @@ import com.project.saas.dto.global.request_dto.ChangePasswordRequestDto;
 import com.project.saas.dto.global.request_dto.LoginRequestDto;
 import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.entity.master.User;
-import com.project.saas.entity.master.UserRoles;
 import com.project.saas.enums.Role;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.UserRepository;
@@ -35,7 +34,6 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final TenantUserRepo tenantUserRepo;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
@@ -82,13 +80,12 @@ public class UserService {
                 .firstName(userDto.firstName())
                 .lastName(userDto.lastName())
                 .phone(userDto.phone())
+                .role(Role.OPERATIONAL_HEAD)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        UserRoles userRoles = new UserRoles();
-        userRoles.setRole(Role.OPERATIONAL_HEAD);
-        user.addUserRole(userRoles);
+
         userRepository.save(user);
         return "user successfully saved";
     }

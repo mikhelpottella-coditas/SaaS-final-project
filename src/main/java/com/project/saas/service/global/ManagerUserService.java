@@ -53,15 +53,6 @@ public class ManagerUserService {
         return getAllUsers(page, size, sortBy, ascending, Role.CITY_MANAGEMENT_STAFF);
     }
 
-    public String updateProfile(UserRequestDto userRequestDto) {
-        User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()-> new CustomException(HttpStatus.BAD_REQUEST, "invalid request"));
-        if(userRequestDto.firstName() != null) user.setFirstName(userRequestDto.firstName());
-        if(userRequestDto.lastName() != null) user.setLastName(userRequestDto.lastName());
-        user.setUpdatedAt(LocalDateTime.now());
-        userRepository.save(user);
-        return "profile updated successfully";
-    }
-
 
 
 

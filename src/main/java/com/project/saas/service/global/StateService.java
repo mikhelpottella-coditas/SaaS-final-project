@@ -3,9 +3,7 @@ package com.project.saas.service.global;
 import com.project.saas.dto.global.request_dto.AssignStateRequestDto;
 import com.project.saas.dto.global.request_dto.StateRequestDto;
 import com.project.saas.dto.global.responceDto.TenantResponseDto;
-import com.project.saas.entity.master.State;
-import com.project.saas.entity.master.Tenant;
-import com.project.saas.entity.master.User;
+import com.project.saas.entity.master.*;
 import com.project.saas.enums.AvailableState;
 import com.project.saas.enums.Role;
 import com.project.saas.exception.CustomException;
@@ -19,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -38,20 +37,32 @@ public class StateService {
 
 
     public String assignState(AssignStateRequestDto assignStateRequestDto) {
-
         State state = stateRepo.findStateByName(assignStateRequestDto.name()).orElseThrow(()-> new CustomException(HttpStatus.BAD_REQUEST,"the state is not available"));
+        if(state.getManagerUser()!=null) throw new CustomException(HttpStatus.BAD_REQUEST,"the state manager is already assigned");
         User user = userService.findById(assignStateRequestDto.managerId());
+        log.info("check the user this is state head or not");
+        if(!user.getRole().equals(Role.STATE_MANAGEMENT_STAFF)) throw new CustomException(HttpStatus.FORBIDDEN,"the user is not a state head");
         state.setManagerUser(user);
         stateRepo.save(state);
         return "assigned the manager : " + user.getFirstName() + " to the state : " + assignStateRequestDto.name();
     }
 
+    public String updateStateHead(AssignStateRequestDto assignStateRequestDto) {
+        State state = stateRepo.findStateByName(assignStateRequestDto.name()).orElseThrow(()-> new CustomException(HttpStatus.BAD_REQUEST,"the state is not available"));
+        User user = userService.findById(assignStateRequestDto.managerId());
+        if(Objects.equals(state.getManagerUser().getId(), assignStateRequestDto.managerId())) throw new CustomException(HttpStatus.BAD_REQUEST,"the state manager you are trying to assign is the same as before");
+        if(!user.getRole().equals(Role.STATE_MANAGEMENT_STAFF)) throw new CustomException(HttpStatus.FORBIDDEN,"the user is not a state head");
+        state.setManagerUser(user);
+        stateRepo.save(state);
+        return "assigned the manager : " + user.getFirstName() + " to the state : " + assignStateRequestDto.name();
+
+    }
 
     public List<TenantResponseDto> availableTenant() {
         User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()-> new CustomException(HttpStatus.UNAUTHORIZED, "the user is not authorized"));
         State state = stateRepo.findStateByManagerUser_Id(user.getId()).orElseThrow(()-> new CustomException(HttpStatus.BAD_REQUEST,"you are not allowed!"));
-        List<Tenant> tenantList = availableStatesRepo.findByAvailableState(AvailableState.valueOf(state.getName())).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "the tenant are not there in that state"));
-        return tenantList.stream().map(tenant -> new TenantResponseDto(tenant.getId(), tenant.getName(), tenant.getSchemaName(), tenant.getTenantStatus(), tenant.getCreatedAt(), tenant.getUpdatedAt(), tenant.getSubscriptionAmount(), tenant.getOperatingTenant().getUser().getId())).toList();
+        List<TenantAvailableStates> tenantAvailableStatesList = availableStatesRepo.findAllByAvailableState(AvailableState.valueOf(state.getName())).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "the tenant are not there in that state"));
+        return tenantAvailableStatesList.stream().map(TenantAvailableStates::getTenant).map(tenant -> new TenantResponseDto(tenant.getId(), tenant.getName(), tenant.getSchemaName(), tenant.getTenantStatus(), tenant.getCreatedAt(), tenant.getUpdatedAt(), tenant.getSubscriptionAmount(), tenant.getOperatingTenant().getUser().getId())).toList();
     }
 
 

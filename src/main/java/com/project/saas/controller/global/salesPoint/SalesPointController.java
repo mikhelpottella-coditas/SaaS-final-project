@@ -26,10 +26,6 @@ public class SalesPointController {
     private final TenantService tenantService;
     private final UserCrudService userCrudService;
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateProfile(@PathVariable Long id,@RequestBody UserRequestDto userRequestDto) {
-        return ResponseEntity.ok(userCrudService.updateProfile(id,userRequestDto));
-    }
 
     @PostMapping("/invite/operational-head")
     public ResponseEntity<String> inviteOperationalHead(@Valid @RequestBody InvitationRequestDto invitationRequestDto){

@@ -62,34 +62,10 @@ public class AuthController {
     }
 
 
-
-
-    @Operation(
-            summary = "registration for operation head",
-            description = "when the invitation sent to the operation head he can register to the application by providing the details"
-    )
-    @PostMapping("/register/operational-head/{invitation}")
-    public ResponseEntity<String> operationalHeadRegister(@Valid @RequestBody UserRequestDto user,@PathVariable String invitation){
-        return ResponseEntity.status(201).body(userRegisterService.saveOperationalHead(user,invitation));
+    @PostMapping("/register/{invitation}")
+    public ResponseEntity<String> registerWithInvitation(@Valid @RequestBody UserRequestDto user,@PathVariable String invitation){
+        return  ResponseEntity.status(201).body(userRegisterService.saveUser(user,invitation));
     }
-
-    @PostMapping("/register/management-staff/{invitation}")
-    public ResponseEntity<String> managementStaffRegister(@Valid @RequestBody UserRequestDto user,@PathVariable String invitation){
-        return  ResponseEntity.status(201).body(userRegisterService.saveManagementStaff(user,invitation));
-    }
-
-
-    @PostMapping("/register/sales-point/{invitation}")
-    public ResponseEntity<String> salesPointRegister(@Valid @RequestBody UserRequestDto user,@PathVariable String invitation){
-        return  ResponseEntity.status(201).body(userRegisterService.saveSalesPoint(user,invitation));
-    }
-
-
-    @PostMapping("/register/state-management/{invitation}")
-    public ResponseEntity<String> sateManagementRegister(@Valid @RequestBody UserRequestDto user,@PathVariable String invitation){
-        return  ResponseEntity.status(201).body(userRegisterService.saveStateManagement(user,invitation));
-    }
-
 
 
 }

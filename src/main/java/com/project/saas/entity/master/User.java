@@ -1,5 +1,6 @@
 package com.project.saas.entity.master;
 
+import com.project.saas.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -39,8 +40,8 @@ public class User implements UserDetails,EndUser{
     @Column(name = "phone", nullable = false,unique = true)
     private String phone;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "user",fetch = FetchType.EAGER)
-    private List<UserRoles> userRoles;
+
+    private Role role;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -53,9 +54,29 @@ public class User implements UserDetails,EndUser{
     private Tenant tenant;
 
 
+    @OneToMany(mappedBy = "electrician")
+    private List<Area> electrianAreas;
+
+    @OneToMany(mappedBy = "biller")
+    private List<Area> billerAreas;
+
+    @OneToMany(mappedBy = "managerUser")
+    private List<Cities> managerCities;
+
+    @OneToMany(mappedBy = "crmUser")
+    private List<Customer> crmUser;
+
+    @OneToMany(mappedBy = "managerUser")
+    private List<District> managerCity;
+
+
+    @OneToMany(mappedBy = "managerUser")
+    private List<State> managerState;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-      return userRoles.stream().map(u-> new SimpleGrantedAuthority("ROLE_"+u.getRole().name())).toList();
+        return List.of(new SimpleGrantedAuthority("ROLE_"+role.name()));
     }
 
     @Override
@@ -64,10 +85,6 @@ public class User implements UserDetails,EndUser{
     }
 
 
-    public void addUserRole(UserRoles userRole){
-        if(userRoles == null) userRoles = new ArrayList<>();
-        userRoles.add(userRole);
-        userRole.setUser(this);
-    }
+
 
 }

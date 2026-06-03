@@ -28,6 +28,7 @@ public class InvitationService {
     private final InvitationRepo inviteRepo;
     private final JavaMailSender javaMailSender;
     private final UserService userService;
+    private final String path = "/global/auth/register/";
 
     public String inviteUser(String issuedTo, Role role, String message, String path) {
 
@@ -59,6 +60,7 @@ public class InvitationService {
 
 
     public Boolean validate(String email, String token) {
+        if(token.isEmpty()) throw new CustomException(HttpStatus.BAD_REQUEST, "please share the invitation code");
         Invitation invite = inviteRepo.findByInvitationToken(token);
         log.info("validating the user token ");
         return email.equals(invite.getIssuedTo());
@@ -66,35 +68,45 @@ public class InvitationService {
 
     public String inviteOperationHead(@Valid InvitationRequestDto request) {
         log.info("invite operational head successfully");
-        return inviteUser(request.issuedTo(), Role.OPERATIONAL_HEAD,request.message(),"/auth/register/operational-head/");
+        return inviteUser(request.issuedTo(), Role.OPERATIONAL_HEAD,request.message(),path);
     }
 
 
     public String inviteManagement(InvitationRequestDto invitationRequestDto) {
         log.info("invite management successfully");
-        return inviteUser(invitationRequestDto.issuedTo(), Role.MANAGEMENT_STAFF, invitationRequestDto.message(), "/auth/register/management-staff/");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.MANAGEMENT_STAFF, invitationRequestDto.message(), path);
     }
 
 
     public String inviteSalesPoint(@Valid InvitationRequestDto invitationRequestDto) {
         log.info("invite sales-point successfully");
-        return inviteUser(invitationRequestDto.issuedTo(), Role.SALES_POINT, invitationRequestDto.message(), "/auth/register/sales-point/");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.SALES_POINT, invitationRequestDto.message(), path);
     }
 
 
     public String inviteStateManager(@Valid InvitationRequestDto invitationRequestDto) {
         log.info("invite to state management staff is successful");
-        return inviteUser(invitationRequestDto.issuedTo(), Role.STATE_MANAGEMENT_STAFF, invitationRequestDto.message(), "/auth/register/state-management/");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.STATE_MANAGEMENT_STAFF, invitationRequestDto.message(), path);
     }
 
     public String inviteDistrictManager(@Valid InvitationRequestDto invitationRequestDto) {
-        log.info("invite to state management staff is successful");
-        return inviteUser(invitationRequestDto.issuedTo(), Role.DISTRICT_MANAGEMENT_STAFF, invitationRequestDto.message(), "/auth/register/state-management/");
+        log.info("invite to district management staff is successful");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.DISTRICT_MANAGEMENT_STAFF, invitationRequestDto.message(), path);
     }
 
     public String inviteOperationHeadAsAdmin(InvitationRequestDto invitationRequestDto) {
         log.info("invite to admin of a provider is successful");
-        return inviteUser(invitationRequestDto.issuedTo(), Role.TENANT_ADMIN, invitationRequestDto.message(), "/tenant/auth/register/admin/");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.TENANT_ADMIN, invitationRequestDto.message(), "/tenant/auth/register/");
 
+    }
+
+    public String inviteCityManager(@Valid InvitationRequestDto invitationRequestDto) {
+        log.info("invite to city is successful");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.CITY_MANAGEMENT_STAFF, invitationRequestDto.message(), path);
+
+    }
+
+    public Invitation getInvite(String invitation) {
+        return inviteRepo.findByInvitationToken(invitation);
     }
 }

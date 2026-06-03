@@ -21,10 +21,6 @@ public class OperationHeadController {
     private final UserCrudService userCrudService;
 
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<String> updateProfile(@PathVariable Long id,@RequestBody UserRequestDto userRequestDto) {
-        return ResponseEntity.ok(userCrudService.updateProfile(id,userRequestDto));
-    }
 
 
     @PostMapping("/tenant/register")

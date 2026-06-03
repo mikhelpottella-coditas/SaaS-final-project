@@ -12,5 +12,5 @@ import java.util.Optional;
 
 @Repository
 public interface TenantAvailableStatesRepo extends JpaRepository<TenantAvailableStates, Long> {
-    Optional<List<Tenant>> findByAvailableState(AvailableState availableState);
+    Optional<List<TenantAvailableStates>> findAllByAvailableState(AvailableState availableState);
 }

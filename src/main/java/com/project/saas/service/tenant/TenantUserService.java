@@ -4,7 +4,6 @@ import com.project.saas.config.tenantConfig.TenantContext;
 import com.project.saas.dto.global.request_dto.LoginRequestDto;
 import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.entity.tenant.TenantUser;
-import com.project.saas.entity.tenant.TenantUserRoles;
 import com.project.saas.enums.Role;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.tenant.TenantUserRepo;
@@ -50,14 +49,13 @@ public class TenantUserService {
                 .firstName(userDto.firstName())
                 .lastName(userDto.lastName())
                 .phone(userDto.phone())
+                .role(Role.M1_MANAGER)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
 
 
-        TenantUserRoles userRoles = new TenantUserRoles();
-        userRoles.setRole(Role.M1_MANAGER);
-        user.addTenantUser(userRoles);
+
 
 
 

@@ -1,5 +1,6 @@
 package com.project.saas.controller.global.globalManagement;
 
+import com.project.saas.dto.global.request_dto.DistrictRequestDto;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.dto.global.responceDto.TenantResponseDto;
@@ -11,6 +12,7 @@ import com.project.saas.service.global.StateService;
 import com.project.saas.service.global.UserCrudService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,15 +30,7 @@ public class StateManagementController{
     private final StateService stateService;
 
 
-    @PostMapping("/invite/district-manager")
-    public ResponseEntity<String> inviteDistrictManager(@Valid @RequestBody InvitationRequestDto invitationRequestDto){
-        return ResponseEntity.ok(invitationService.inviteDistrictManager(invitationRequestDto));
-    }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<String> UpdateProfile(@PathVariable Long id,@RequestBody UserRequestDto userRequestDto){
-        return ResponseEntity.ok(userCrudService.updateProfile(id,userRequestDto));
-    }
 
 
     @GetMapping("/available-tenants")
@@ -45,9 +39,27 @@ public class StateManagementController{
     }
 
 
+    @PostMapping("/invite/district-manager")
+    public ResponseEntity<String> inviteDistrictManager(@Valid @RequestBody InvitationRequestDto invitationRequestDto){
+        return ResponseEntity.ok(invitationService.inviteDistrictManager(invitationRequestDto));
+    }
+
+    @PostMapping("/create/district")
+    public ResponseEntity<String> createDistrict(@Valid @RequestBody DistrictRequestDto districtRequestDto){
+        return ResponseEntity.ok(districtService.createDistrict(districtRequestDto));
+    }
+
+
+
     @GetMapping("/district-heads")
-    public ResponseEntity<List<UserResponseDto>> getAllDistrictHeads(){
-        return ResponseEntity.ok(districtService.getAllDistrictHeads());
+    public ResponseEntity<List<UserResponseDto>> getAllDistrictHeads(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending,
+            @RequestParam(defaultValue = "") String search
+           ){
+        return ResponseEntity.ok(districtService.getAllDistrictHeads(page,size,sortBy,ascending,search));
     }
 
     @GetMapping("/district-head/{id}")
@@ -55,9 +67,11 @@ public class StateManagementController{
         return ResponseEntity.ok(districtService.getDistrictHeadById(id));
     }
 
-    @PatchMapping("/assign-district/{districtId}/district-head/{headId}")
-    public ResponseEntity<String> assignDistrictHead(@PathVariable Long districtId,@PathVariable Long headId){
-        return ResponseEntity.ok(districtService.assignDistrictHead(districtId,headId));
+    @PatchMapping("/assign-district/{stateId}/{districtId}/district-head/{headId}")
+    public ResponseEntity<String> assignDistrictHead( @PathVariable Long stateId,@PathVariable Long districtId,@PathVariable Long headId){
+        return ResponseEntity.ok(districtService.assignDistrictHead(stateId,districtId,headId));
     }
+
+    @PatchMapping("/update/district-head/")
 
 }

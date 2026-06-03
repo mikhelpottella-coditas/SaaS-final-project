@@ -8,6 +8,7 @@ import com.project.saas.enums.TenantStatus;
 import com.project.saas.service.InvitationService;
 import com.project.saas.service.global.AdminService;
 import com.project.saas.service.global.GlobalManagementService;
+import com.project.saas.service.global.UserCrudService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,25 +26,10 @@ public class GlobalAdminController {
 
 
 
-
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateAdminProfile(@PathVariable Long id,@RequestBody UserRequestDto userRequestDto) {
-        return ResponseEntity.ok(adminService.updateAdminProfile(id,userRequestDto));
-    }
-
-
-
-    @PutMapping("/{tenantName}/{status}")
-    public ResponseEntity<String> activateTenant(@PathVariable String tenantName,@PathVariable TenantStatus status) {
-        return ResponseEntity.ok(adminService.activateTenant(tenantName,status));
-    }
-
-
     @PostMapping("/invite/management")
     public ResponseEntity<String> inviteManagement(@RequestBody InvitationRequestDto invitationRequestDto){
         return ResponseEntity.ok(invitationService.inviteManagement(invitationRequestDto));
     }
-
 
     @GetMapping("/all-management")
     public ResponseEntity<List<UserResponseDto>> getAllManagement(@RequestParam(defaultValue = "0") int page,
@@ -54,5 +40,8 @@ public class GlobalAdminController {
     }
 
 
-
+    @PutMapping("/{tenantName}/{status}")
+    public ResponseEntity<String> activateTenant(@PathVariable String tenantName,@PathVariable TenantStatus status) {
+        return ResponseEntity.ok(adminService.activateTenant(tenantName,status));
+    }
 }

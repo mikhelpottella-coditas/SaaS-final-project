@@ -2,7 +2,6 @@ package com.project.saas.service.tenant;
 
 import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.entity.tenant.TenantUser;
-import com.project.saas.entity.tenant.TenantUserRoles;
 import com.project.saas.enums.Role;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.tenant.TenantUserRepo;
@@ -34,14 +33,12 @@ public class TenantUserRegisterService {
                 .firstName(user.firstName())
                 .lastName(user.lastName())
                 .password(user.password())
+                .role(Role.TENANT_ADMIN)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
 
-        TenantUserRoles userRoles = new TenantUserRoles();
-        userRoles.setRole(Role.TENANT_ADMIN);
 
-        tenantUser.addTenantUser(userRoles);
         userRepo.save(tenantUser);
 
         return "admin registration success";
