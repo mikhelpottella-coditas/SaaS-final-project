@@ -53,21 +53,20 @@ public class User implements UserDetails,EndUser{
     @JoinColumn(name = "tenant_id",referencedColumnName = "id")
     private Tenant tenant;
 
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    private Crm crm;
 
-    @OneToMany(mappedBy = "electrician")
-    private List<Area> electrianAreas;
+    @OneToOne(mappedBy = "electrician")
+    private Area electrianAreas;
 
-    @OneToMany(mappedBy = "biller")
-    private List<Area> billerAreas;
+    @OneToOne(mappedBy = "biller")
+    private Area billerAreas;
 
     @OneToMany(mappedBy = "managerUser")
     private List<Cities> managerCities;
 
-    @OneToMany(mappedBy = "crmUser")
-    private List<Customer> crmUser;
-
     @OneToMany(mappedBy = "managerUser")
-    private List<District> managerCity;
+    private List<District> managerDistrict;
 
 
     @OneToMany(mappedBy = "managerUser")

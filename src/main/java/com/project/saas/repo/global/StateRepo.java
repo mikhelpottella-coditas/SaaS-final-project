@@ -12,4 +12,6 @@ public interface StateRepo extends JpaRepository<State,Long> {
     Optional<State> findStateByName(String name);
 
     Optional<State> findStateByManagerUser_Id(Long managerUserId);
+
+    boolean existsByName(String name);
 }

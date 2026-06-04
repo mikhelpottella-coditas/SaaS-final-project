@@ -53,11 +53,11 @@ public class StateManagementController{
 
     @GetMapping("/district-heads")
     public ResponseEntity<List<UserResponseDto>> getAllDistrictHeads(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "true") boolean ascending,
-            @RequestParam(defaultValue = "") String search
+            @RequestParam(required = false,defaultValue = "0") int page,
+            @RequestParam(required = false,defaultValue = "5") int size,
+            @RequestParam(required = false,defaultValue = "id") String sortBy,
+            @RequestParam(required = false,defaultValue = "true") boolean ascending,
+            @RequestParam(required = false,defaultValue = "") String search
            ){
         return ResponseEntity.ok(districtService.getAllDistrictHeads(page,size,sortBy,ascending,search));
     }
@@ -72,6 +72,6 @@ public class StateManagementController{
         return ResponseEntity.ok(districtService.assignDistrictHead(stateId,districtId,headId));
     }
 
-    @PatchMapping("/update/district-head/")
+
 
 }

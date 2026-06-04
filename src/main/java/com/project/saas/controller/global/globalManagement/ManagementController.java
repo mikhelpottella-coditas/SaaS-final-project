@@ -5,8 +5,7 @@ import com.project.saas.dto.global.request_dto.StateRequestDto;
 import com.project.saas.dto.global.request_dto.AssignStateRequestDto;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.dto.global.request_dto.UserRequestDto;
-import com.project.saas.dto.global.responceDto.TenantResponseDto;
-import com.project.saas.dto.global.responceDto.UserResponseDto;
+import com.project.saas.dto.global.responceDto.*;
 import com.project.saas.service.InvitationService;
 import com.project.saas.service.TenantService;
 import com.project.saas.service.global.ManagerUserService;
@@ -51,34 +50,26 @@ public class ManagementController {
     }
 
     @GetMapping("/all/state-managers")
-    public ResponseEntity<List<UserResponseDto>>  getAllStateManagers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "true") boolean ascending
+    public ResponseEntity<List<StateManagerResponseDto>>  getAllStateManagers(
+            @RequestParam(,required = false, defaultValue = "0") int page,
+            @RequestParam(,required = false, defaultValue = "5") int size,
+            @RequestParam(,required = false, defaultValue = "id") String sortBy,
+            @RequestParam(,required = false, defaultValue = "true") boolean ascending
     ){
         return ResponseEntity.ok(managerUserService.getAllStateManagers(page,size,sortBy,ascending));
     }
 
     @GetMapping("/all/district-managers")
-    public ResponseEntity<List<UserResponseDto>>  getAllDistrictManagers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "true") boolean ascending
+    public ResponseEntity<List<DistrictMangerResponseDto>>  getAllDistrictManagers(
+            @RequestParam(,required = false, defaultValue = "0") int page,
+            @RequestParam(,required = false, defaultValue = "5") int size,
+            @RequestParam(,required = false, defaultValue = "id") String sortBy,
+            @RequestParam(,required = false, defaultValue = "true") boolean ascending
     ){
         return ResponseEntity.ok(managerUserService.getAllDistrictManagers(page,size,sortBy,ascending));
     }
 
-    @GetMapping("/all/city-managers")
-    public ResponseEntity<List<UserResponseDto>>  getAllCityManagers(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
-            @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "true") boolean ascending
-    ){
-        return ResponseEntity.ok(managerUserService.getAllCityManagers(page,size,sortBy,ascending));
-    }
+
 
 
     @PostMapping("/invite/sales-point")

@@ -32,11 +32,10 @@ public class Customer {
 
     @ManyToOne
     @JoinColumn(name = "area_id",nullable = false)
-    private Customer customer;
+    private Area area;
 
     @ManyToOne
-    @JoinColumn(name = "crm_id")
-    private User crmUser;
+    private Crm crm;
 
     @OneToMany(mappedBy = "customer")
     private List<CustomerTenant> customerTenantList;

@@ -109,4 +109,22 @@ public class InvitationService {
     public Invitation getInvite(String invitation) {
         return inviteRepo.findByInvitationToken(invitation);
     }
+
+    public String inviteBiller(@Valid InvitationRequestDto invitationRequestDto) {
+        log.info("invite to biller is successful");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.BILLER, invitationRequestDto.message(), path);
+
+    }
+
+    public String inviteCrm(@Valid InvitationRequestDto invitationRequestDto) {
+        log.info("invite to biller is successful");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.CMR, invitationRequestDto.message(), path);
+
+    }
+
+    public String inviteElectrician(@Valid InvitationRequestDto invitationRequestDto) {
+        log.info("invite to biller is successful");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.ELECTRICIAN, invitationRequestDto.message(), path);
+
+    }
 }

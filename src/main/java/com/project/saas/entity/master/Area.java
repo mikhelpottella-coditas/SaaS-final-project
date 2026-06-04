@@ -3,6 +3,8 @@ package com.project.saas.entity.master;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter @Setter
 @AllArgsConstructor
@@ -21,7 +23,7 @@ public class Area {
     @Column(name = "code",nullable = false)
     private String code;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "electrician_id")
     private User electrician;
 
@@ -29,14 +31,11 @@ public class Area {
     @JoinColumn(name = "city_id",nullable = false)
     private Cities city;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "biller_id")
     private User biller;
 
-
-
-
-
-
+    @OneToMany(mappedBy = "area")
+    private List<Customer> customerList;
 
 }

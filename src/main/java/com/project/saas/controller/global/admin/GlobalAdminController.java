@@ -32,10 +32,10 @@ public class GlobalAdminController {
     }
 
     @GetMapping("/all-management")
-    public ResponseEntity<List<UserResponseDto>> getAllManagement(@RequestParam(defaultValue = "0") int page,
-                                                                  @RequestParam(defaultValue = "5") int size,
-                                                                  @RequestParam(defaultValue = "id") String sortBy,
-                                                                  @RequestParam(defaultValue = "true") boolean ascending){
+    public ResponseEntity<List<UserResponseDto>> getAllManagement(@RequestParam(required = false,defaultValue = "0") int page,
+                                                                  @RequestParam(required = false,defaultValue = "5") int size,
+                                                                  @RequestParam(required = false,defaultValue = "id") String sortBy,
+                                                                  @RequestParam(required = false,defaultValue = "true") boolean ascending){
         return ResponseEntity.ok(managementService.getAllManagement(page,size,sortBy,ascending));
     }
 

@@ -30,6 +30,8 @@ public class StateService {
 
 
     public String createState(StateRequestDto stateRequestDto) {
+
+        if(stateRepo.existsByName(stateRequestDto.stateName().name())) throw new CustomException(HttpStatus.BAD_REQUEST, "the state is already exists");
         State state = State.builder().name(stateRequestDto.stateName().name()).code(stateRequestDto.stateName().getCode()).build();
         stateRepo.save(state);
         return "success on createState";

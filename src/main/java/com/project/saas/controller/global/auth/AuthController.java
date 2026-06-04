@@ -38,6 +38,8 @@ public class AuthController {
         return ResponseEntity.ok(userService.save(user));
     }
 
+
+
     @Operation(
             summary = "login to the application",
             description = "the user will login into the application by providing the user name and password and in return they get the access token and refresh token"
@@ -66,6 +68,5 @@ public class AuthController {
     public ResponseEntity<String> registerWithInvitation(@Valid @RequestBody UserRequestDto user,@PathVariable String invitation){
         return  ResponseEntity.status(201).body(userRegisterService.saveUser(user,invitation));
     }
-
 
 }

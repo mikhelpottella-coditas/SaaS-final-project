@@ -21,6 +21,10 @@ public class UserCrudService {
     private final UserRepository userRepository;
 
 
+    public User getById(Long billerId) {
+        return userRepository.findById(billerId).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, " the user user trying to assess is not found"));
+    }
+
     public String updateProfile(UserRequestDto userRequestDto)  {
 
         User user = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -46,4 +50,6 @@ public class UserCrudService {
         if(user==null) throw  new CustomException(HttpStatus.NOT_FOUND, "the user is not found to update");
         return new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getCreatedAt(), user.getUpdatedAt());
     }
+
+
 }

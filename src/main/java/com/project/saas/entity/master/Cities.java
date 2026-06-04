@@ -37,5 +37,8 @@ public class Cities {
     @JoinColumn(name = "district_service_id",nullable = false)
     private District district;
 
+    @OneToMany(mappedBy = "cities")
+    private List<Crm> crmList;
+
 
 }
