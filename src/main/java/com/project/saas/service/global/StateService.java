@@ -2,6 +2,8 @@ package com.project.saas.service.global;
 
 import com.project.saas.dto.global.request_dto.AssignStateRequestDto;
 import com.project.saas.dto.global.request_dto.StateRequestDto;
+import com.project.saas.dto.global.responceDto.StateManagerResponseDto;
+import com.project.saas.dto.global.responceDto.StateResponseDto;
 import com.project.saas.dto.global.responceDto.TenantResponseDto;
 import com.project.saas.entity.master.*;
 import com.project.saas.enums.AvailableState;
@@ -73,5 +75,16 @@ public class StateService {
     }
 
 
+    public State getById(Long stateId) {
+        return stateRepo.findById(stateId).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "THe state is not found that you are trying to access"));
+    }
 
+
+
+    public StateResponseDto getStateById(Long id) {
+        State state = getByStateHead(id);
+        Long managerId = state.getManagerUser()==null?null:state.getManagerUser().getId();
+        List<Long> districtIds = state.getDistrictList()==null?null:state.getDistrictList().stream().map(District::getId).toList();
+        return new StateResponseDto(state.getId(), state.getName(), managerId, districtIds);
+    }
 }

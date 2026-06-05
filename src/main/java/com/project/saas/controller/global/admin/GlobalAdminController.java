@@ -4,6 +4,7 @@ package com.project.saas.controller.global.admin;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.dto.global.responceDto.UserResponseDto;
+import com.project.saas.entity.master.User;
 import com.project.saas.enums.TenantStatus;
 import com.project.saas.service.InvitationService;
 import com.project.saas.service.global.AdminService;
@@ -31,7 +32,7 @@ public class GlobalAdminController {
         return ResponseEntity.ok(invitationService.inviteManagement(invitationRequestDto));
     }
 
-    @GetMapping("/all-management")
+    @GetMapping("/management")
     public ResponseEntity<List<UserResponseDto>> getAllManagement(@RequestParam(required = false,defaultValue = "0") int page,
                                                                   @RequestParam(required = false,defaultValue = "5") int size,
                                                                   @RequestParam(required = false,defaultValue = "id") String sortBy,
@@ -39,9 +40,9 @@ public class GlobalAdminController {
         return ResponseEntity.ok(managementService.getAllManagement(page,size,sortBy,ascending));
     }
 
-
-    @PutMapping("/{tenantName}/{status}")
-    public ResponseEntity<String> activateTenant(@PathVariable String tenantName,@PathVariable TenantStatus status) {
-        return ResponseEntity.ok(adminService.activateTenant(tenantName,status));
+    @GetMapping("/management/{id}")
+    public ResponseEntity<UserResponseDto> getManagement(@PathVariable("id") Long id){
+        return ResponseEntity.ok(managementService.getById(id));
     }
+
 }

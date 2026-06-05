@@ -3,11 +3,13 @@ package com.project.saas.controller.global.globalManagement;
 import com.project.saas.dto.global.request_dto.DistrictRequestDto;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.dto.global.request_dto.UserRequestDto;
+import com.project.saas.dto.global.responceDto.DistrictMangerResponseDto;
 import com.project.saas.dto.global.responceDto.TenantResponseDto;
 import com.project.saas.dto.global.responceDto.UserResponseDto;
 import com.project.saas.service.InvitationService;
 import com.project.saas.service.TenantService;
 import com.project.saas.service.global.DistrictService;
+import com.project.saas.service.global.ManagerUserService;
 import com.project.saas.service.global.StateService;
 import com.project.saas.service.global.UserCrudService;
 import jakarta.validation.Valid;
@@ -28,9 +30,7 @@ public class StateManagementController{
     private final TenantService tenantService;
     private final DistrictService districtService;
     private final StateService stateService;
-
-
-
+    private final ManagerUserService managerUserService;
 
 
     @GetMapping("/available-tenants")
@@ -49,21 +49,32 @@ public class StateManagementController{
         return ResponseEntity.ok(districtService.createDistrict(districtRequestDto));
     }
 
+    @GetMapping("/district-managers")
+    public ResponseEntity<List<DistrictMangerResponseDto>>  getAllDistrictManagers(
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "5") int size,
+            @RequestParam(required = false, defaultValue = "id") String sortBy,
+            @RequestParam(required = false, defaultValue = "true") boolean ascending,
+            @RequestParam(required = false,defaultValue = "")String search
+    ){
+        return ResponseEntity.ok(managerUserService.getAllDistrictManagers(page,size,sortBy,ascending,search));
+    }
 
 
-    @GetMapping("/district-heads")
-    public ResponseEntity<List<UserResponseDto>> getAllDistrictHeads(
+    @GetMapping("/state/{stateId}/district-managers")
+    public ResponseEntity<List<DistrictMangerResponseDto>> getAllDistrictManagersByState(
+            @PathVariable Long stateId,
             @RequestParam(required = false,defaultValue = "0") int page,
             @RequestParam(required = false,defaultValue = "5") int size,
             @RequestParam(required = false,defaultValue = "id") String sortBy,
             @RequestParam(required = false,defaultValue = "true") boolean ascending,
             @RequestParam(required = false,defaultValue = "") String search
            ){
-        return ResponseEntity.ok(districtService.getAllDistrictHeads(page,size,sortBy,ascending,search));
+        return ResponseEntity.ok(districtService.getAllDistrictManagersByStateId(stateId,page,size,sortBy,ascending,search));
     }
 
     @GetMapping("/district-head/{id}")
-    public ResponseEntity<UserResponseDto> getDistrictHead(@PathVariable Long id){
+    public ResponseEntity<DistrictMangerResponseDto> getDistrictHead(@PathVariable Long id){
         return ResponseEntity.ok(districtService.getDistrictHeadById(id));
     }
 

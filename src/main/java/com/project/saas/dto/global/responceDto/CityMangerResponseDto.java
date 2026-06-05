@@ -20,6 +20,8 @@ public record CityMangerResponseDto(
 
         LocalDateTime updatedAt,
 
-        List<Long> assignedCityIdList
+        List<Long> assignedCityIdList,
+
+        boolean isAssigned
 ) {
 }

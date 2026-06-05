@@ -44,32 +44,38 @@ public class ManagementController {
         return ResponseEntity.ok(stateService.assignState(assignStateRequestDto));
     }
 
-    @PostMapping("/update/state-head")
+    @PostMapping("/reassign/state-manager")
     public ResponseEntity<String> updateStateHead(@RequestBody AssignStateRequestDto assignStateRequestDto){
         return ResponseEntity.ok(stateService.updateStateHead(assignStateRequestDto));
     }
 
     @GetMapping("/all/state-managers")
     public ResponseEntity<List<StateManagerResponseDto>>  getAllStateManagers(
-            @RequestParam(,required = false, defaultValue = "0") int page,
-            @RequestParam(,required = false, defaultValue = "5") int size,
-            @RequestParam(,required = false, defaultValue = "id") String sortBy,
-            @RequestParam(,required = false, defaultValue = "true") boolean ascending
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "5") int size,
+            @RequestParam(required = false, defaultValue = "id") String sortBy,
+            @RequestParam(required = false, defaultValue = "true") boolean ascending,
+            @RequestParam(required = false,defaultValue = "")  String search
     ){
-        return ResponseEntity.ok(managerUserService.getAllStateManagers(page,size,sortBy,ascending));
-    }
-
-    @GetMapping("/all/district-managers")
-    public ResponseEntity<List<DistrictMangerResponseDto>>  getAllDistrictManagers(
-            @RequestParam(,required = false, defaultValue = "0") int page,
-            @RequestParam(,required = false, defaultValue = "5") int size,
-            @RequestParam(,required = false, defaultValue = "id") String sortBy,
-            @RequestParam(,required = false, defaultValue = "true") boolean ascending
-    ){
-        return ResponseEntity.ok(managerUserService.getAllDistrictManagers(page,size,sortBy,ascending));
+        return ResponseEntity.ok(managerUserService.getAllStateManagers(page,size,sortBy,ascending,search));
     }
 
 
+    @GetMapping("/states")
+    public ResponseEntity<List<StateResponseDto>>  getAllStates(
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "5") int size,
+            @RequestParam(required = false, defaultValue = "id") String sortBy,
+            @RequestParam(required = false, defaultValue = "true") boolean ascending,
+            @RequestParam(required = false,defaultValue = "")  String search
+    ){
+        return ResponseEntity.ok(managerUserService.getAllStates(page,size,sortBy,ascending,search));
+    }
+
+    @GetMapping("/state/{id}")
+    public ResponseEntity<StateResponseDto> getStateById(@PathVariable Long id){
+        return ResponseEntity.ok(stateService.getStateById(id));
+    }
 
 
     @PostMapping("/invite/sales-point")

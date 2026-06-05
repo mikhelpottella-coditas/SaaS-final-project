@@ -20,6 +20,10 @@ public record DistrictMangerResponseDto (
 
         LocalDateTime updatedAt,
 
-        List<String> assignedDistricts
+        List<Long> assignedDistrictIdList,
+
+        boolean isAssigned
+
+
 ){
 }

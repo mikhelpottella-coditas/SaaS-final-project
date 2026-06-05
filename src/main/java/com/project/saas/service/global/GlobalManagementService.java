@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,4 +37,10 @@ public class GlobalManagementService {
         log.info("sending the list management staff");
         return responseList;
     }
+
+    public UserResponseDto getById(Long id) {
+        User manager = userService.findById(id);
+        return new UserResponseDto(manager.getId(), manager.getFirstName(), manager.getLastName(), manager.getEmail(), manager.getPhone(), manager.getCreatedAt(), manager.getUpdatedAt());
+    }
 }
+

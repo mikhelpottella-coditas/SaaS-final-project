@@ -21,6 +21,8 @@ public record StateManagerResponseDto (
 
         LocalDateTime updatedAt,
 
-        List<String> assignedStates
+        List<Long> assignedStatesIdList,
+
+        boolean isAssigned
 ){
 }

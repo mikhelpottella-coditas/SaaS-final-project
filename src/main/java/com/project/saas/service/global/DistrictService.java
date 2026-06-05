@@ -2,6 +2,7 @@ package com.project.saas.service.global;
 
 import com.project.saas.dto.global.request_dto.DistrictRequestDto;
 import com.project.saas.dto.global.responceDto.CityMangerResponseDto;
+import com.project.saas.dto.global.responceDto.DistrictMangerResponseDto;
 import com.project.saas.dto.global.responceDto.UserResponseDto;
 import com.project.saas.entity.master.Cities;
 import com.project.saas.entity.master.District;
@@ -15,6 +16,7 @@ import com.project.saas.repo.global.UserRepository;
 import com.project.saas.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -59,7 +61,7 @@ public class DistrictService {
     }
 
 
-    public List<UserResponseDto> getAllDistrictHeads(int page, int size, String sortBy, boolean ascending, String search) {
+    public List<UserResponseDto> getAllDistrictHeadsByState(int page, int size, String sortBy, boolean ascending, String search) {
         Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
         log.info("checking the user is valid or not");
@@ -77,12 +79,15 @@ public class DistrictService {
         return finalList.stream().filter(dto-> dto.firstName().contains(search)).toList();
     }
 
-    public UserResponseDto getDistrictHeadById(Long id) {
-        log.info("first fetching the all the district head then we can find the one we wanted");
-        List<UserResponseDto> userResponseDtoList = getAllDistrictHeads(0,5,"id",true,"");
+    public DistrictMangerResponseDto getDistrictHeadById(Long id) {
 
+        User districtHead = userService.findById(id);
 
-        return userResponseDtoList.stream().filter(userResponseDto -> userResponseDto.id().equals(id)).findFirst().orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "invalid request, the district head not found with the id"));
+        if(districtHead.getRole()!=Role.DISTRICT_MANAGEMENT_STAFF) throw new  CustomException(HttpStatus.BAD_REQUEST, "invalid id to get the district manager");
+
+        List<Long> districtIds = districtHead.getManagerDistrict()==null?null:districtHead.getManagerDistrict().stream().map(District::getId).toList();
+
+        return new DistrictMangerResponseDto(districtHead.getId(), districtHead.getFirstName(), districtHead.getLastName(), districtHead.getEmail(), districtHead.getPhone(), districtHead.getCreatedAt(), districtHead.getUpdatedAt(),districtIds,districtIds!=null);
 
 
     }
@@ -105,7 +110,12 @@ public class DistrictService {
         Pageable pageable = PageRequest.of(page, size, sort);
         List<User> cityHead = userRepository.findAllByRoleAndManagerCitiesIsNotEmpty(Role.CITY_MANAGEMENT_STAFF,pageable).getContent();
         log.info("fetching all the city head who are assigned to the cities");
-        List<CityMangerResponseDto> cityMangerResponseDtoList = cityHead.stream().map(u -> new CityMangerResponseDto(u.getId(), u.getFirstName(), u.getLastName(), u.getEmail(), u.getPhone(), u.getCreatedAt(), u.getUpdatedAt(), u.getManagerCities().stream().map(Cities::getId).toList())).toList();
+
+        List<CityMangerResponseDto> cityMangerResponseDtoList = new ArrayList<>();
+        cityHead.forEach(u->{
+            List<Long> citiesIds = u.getManagerCities()==null?null:u.getManagerCities().stream().map(Cities::getId).toList();
+         cityMangerResponseDtoList.add(new CityMangerResponseDto(u.getId(), u.getFirstName(), u.getLastName(), u.getEmail(), u.getPhone(), u.getCreatedAt(), u.getUpdatedAt(),citiesIds,citiesIds!=null));
+        });
         if(search.isBlank()) return cityMangerResponseDtoList;
         return cityMangerResponseDtoList.stream().filter(c->c.firstName().contains(search)).toList();
     }
@@ -118,4 +128,22 @@ public class DistrictService {
     }
 
 
+    public List<DistrictMangerResponseDto> getAllDistrictManagersByStateId(Long stateId, int page, int size, String sortBy, boolean ascending, String search) {
+        Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        State state = stateService.getById(stateId);
+        List<District> districtList = districtRepo.findAllByState(state, pageable).getContent();
+
+
+        List<DistrictMangerResponseDto> districtMangerResponseDtoList = new ArrayList<>();
+
+        districtList.stream().filter(district->district.getManagerUser()!=null).map(district -> district.getManagerUser()).forEach(district ->{
+
+
+
+
+        });
+
+
+    }
 }
