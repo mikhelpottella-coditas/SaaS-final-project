@@ -23,7 +23,7 @@ public class Area {
     @Column(name = "code",nullable = false)
     private String code;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "electrician_id")
     private User electrician;
 
@@ -31,7 +31,7 @@ public class Area {
     @JoinColumn(name = "city_id",nullable = false)
     private Cities city;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "biller_id")
     private User biller;
 

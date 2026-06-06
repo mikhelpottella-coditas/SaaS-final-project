@@ -4,6 +4,7 @@ package com.project.saas.controller.global.globalManagement;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.dto.global.request_dto.ServiceAreaRequestDto;
 import com.project.saas.dto.global.responceDto.BillerResponseDto;
+import com.project.saas.dto.global.responceDto.CityMangerResponseDto;
 import com.project.saas.dto.global.responceDto.CrmResponseDto;
 import com.project.saas.dto.global.responceDto.ElectricianResponseDto;
 import com.project.saas.service.InvitationService;
@@ -20,12 +21,12 @@ import java.util.List;
 @RequestMapping("/global/city-manager")
 public class CityManagementController {
 
-    private final CityService cityService;
     private final InvitationService invitationService;
     private final AreaService areaService;
     private final BillerService billerService;
     private final ElectricianService electricianService;
     private final CrmService crmService;
+    private final DistrictService districtService;
 
 
     // the service area controllers
@@ -64,16 +65,16 @@ public class CityManagementController {
 
     // assign ground workers to there area
     @PostMapping("/assign/biller/{billerId}/area/{areaId}")
-    public ResponseEntity<String>  assignBiller(@PathVariable Long billerId, @PathVariable Long areaId){
+    public ResponseEntity<String>  assignBiller(@PathVariable(name = "billerId") Long billerId, @PathVariable(name = "areaId") Long areaId){
         return ResponseEntity.ok(billerService.assignArea(billerId,areaId));
     }
 
     @PostMapping("/assign/electrician/{electricianId}/area/{areaId}")
-    public ResponseEntity<String>  assignElectrician(@PathVariable Long electricianId, @PathVariable Long areaId){
+    public ResponseEntity<String>  assignElectrician(@PathVariable(name = "electricianId") Long electricianId, @PathVariable(name = "areaId") Long areaId){
         return ResponseEntity.ok(electricianService.assignArea(electricianId,areaId));
     }
 
-    @PostMapping("/assign/electrician/{electricianId}/area/{areaId}")
+    @PostMapping("/assign/crm/{crmId}/area/{cityId}")
     public ResponseEntity<String>  assignCrm(@PathVariable Long crmId, @PathVariable Long cityId){
         return ResponseEntity.ok(crmService.assignCity(crmId,cityId));
     }
@@ -89,7 +90,7 @@ public class CityManagementController {
         return ResponseEntity.ok(electricianService.reassignArea(electricianId,areaId));
     }
 
-    @PatchMapping("/reassign/electrician/{electricianId}/area/{areaId}")
+    @PatchMapping("/reassign/electrician/{crmId}/area/{cityId}")
     public ResponseEntity<String>  reassignCrm(@PathVariable Long crmId, @PathVariable Long cityId){
         return ResponseEntity.ok(crmService.reassignCity(crmId,cityId));
     }
@@ -173,7 +174,12 @@ public class CityManagementController {
         return  ResponseEntity.ok(crmService.getCrmById(id));
     }
 
+// city controller
 
 
 
+    @GetMapping("/city-head/{headId}")
+    public ResponseEntity<CityMangerResponseDto> getCityHeadById(@PathVariable Long headId){
+        return ResponseEntity.ok(districtService.getCityHeadById(headId));
+    }
 }

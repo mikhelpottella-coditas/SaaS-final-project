@@ -2,9 +2,8 @@ package com.project.saas.controller.global.globalManagement;
 
 import com.project.saas.dto.global.request_dto.AssignStateRequestDto;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
-import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.dto.global.responceDto.CityMangerResponseDto;
-import com.project.saas.dto.global.responceDto.UserResponseDto;
+import com.project.saas.dto.global.responceDto.CityResponseDto;
 import com.project.saas.service.InvitationService;
 import com.project.saas.service.UserService;
 import com.project.saas.service.global.CityService;
@@ -13,9 +12,6 @@ import com.project.saas.service.global.ManagerUserService;
 import com.project.saas.service.global.UserCrudService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,7 +46,7 @@ public class DistrictHeadController {
         return ResponseEntity.ok(cityService.reassignCityHead(assignStateRequestDto));
     }
 
-    @GetMapping("/all/city-heads")
+    @GetMapping("/city-heads")
     public ResponseEntity<List<CityMangerResponseDto>>  getAllCityManagers(
             @RequestParam(required = false,defaultValue = "0") int page,
             @RequestParam(required = false,defaultValue = "5") int size,
@@ -84,11 +80,50 @@ public class DistrictHeadController {
     }
 
 
-    @GetMapping("/city-head/{headId}")
-    public ResponseEntity<CityMangerResponseDto> getCityHeadById(@PathVariable Long headId){
-        return ResponseEntity.ok(districtService.getCityHeadById(headId));
+
+
+    @GetMapping("/district/{districtId}/city-heads")
+    public ResponseEntity<List<CityMangerResponseDto>> getAllCityHeadsByDistricts(
+            @PathVariable Long districtId,
+            @RequestParam(required = false,defaultValue = "0") int page,
+            @RequestParam(required = false,defaultValue = "5") int size,
+            @RequestParam(required = false,defaultValue = "id") String sortBy,
+            @RequestParam(required = false,defaultValue = "true") boolean ascending,
+            @RequestParam(required = false,defaultValue = "") String search)
+    {
+        return ResponseEntity.ok(cityService.getCityHeadsByDistrict(districtId,page,size,sortBy,ascending,search));
+    }
+
+// city based controllers
+
+    @GetMapping("/cities")
+    public ResponseEntity<List<CityResponseDto>> getAllCities(
+            @RequestParam(required = false,defaultValue = "0") int page,
+            @RequestParam(required = false,defaultValue = "5") int size,
+            @RequestParam(required = false,defaultValue = "id") String sortBy,
+            @RequestParam(required = false,defaultValue = "true") boolean ascending,
+            @RequestParam(required = false,defaultValue = "") String search
+    ){
+        return ResponseEntity.ok(cityService.getAllCities(page,size,sortBy,ascending,search));
     }
 
 
+    @GetMapping("/district/{districtId}/cities")
+    public ResponseEntity<List<CityResponseDto>> getAllCitiesByDistrict(
+            @PathVariable Long districtId,
+            @RequestParam(required = false,defaultValue = "0") int page,
+            @RequestParam(required = false,defaultValue = "5") int size,
+            @RequestParam(required = false,defaultValue = "id") String sortBy,
+            @RequestParam(required = false,defaultValue = "true") boolean ascending,
+            @RequestParam(required = false,defaultValue = "") String search
+    ){
+        return ResponseEntity.ok(cityService.getAllCitiesByDistrict(districtId,page,size,sortBy,ascending,search));
+    }
+
+
+    @GetMapping("/cities/{id}")
+    public ResponseEntity<CityResponseDto> getCityById(@PathVariable Long id){
+        return ResponseEntity.ok(cityService.getCityById(id));
+    }
 
 }

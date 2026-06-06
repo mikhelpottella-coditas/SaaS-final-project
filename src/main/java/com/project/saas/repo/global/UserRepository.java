@@ -6,6 +6,7 @@ import com.project.saas.enums.Role;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Repository;
 
 import java.net.ContentHandler;
@@ -14,10 +15,9 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findByEmail(String username);
+    UserDetails findByEmail(String username);
 
 
-    Page<User> findUsersByUserRoles(Role role, Pageable pageable);
 
 
     List<User> findAllByRoleAndManagerDistrict_Empty(Role role, List<District> managerDistrict);
@@ -29,4 +29,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findAllByRole(Role role, Pageable pageable);
 
     Page<User> findAllByRoleAndManagerCitiesIsNotEmpty(Role role, Pageable pageable);
+
+    User findUserByEmail(String username);
 }

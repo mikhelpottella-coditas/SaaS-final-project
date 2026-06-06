@@ -40,7 +40,7 @@ public class UserService {
     private final RefreshTokenService refreshTokenService;
 
     public Optional<User> findByUsername(String username) {
-        return Optional.ofNullable(userRepository.findByEmail(username));
+        return Optional.ofNullable(userRepository.findUserByEmail(username));
     }
 
     public User findById(Long id) {

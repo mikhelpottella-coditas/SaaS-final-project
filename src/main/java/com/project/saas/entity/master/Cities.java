@@ -29,7 +29,7 @@ public class Cities {
     @OneToMany(mappedBy = "city",cascade = CascadeType.ALL)
     private List<Area> areaList;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_user_id")
     private User managerUser;
 

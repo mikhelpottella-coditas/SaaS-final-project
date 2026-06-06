@@ -8,7 +8,5 @@ public record StateRequestDto(
 
         @NotBlank(message = "please enter the state in proper capital letters")
         AvailableState stateName
-        
-
 ) {
 }

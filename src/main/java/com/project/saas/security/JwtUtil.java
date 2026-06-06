@@ -1,9 +1,6 @@
 package com.project.saas.security;
 
 
-import com.project.saas.config.tenantConfig.TenantContext;
-import com.project.saas.entity.master.EndUser;
-import com.project.saas.entity.master.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -13,8 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Component
 @Slf4j

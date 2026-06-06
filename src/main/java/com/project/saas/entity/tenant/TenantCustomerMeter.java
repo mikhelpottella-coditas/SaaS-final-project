@@ -25,16 +25,10 @@ public class TenantCustomerMeter {
     @JoinColumn(name = "meter_id")
     private TenantMeter tenantMeter;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private TenantCustomer customer;
 
-    @ManyToOne
-    @JoinColumn(name = "city_id")
-    private TenantCity city;
+    @Column(name = "customer_id", nullable = false)
+    private Long customerId;
 
-    @Column(name = "area")
-    private String area;
 
     @OneToMany(mappedBy = "tenantCustomerMeter")
     private List<CustomerBill> customerBillList;

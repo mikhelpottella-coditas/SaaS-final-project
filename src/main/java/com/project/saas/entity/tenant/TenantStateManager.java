@@ -29,5 +29,8 @@ public class TenantStateManager {
     @JoinColumn(name = "m2_manager_id")
     private TenantUser m2Manager;
 
+    @ManyToOne
+    @JoinColumn(name = "personnel_id")
+    private TenantUser personnel;
 
 }

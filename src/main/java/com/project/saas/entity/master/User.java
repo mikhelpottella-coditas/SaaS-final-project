@@ -8,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -19,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "users",schema = "public")
-public class User implements UserDetails,EndUser{
+public class User implements UserDetails{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -53,23 +52,23 @@ public class User implements UserDetails,EndUser{
     @JoinColumn(name = "tenant_id",referencedColumnName = "id")
     private Tenant tenant;
 
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Crm crm;
 
-    @OneToOne(mappedBy = "electrician")
+    @OneToOne(mappedBy = "electrician",fetch = FetchType.LAZY)
     private Area electrianAreas;
 
-    @OneToOne(mappedBy = "biller")
+    @OneToOne(mappedBy = "biller",fetch = FetchType.LAZY)
     private Area billerAreas;
 
-    @OneToMany(mappedBy = "managerUser")
+    @OneToMany(mappedBy = "managerUser",fetch = FetchType.LAZY)
     private List<Cities> managerCities;
 
-    @OneToMany(mappedBy = "managerUser")
+    @OneToMany(mappedBy = "managerUser",fetch = FetchType.LAZY)
     private List<District> managerDistrict;
 
 
-    @OneToMany(mappedBy = "managerUser")
+    @OneToMany(mappedBy = "managerUser",fetch = FetchType.LAZY)
     private List<State> managerState;
 
 

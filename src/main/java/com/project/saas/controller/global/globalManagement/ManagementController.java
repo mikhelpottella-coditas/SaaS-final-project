@@ -49,7 +49,7 @@ public class ManagementController {
         return ResponseEntity.ok(stateService.updateStateHead(assignStateRequestDto));
     }
 
-    @GetMapping("/all/state-managers")
+    @GetMapping("/state-managers")
     public ResponseEntity<List<StateManagerResponseDto>>  getAllStateManagers(
             @RequestParam(required = false, defaultValue = "0") int page,
             @RequestParam(required = false, defaultValue = "5") int size,
@@ -58,6 +58,11 @@ public class ManagementController {
             @RequestParam(required = false,defaultValue = "")  String search
     ){
         return ResponseEntity.ok(managerUserService.getAllStateManagers(page,size,sortBy,ascending,search));
+    }
+
+    @GetMapping("/state-manager/{id}")
+    public ResponseEntity<StateManagerResponseDto> getStateManagerById(@PathVariable Long id){
+        return ResponseEntity.ok(stateManagerService.getManagerById(id));
     }
 
 

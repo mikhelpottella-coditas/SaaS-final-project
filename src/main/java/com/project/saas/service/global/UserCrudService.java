@@ -27,7 +27,7 @@ public class UserCrudService {
 
     public String updateProfile(UserRequestDto userRequestDto)  {
 
-        User user = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        User user = userRepository.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         if(user==null) throw  new CustomException(HttpStatus.NOT_FOUND, "the user is not found to update");
 
         if (userRequestDto.firstName() != null && !userRequestDto.firstName().isEmpty())
@@ -46,7 +46,7 @@ public class UserCrudService {
 
 
     public UserResponseDto getProfile() {
-        User user = userRepository.findByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        User user = userRepository.findUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
         if(user==null) throw  new CustomException(HttpStatus.NOT_FOUND, "the user is not found to update");
         return new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getCreatedAt(), user.getUpdatedAt());
     }

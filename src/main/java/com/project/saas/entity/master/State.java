@@ -23,7 +23,7 @@ public class State {
     @Column(name = "code",nullable = false)
     private String code;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_user_id")
     private User managerUser;
 

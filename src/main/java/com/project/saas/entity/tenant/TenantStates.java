@@ -25,10 +25,6 @@ public class TenantStates {
     private String code;
 
     @OneToMany(mappedBy = "state")
-    private List<TenantDistrict > tenantDistrictList;
-
-    @OneToMany(mappedBy = "state")
     private List<TenantStateManager>  tenantStateManagerList;
-
 
 }

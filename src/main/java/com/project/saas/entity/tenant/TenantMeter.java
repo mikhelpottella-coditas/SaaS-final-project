@@ -3,6 +3,8 @@ package com.project.saas.entity.tenant;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -27,5 +29,9 @@ public class TenantMeter {
 
     @Column(name = "interval_btw_photos",nullable = false)
     private Integer intervalBtwPhotos;
+
+    @OneToMany(mappedBy = "tenantMeter")
+    private List<TenantCustomerMeter> tenantCustomerMeterList;
+
 
 }

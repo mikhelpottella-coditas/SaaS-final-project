@@ -27,7 +27,7 @@ public class District {
     @OneToMany(mappedBy = "district",cascade = CascadeType.ALL)
     private List<Cities> citiesList;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_user_id")
     private User managerUser;
 

@@ -1,4 +1,4 @@
-package com.project.saas.entity.master;
+package com.project.saas.dto.global.responceDto;
 
 import java.util.List;
 

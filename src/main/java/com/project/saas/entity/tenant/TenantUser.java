@@ -1,6 +1,5 @@
 package com.project.saas.entity.tenant;
 
-import com.project.saas.entity.master.EndUser;
 import com.project.saas.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,7 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tenant_users")
-public class TenantUser implements UserDetails, EndUser {
+public class TenantUser implements UserDetails {
 
 
     @Id
@@ -43,6 +41,8 @@ public class TenantUser implements UserDetails, EndUser {
     @Column(name = "phone", nullable = false,unique = true)
     private String phone;
 
+    @Column(name = "role",nullable = false)
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     @Column(name = "created_at")
@@ -50,6 +50,15 @@ public class TenantUser implements UserDetails, EndUser {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToMany(mappedBy = "personnel")
+    private List<TenantStateManager> tenantStateManagerPersonnel;
+
+    @OneToMany(mappedBy = "m2Manager")
+    private List<TenantStateManager> tenantStateManagersM2;
+
+    @OneToMany(mappedBy = "m1Manager")
+    private List<TenantStateManager> tenantStateManagersM1;
 
 
     @Override
