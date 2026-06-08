@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -53,10 +54,6 @@ public class TenantUserService {
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
-
-
-
-
 
 
         tenantUserRepo.save(user);
@@ -97,5 +94,9 @@ public class TenantUserService {
 
         return tenantUser;
 
+    }
+
+    public Optional<TenantUser> findByUsername(String name) {
+        return Optional.ofNullable(tenantUserRepo.findTenantUserByEmail(name));
     }
 }

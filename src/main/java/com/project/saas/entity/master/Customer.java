@@ -30,11 +30,11 @@ public class Customer {
     @Column(name = "address",nullable = false)
     private String address;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "area_id",nullable = false)
     private Area area;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Crm crm;
 
     @OneToMany(mappedBy = "customer")

@@ -18,13 +18,13 @@ public class TenantMeterPhoto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "photo_url")
+    @Column(name = "photo_url",nullable = false)
     private String photoUrl;
 
-    @Column(name = "reference")
+    @Column(name = "reference",nullable = false)
     private String reference;
 
-    @Column(name = "capture_time")
+    @Column(name = "capture_time",nullable = false)
     private LocalDateTime captureTime;
 
     @ManyToOne

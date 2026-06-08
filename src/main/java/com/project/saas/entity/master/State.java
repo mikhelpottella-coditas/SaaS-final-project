@@ -27,7 +27,7 @@ public class State {
     @JoinColumn(name = "manager_user_id")
     private User managerUser;
 
-    @OneToMany(mappedBy = "state")
+    @OneToMany(mappedBy = "state",fetch = FetchType.LAZY)
     private List<District> districtList;
 
 

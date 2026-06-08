@@ -44,16 +44,16 @@ public class Tenant {
     @OneToOne(mappedBy = "tenant",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private OperatingTenant operatingTenant;
 
-    @OneToMany(mappedBy = "tenant")
+    @OneToMany(mappedBy = "tenant",fetch = FetchType.LAZY)
     private List<Meter> meterList;
 
-    @OneToMany(mappedBy = "tenant")
+    @OneToMany(mappedBy = "tenant",fetch = FetchType.LAZY)
     private List<TenantSubscriptionBill> tenantSubscriptionBillList;
 
     @OneToMany(mappedBy = "tenant",fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)
     private List<TenantAvailableStates> tenantAvailableStatesList;
 
-    @OneToMany(mappedBy = "tenant")
+    @OneToMany(mappedBy = "tenant",fetch = FetchType.LAZY)
     private List<CustomerTenant> customerTenantList;
 
 

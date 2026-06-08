@@ -1,5 +1,6 @@
 package com.project.saas.service.tenant;
 
+import com.project.saas.entity.tenant.TenantCustomerMeter;
 import com.project.saas.repo.tenant.TenantCustomerMeterRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -13,4 +14,8 @@ import org.springframework.stereotype.Service;
 public class TenantCustomerMeterService {
 
     private final TenantCustomerMeterRepo tenantCustomerMeterRepo;
+
+    public void save(TenantCustomerMeter cmt) {
+        tenantCustomerMeterRepo.save(cmt);
+    }
 }

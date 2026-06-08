@@ -24,14 +24,14 @@ public class District {
     @Column(name = "name",nullable = false)
     private String name;
 
-    @OneToMany(mappedBy = "district",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "district",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private List<Cities> citiesList;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "manager_user_id")
     private User managerUser;
 
-    @ManyToOne
+    @ManyToOne(fetch =  FetchType.LAZY)
     @JoinColumn(name = "state_id",nullable = false)
     private State state;
 

@@ -22,10 +22,10 @@ public class Crm {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
     @JoinColumn(name = "cities_id")
     private Cities cities;
 
-    @OneToMany(mappedBy = "crm")
+    @OneToMany(mappedBy = "crm",fetch = FetchType.LAZY)
     private List<Customer> customer;
 }

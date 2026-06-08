@@ -22,7 +22,7 @@ public class CustomerBill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_meter_id")
     private TenantCustomerMeter  tenantCustomerMeter;
 

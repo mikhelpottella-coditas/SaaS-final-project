@@ -20,18 +20,18 @@ public class CustomerComplaints {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_meter_id",nullable = false)
     private TenantCustomerMeter tenantCustomerMeter;
 
-    @Column(name = "complaint")
+    @Column(name = "complaint",nullable = false)
     private String complaint;
 
     @Column(name = "complaint_status")
     @Enumerated(EnumType.STRING)
     private ComplaintStatus complaintStatus;
 
-    @Column(name = "raise date")
+    @Column(name = "raise date",nullable = false)
     private LocalDateTime raiseDate;
 
 

@@ -21,7 +21,7 @@ public class TenantCustomerMeter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "meter_id")
     private TenantMeter tenantMeter;
 
@@ -46,7 +46,7 @@ public class TenantCustomerMeter {
     private String address;
 
 
-    @OneToMany(mappedBy = "tenantCustomerMeter")
+    @OneToMany(mappedBy = "tenantCustomerMeter", fetch = FetchType.LAZY)
     private List<CustomerBill> customerBillList;
 
 }

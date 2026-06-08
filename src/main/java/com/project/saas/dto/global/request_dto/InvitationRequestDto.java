@@ -8,7 +8,6 @@ public record InvitationRequestDto(
         @Email(message = "email is not in the correct format")
         String issuedTo,
 
-
         String message
 
 ) {

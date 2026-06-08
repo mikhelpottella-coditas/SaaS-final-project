@@ -27,7 +27,7 @@ public class Area {
     @JoinColumn(name = "electrician_id")
     private User electrician;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "city_id",nullable = false)
     private Cities city;
 
@@ -35,7 +35,7 @@ public class Area {
     @JoinColumn(name = "biller_id")
     private User biller;
 
-    @OneToMany(mappedBy = "area")
+    @OneToMany(mappedBy = "area", fetch = FetchType.LAZY)
     private List<Customer> customerList;
 
 }

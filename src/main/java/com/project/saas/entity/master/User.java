@@ -52,13 +52,13 @@ public class User implements UserDetails{
     @JoinColumn(name = "tenant_id",referencedColumnName = "id")
     private Tenant tenant;
 
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
     private Crm crm;
 
-    @OneToOne(mappedBy = "electrician",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "electrician")
     private Area electrianAreas;
 
-    @OneToOne(mappedBy = "biller",fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "biller")
     private Area billerAreas;
 
     @OneToMany(mappedBy = "managerUser",fetch = FetchType.LAZY)

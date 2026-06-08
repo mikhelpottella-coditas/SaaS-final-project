@@ -29,7 +29,7 @@ public class Meter {
     private Integer intervalBtwPhotos;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tenant_id")
     private Tenant tenant;
 
