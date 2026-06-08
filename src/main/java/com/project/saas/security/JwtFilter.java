@@ -3,10 +3,8 @@ package com.project.saas.security;
 
 
 
-import com.project.saas.config.tenantConfig.SchemaMultiTenantConnectionProvider;
 import com.project.saas.config.tenantConfig.TenantContext;
 import com.project.saas.service.CustomUserService;
-import com.project.saas.service.UserService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -6,6 +6,7 @@ import com.project.saas.entity.master.User;
 import com.project.saas.enums.Role;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.InvitationRepo;
+import com.project.saas.service.global.UserService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

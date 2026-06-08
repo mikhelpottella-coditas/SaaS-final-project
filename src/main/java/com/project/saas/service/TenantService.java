@@ -8,6 +8,7 @@ import com.project.saas.enums.TenantStatus;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.StateRepo;
 import com.project.saas.repo.global.TenantRepo;
+import com.project.saas.service.global.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;

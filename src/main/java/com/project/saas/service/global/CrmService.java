@@ -1,9 +1,6 @@
 package com.project.saas.service.global;
 
-import com.project.saas.dto.global.responceDto.BillerResponseDto;
 import com.project.saas.dto.global.responceDto.CrmResponseDto;
-import com.project.saas.dto.global.responceDto.ElectricianResponseDto;
-import com.project.saas.entity.master.Area;
 import com.project.saas.entity.master.Cities;
 import com.project.saas.entity.master.Crm;
 import com.project.saas.entity.master.User;
@@ -12,7 +9,6 @@ import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.CrmRepo;
 import com.project.saas.repo.global.CustomerRepo;
 import com.project.saas.repo.global.UserRepository;
-import com.project.saas.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

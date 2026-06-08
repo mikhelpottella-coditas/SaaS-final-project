@@ -49,7 +49,7 @@ public class TenantUserService {
                 .firstName(userDto.firstName())
                 .lastName(userDto.lastName())
                 .phone(userDto.phone())
-                .role(Role.M1_MANAGER)
+                .role(Role.TENANT_ADMIN)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();

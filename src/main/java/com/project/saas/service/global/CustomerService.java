@@ -2,7 +2,6 @@ package com.project.saas.service.global;
 
 import com.project.saas.entity.master.Customer;
 import com.project.saas.repo.global.CustomerRepo;
-import com.project.saas.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

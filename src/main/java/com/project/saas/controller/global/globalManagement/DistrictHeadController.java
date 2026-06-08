@@ -5,7 +5,7 @@ import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.dto.global.responceDto.CityMangerResponseDto;
 import com.project.saas.dto.global.responceDto.CityResponseDto;
 import com.project.saas.service.InvitationService;
-import com.project.saas.service.UserService;
+import com.project.saas.service.global.UserService;
 import com.project.saas.service.global.CityService;
 import com.project.saas.service.global.DistrictService;
 import com.project.saas.service.global.ManagerUserService;

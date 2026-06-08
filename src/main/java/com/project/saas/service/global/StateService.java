@@ -2,7 +2,6 @@ package com.project.saas.service.global;
 
 import com.project.saas.dto.global.request_dto.AssignStateRequestDto;
 import com.project.saas.dto.global.request_dto.StateRequestDto;
-import com.project.saas.dto.global.responceDto.StateManagerResponseDto;
 import com.project.saas.dto.global.responceDto.StateResponseDto;
 import com.project.saas.dto.global.responceDto.TenantResponseDto;
 import com.project.saas.entity.master.*;
@@ -11,7 +10,6 @@ import com.project.saas.enums.Role;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.StateRepo;
 import com.project.saas.repo.global.TenantAvailableStatesRepo;
-import com.project.saas.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

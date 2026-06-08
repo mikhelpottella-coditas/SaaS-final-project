@@ -1,26 +1,20 @@
 package com.project.saas.service.global;
 
-import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.dto.global.responceDto.*;
 import com.project.saas.entity.master.Cities;
 import com.project.saas.entity.master.District;
 import com.project.saas.entity.master.State;
 import com.project.saas.entity.master.User;
 import com.project.saas.enums.Role;
-import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.StateRepo;
 import com.project.saas.repo.global.UserRepository;
-import com.project.saas.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 

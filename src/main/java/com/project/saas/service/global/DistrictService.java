@@ -11,7 +11,6 @@ import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.CityRepo;
 import com.project.saas.repo.global.DistrictRepo;
 import com.project.saas.repo.global.UserRepository;
-import com.project.saas.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

@@ -1,4 +1,4 @@
-package com.project.saas.service;
+package com.project.saas.service.global;
 
 import com.project.saas.config.tenantConfig.TenantContext;
 import com.project.saas.dto.global.request_dto.ChangePasswordRequestDto;
@@ -8,9 +8,7 @@ import com.project.saas.entity.master.User;
 import com.project.saas.enums.Role;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.UserRepository;
-import com.project.saas.repo.tenant.TenantUserRepo;
 import com.project.saas.security.JwtUtil;
-import com.project.saas.service.global.RefreshTokenService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -80,7 +78,7 @@ public class UserService {
                 .firstName(userDto.firstName())
                 .lastName(userDto.lastName())
                 .phone(userDto.phone())
-                .role(Role.OPERATIONAL_HEAD)
+                .role(Role.SALES_POINT)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
