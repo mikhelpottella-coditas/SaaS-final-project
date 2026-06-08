@@ -27,4 +27,7 @@ public class TenantStates {
     @OneToMany(mappedBy = "state")
     private List<TenantStateManager>  tenantStateManagerList;
 
+    @OneToMany(mappedBy = "tenantStates",fetch = FetchType.LAZY)
+    private List<TenantCustomerMeter>  tenantCustomerMeterList;
+
 }

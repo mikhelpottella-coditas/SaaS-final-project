@@ -102,4 +102,35 @@ public class ElectricianService {
         Long areaId = electrician.getBillerAreas()==null ? null : electrician.getBillerAreas().getId();
         return new ElectricianResponseDto(electrician.getId(), electrician.getFirstName(), electrician.getLastName(), electrician.getEmail(), electrician.getPhone(), electrician.getCreatedAt(),electrician.getUpdatedAt() , areaId,areaId!=null);
     }
+
+    public List<ElectricianResponseDto> getAllByArea(Long Id, int page, int size, String sortBy, boolean ascending, String search) {
+        Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Area area = areaService.getById(Id);
+
+        List<User> electricianList = userService.getByRole(Role.ELECTRICIAN, pageable);
+
+
+
+        List<ElectricianResponseDto> electricianResponseDtoList = new ArrayList<>();
+
+        electricianList.stream().filter(e->e.getElectrianAreas().equals(area)).forEach(u->{
+            Long areaId = u.getBillerAreas() == null ? null : u.getBillerAreas().getId();
+            electricianResponseDtoList.add(new ElectricianResponseDto(
+                    u.getId(), u.getFirstName(),
+                    u.getLastName(), u.getEmail(),
+                    u.getPhone(), u.getCreatedAt(),
+                    u.getUpdatedAt(), areaId,areaId!=null));
+        });
+
+        if(search.isEmpty()) return electricianResponseDtoList;
+
+        log.info("fetching all the electrician details ");
+        return electricianResponseDtoList.stream().filter(b-> b.firstName().contains(search)).toList();
+
+
+
+
+    }
 }

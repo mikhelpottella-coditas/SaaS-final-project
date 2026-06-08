@@ -1,13 +1,17 @@
 package com.project.saas.controller.tenant.admin;
 
+import com.project.saas.dto.global.request_dto.AssignStateRequestDto;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
+import com.project.saas.dto.global.request_dto.StateRequestDto;
 import com.project.saas.dto.global.responceDto.UserResponseDto;
 import com.project.saas.dto.tenant.request.MeterRequestDto;
 import com.project.saas.dto.tenant.response.ManagerResponseDto;
 import com.project.saas.dto.tenant.response.MeterResponseDto;
+import com.project.saas.entity.tenant.TenantStates;
 import com.project.saas.service.tenant.TenantInvitationService;
 import com.project.saas.service.tenant.TenantManagementService;
 import com.project.saas.service.tenant.TenantMeterService;
+import com.project.saas.service.tenant.TenantStateService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +28,8 @@ public class AdminController {
     private final TenantMeterService meterService;
     private final TenantManagementService managementService;
     private final TenantInvitationService invitationService;
+
+    private final TenantStateService tenantStateService;
 
 
     // meter specific controllers
@@ -98,6 +104,24 @@ public class AdminController {
     @DeleteMapping("/management/{id}")
     public ResponseEntity<String> deleteManagement(@PathVariable("id") Long id){
         return ResponseEntity.ok(managementService.deleteById(id));
+    }
+
+
+    // state controllers
+
+    @PostMapping("/createState")
+    public ResponseEntity<String> createState(@RequestBody StateRequestDto stateRequestDto){
+        return ResponseEntity.ok(tenantStateService.createState(stateRequestDto));
+    }
+
+    @PostMapping("/assign-m1-state")
+    public ResponseEntity<String> assignState(@RequestBody AssignStateRequestDto assignStateRequestDto){
+        return ResponseEntity.ok(tenantStateService.assignState(assignStateRequestDto));
+    }
+
+    @PostMapping("/reassign-m1/state-manager")
+    public ResponseEntity<String> updateStateHead(@RequestBody AssignStateRequestDto assignStateRequestDto){
+        return ResponseEntity.ok(tenantStateService.assignState(assignStateRequestDto));
     }
 
 

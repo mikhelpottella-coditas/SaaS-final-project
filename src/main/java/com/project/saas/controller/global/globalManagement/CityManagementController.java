@@ -9,6 +9,7 @@ import com.project.saas.dto.global.responceDto.CrmResponseDto;
 import com.project.saas.dto.global.responceDto.ElectricianResponseDto;
 import com.project.saas.service.InvitationService;
 import com.project.saas.service.global.*;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -147,6 +148,22 @@ public class CityManagementController {
             @RequestParam(required = false,defaultValue = "") String search
     ){
         return ResponseEntity.ok(electricianService.getAll(page,size,sortBy,ascending,search));
+    }
+
+
+    @Operation(
+            summary = "get all the electricians working in a particular area"
+    )
+    @GetMapping("/area/{areaId}/electricians")
+    public ResponseEntity<List<ElectricianResponseDto>> getElectricianByArea(
+            @PathVariable Long areaId,
+            @RequestParam(required = false,defaultValue = "0") int page,
+            @RequestParam(required = false,defaultValue = "5") int size,
+            @RequestParam(required = false,defaultValue = "id") String sortBy,
+            @RequestParam(required = false,defaultValue = "true") boolean ascending,
+            @RequestParam(required = false,defaultValue = "") String search
+    ){
+        return ResponseEntity.ok(electricianService.getAllByArea(areaId,page,size,sortBy,ascending,search));
     }
 
 

@@ -34,6 +34,7 @@ public class CustomerComplaints {
     @Column(name = "raise date",nullable = false)
     private LocalDateTime raiseDate;
 
-
+    @Column(name = "assigned_electrician")
+    private Long assignedElectrician;
 
 }

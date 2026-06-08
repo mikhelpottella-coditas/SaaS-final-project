@@ -89,6 +89,12 @@ public class TenantInvitationService {
         return inviteUser(invitationRequestDto.issuedTo(), Role.M2_MANAGER, invitationRequestDto.message(), path);
 
     }
+
+    public String invitePersonnel(InvitationRequestDto invitationRequestDto) {
+        log.info("invite personnel successfully");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.PERSONNEL, invitationRequestDto.message(), path);
+
+    }
 }
 
 

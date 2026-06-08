@@ -45,8 +45,14 @@ public class TenantCustomerMeter {
     @Column(name = "address",nullable = false)
     private String address;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private TenantStates  tenantStates;
 
     @OneToMany(mappedBy = "tenantCustomerMeter", fetch = FetchType.LAZY)
     private List<CustomerBill> customerBillList;
+
+    @OneToMany(mappedBy = "tenantCustomerMeter",fetch = FetchType.LAZY)
+    private List<CustomerComplaints> customerComplaintsList;
 
 }
