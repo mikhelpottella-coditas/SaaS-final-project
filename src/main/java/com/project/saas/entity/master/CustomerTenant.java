@@ -26,10 +26,7 @@ public class CustomerTenant {
     @ManyToOne
     @JoinColumn(name = "tenant_id",nullable = false)
     private Tenant tenant;
-
-    @ManyToOne
-    @JoinColumn(name = "meter_id",nullable = false)
-    private Meter meter;
+    
 
     @ManyToOne
     @JoinColumn(name = "area_id",nullable = false)

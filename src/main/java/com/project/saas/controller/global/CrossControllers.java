@@ -1,8 +1,14 @@
 package com.project.saas.controller.global;
 
+import com.project.saas.dto.global.request_dto.CustomerTenantRequestDto;
 import com.project.saas.dto.global.responceDto.ElectricianResponseDto;
+import com.project.saas.dto.tenant.request.TenantCustomerMeterRequestDto;
+import com.project.saas.dto.tenant.response.MeterResponseDto;
 import com.project.saas.service.global.ElectricianService;
+import com.project.saas.service.tenant.TenantCustomerMeterService;
+import com.project.saas.service.tenant.TenantMeterService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +23,8 @@ import java.util.List;
 public class CrossControllers {
 
     private final ElectricianService electricianService;
+    private final TenantMeterService tenantMeterService;
+    private final TenantCustomerMeterService tenantCustomerMeterService;
 
 
     // used by personnel
@@ -33,6 +41,17 @@ public class CrossControllers {
             @RequestParam(required = false,defaultValue = "") String search
     ){
         return ResponseEntity.ok(electricianService.getAllByArea(areaId,page,size,sortBy,ascending,search));
+    }
+
+
+    @GetMapping("/meters")
+    public ResponseEntity<List<MeterResponseDto>> getMeters(){
+        return ResponseEntity.ok(tenantMeterService.getAll());
+    }
+
+    @PostMapping("/onborad/customer")
+    public ResponseEntity<String > onBoardCustomer(@Valid @RequestBody TenantCustomerMeterRequestDto tenantCustomerMeterRequestDto){
+        return ResponseEntity.status(201).body(tenantCustomerMeterService.register(tenantCustomerMeterRequestDto));
     }
 
 

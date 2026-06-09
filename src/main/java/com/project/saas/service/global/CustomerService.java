@@ -3,8 +3,6 @@ package com.project.saas.service.global;
 import com.project.saas.dto.global.responceDto.CustomerResponseDto;
 import com.project.saas.entity.master.Customer;
 import com.project.saas.entity.master.CustomerTenant;
-import com.project.saas.entity.master.Meter;
-import com.project.saas.entity.master.Tenant;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.CustomerRepo;
 import com.project.saas.repo.global.CustomerTenantRepo;
@@ -17,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -54,11 +51,10 @@ public class CustomerService {
             Customer customer = customerTenant.getCustomer();
             List<Long> areaIds = customer.getCustomerTenantList().stream().map(c->c.getArea().getId()).toList();
             List<Long> tenantIds = customer.getCustomerTenantList().stream().map(c->c.getTenant().getId()).toList();
-            List<Long> meterIds = customer.getCustomerTenantList().stream().map(c->c.getMeter().getId()).toList();
 
 
 
-            CustomerResponseDto customerResponseDto = new CustomerResponseDto(customer.getId(), customer.getUser().getFirstName(), customer.getUser().getLastName(), customer.getUser().getEmail(), customer.getUser().getPhone(), customer.getUser().getCreatedAt(), customer.getUser().getUpdatedAt(), customer.getAddress(),areaIds , customer.getCrm().getId(),tenantIds,meterIds,customerTenant.isActive());
+            CustomerResponseDto customerResponseDto = new CustomerResponseDto(customer.getId(), customer.getUser().getFirstName(), customer.getUser().getLastName(), customer.getUser().getEmail(), customer.getUser().getPhone(), customer.getUser().getCreatedAt(), customer.getUser().getUpdatedAt(), customer.getAddress(),areaIds , customer.getCrm().getId(),tenantIds,customerTenant.isActive());
             customerResponseDtoList.add(customerResponseDto);
         });
 
@@ -76,9 +72,8 @@ public class CustomerService {
         if(customer.getCustomerTenantList().isEmpty()) throw new CustomException(HttpStatus.NOT_FOUND, "customer with the given id is not having any meter");
         List<Long> areaIds = customer.getCustomerTenantList().stream().map(c->c.getArea().getId()).toList();
         List<Long> tenantIds = customer.getCustomerTenantList().stream().map(c->c.getTenant().getId()).toList();
-        List<Long> meterIds = customer.getCustomerTenantList().stream().map(c->c.getMeter().getId()).toList();
 
         log.info("customer details are provided with the given id : {}", id);
-        return new CustomerResponseDto(customer.getId(), customer.getUser().getFirstName(), customer.getUser().getLastName(), customer.getUser().getEmail(), customer.getUser().getPhone(), customer.getUser().getCreatedAt(), customer.getUser().getUpdatedAt(), customer.getAddress(),areaIds , customer.getCrm().getId(),tenantIds,meterIds,true);
+        return new CustomerResponseDto(customer.getId(), customer.getUser().getFirstName(), customer.getUser().getLastName(), customer.getUser().getEmail(), customer.getUser().getPhone(), customer.getUser().getCreatedAt(), customer.getUser().getUpdatedAt(), customer.getAddress(),areaIds , customer.getCrm().getId(),tenantIds,true);
     }
 }

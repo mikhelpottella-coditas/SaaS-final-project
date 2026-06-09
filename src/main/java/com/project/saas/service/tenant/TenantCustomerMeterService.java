@@ -1,9 +1,12 @@
 package com.project.saas.service.tenant;
 
+import com.project.saas.dto.tenant.request.TenantCustomerMeterRequestDto;
 import com.project.saas.entity.tenant.TenantCustomerMeter;
+import com.project.saas.entity.tenant.TenantMeter;
 import com.project.saas.entity.tenant.TenantStates;
 import com.project.saas.repo.tenant.TenantCustomerMeterRepo;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,8 @@ import java.util.List;
 public class TenantCustomerMeterService {
 
     private final TenantCustomerMeterRepo tenantCustomerMeterRepo;
+    private final TenantMeterService tenantMeterService;
+    private final TenantStateService tenantStateService;
 
     public void save(TenantCustomerMeter cmt) {
         tenantCustomerMeterRepo.save(cmt);
@@ -24,5 +29,27 @@ public class TenantCustomerMeterService {
 
     public List<TenantCustomerMeter> getAllByState(TenantStates states) {
         return tenantCustomerMeterRepo.findAllByTenantStates(states);
+    }
+
+    public String register(@Valid TenantCustomerMeterRequestDto tenantCustomerMeterRequestDto) {
+
+        TenantMeter meter = tenantMeterService.getById(tenantCustomerMeterRequestDto.tenantMeterId());
+        TenantStates states = tenantStateService.getById(tenantCustomerMeterRequestDto.tenantStatesId());
+        TenantCustomerMeter tenantCustomerMeter = TenantCustomerMeter.builder()
+                .tenantMeter(meter)
+                .customerId(tenantCustomerMeterRequestDto.customerId())
+                .firstName(tenantCustomerMeterRequestDto.firstName())
+                .lastName(tenantCustomerMeterRequestDto.lastName())
+                .email(tenantCustomerMeterRequestDto.email())
+                .phone(tenantCustomerMeterRequestDto.phone())
+                .address(tenantCustomerMeterRequestDto.address())
+                .doorNo(tenantCustomerMeterRequestDto.doorNo())
+                .tenantStates(states).build();
+
+        tenantCustomerMeterRepo.save(tenantCustomerMeter);
+
+        log.info("the customer registration successfully on the tenant meter with id : {}",meter.getId());
+        return "the customer registration successfully on the tenant meter with id : "+meter.getId();
+
     }
 }

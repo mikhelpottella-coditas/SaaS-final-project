@@ -21,6 +21,6 @@ public record CustomerBillRequestDto(
         Long units,
 
         @NotNull(message = "photos are empty")
-        List<String> photoUrls
+        List<MeterPhotoRequestDto> meterPhotoRequestDtoList
 ) {
 }

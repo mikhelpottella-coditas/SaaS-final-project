@@ -42,6 +42,9 @@ public class CustomerBill {
     @Column(name = "to", nullable = false)
     private LocalDateTime to;
 
+    @Column(name = "paid_date")
+    private LocalDateTime paidDate;
+
     @Column(name = "payment_type")
     @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
@@ -59,5 +62,6 @@ public class CustomerBill {
         meterPhotosList.add(meterPhoto);
         meterPhoto.setBill(this);
     }
+
 
 }

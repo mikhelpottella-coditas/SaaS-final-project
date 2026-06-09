@@ -12,6 +12,7 @@ import com.project.saas.enums.ComplaintStatus;
 import com.project.saas.enums.WorkType;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.tenant.CustomerComplaintsRepo;
+import com.project.saas.repo.tenant.TenantCustomerMeterRepo;
 import com.project.saas.service.global.AssignWorkService;
 import com.project.saas.service.global.CustomerService;
 import com.project.saas.service.global.UserService;
@@ -41,6 +42,7 @@ public class CustomerComplaintService {
     private final TenantCustomerMeterService tenantCustomerMeterService;
     private final CustomerService customerService;
     private final AssignWorkService assignWorkService;
+    private final TenantCustomerMeterRepo tenantCustomerMeterRepo;
 
 
     public List<ComplaintResponseDto>   getAllComplaintsByState(Long id, ComplaintStatus filter, int page, int size, String sortBy, boolean ascending, String search) {
@@ -113,5 +115,15 @@ public class CustomerComplaintService {
         customerComplaints.setComplaintStatus(ComplaintStatus.RAISED_TO_M2);
         log.info("the complaint is raised to m2 manager : {}",id);
         return new ComplaintResponseDto(customerComplaints.getId(), customerComplaints.getTenantCustomerMeter().getId(), customerComplaints.getComplaint(), customerComplaints.getComplaintStatus().name(), customerComplaints.getRaiseDate(), customerComplaints.getAssignedElectrician());
+    }
+
+    public List<ComplaintResponseDto> getByCustomer(String doorNo) {
+
+        TenantCustomerMeter customerMeter = tenantCustomerMeterRepo.findByDoorNo(doorNo);
+
+        List<CustomerComplaints> customerComplaintsList = customerMeter.getCustomerComplaintsList();
+
+        log.info("getting all the complaints of a customer");
+        return customerComplaintsList.stream().map(c->new ComplaintResponseDto(c.getId(), c.getTenantCustomerMeter().getId(), c.getComplaint(), c.getComplaintStatus().name(), c.getRaiseDate(), c.getAssignedElectrician())).toList();
     }
 }

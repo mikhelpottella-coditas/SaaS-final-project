@@ -45,9 +45,6 @@ public class Tenant {
     private OperatingTenant operatingTenant;
 
     @OneToMany(mappedBy = "tenant",fetch = FetchType.LAZY)
-    private List<Meter> meterList;
-
-    @OneToMany(mappedBy = "tenant",fetch = FetchType.LAZY)
     private List<TenantSubscriptionBill> tenantSubscriptionBillList;
 
     @OneToMany(mappedBy = "tenant",fetch = FetchType.EAGER,cascade = CascadeType.ALL,orphanRemoval = true)

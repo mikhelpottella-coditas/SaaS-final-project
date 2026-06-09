@@ -31,20 +31,19 @@ public class CustomerBillService {
         TenantCustomerMeter tenantCustomerMeter = tenantCustomerMeterRepo.findByDoorNo(customerBillRequestDto.doorNo());
         List<CustomerBill> customerBillList = customerBillsRepo.findAllByTenantCustomerMeter(tenantCustomerMeter);
 
-        CustomerBill customerBill = customerBillList.getLast();
+        CustomerBill customerBill = customerBillList.get(customerBillList.size() - 1);
         TenantMeter tenantMeter = tenantCustomerMeter.getTenantMeter();
 
         LocalDateTime from;
         Double amount = 0.0;
-        if(customerBill==null){
-            amount = customerBillRequestDto.units()*tenantMeter.getRatePerUnit();
+        if (customerBill == null) {
+            amount = customerBillRequestDto.units() * tenantMeter.getRatePerUnit();
             from = LocalDateTime.now();
-        }else {
-            Long units =  customerBillRequestDto.units() - customerBill.getUnits();
+        } else {
+            Long units = customerBillRequestDto.units() - customerBill.getUnits();
             from = customerBill.getTo();
             amount = units * tenantMeter.getRatePerUnit();
         }
-
 
 
         CustomerBill newBill = CustomerBill.builder()
@@ -56,14 +55,26 @@ public class CustomerBillService {
                 .paymentType(null)
                 .billStatus(CustomerBillStatus.PENDING).build();
 
-        customerBillRequestDto.photoUrls().forEach(photoUrl -> {
-            TenantMeterPhoto  meterPhoto= TenantMeterPhoto.builder().photoUrl(photoUrl).reference("meter photo").captureTime(Loca).bill().build().build();
-        })
+        customerBillRequestDto.meterPhotoRequestDtoList().forEach(photo -> {
+            TenantMeterPhoto meterPhoto = TenantMeterPhoto.builder().photoUrl(photo.photoUrl()).reference(photo.reference()).captureTime(photo.captureTime()).build();
+            customerBill.addPhoto(meterPhoto);
+        });
 
         customerBillsRepo.save(newBill);
 
         log.info("New bill has been saved successfully");
-        return new CustomerBillResponseDto(newBill.getId(), customerBillRequestDto.customerId(), newBill.getFrom(),newBill.getTo() , customerBillRequestDto.meterId(), customerBillRequestDto.units(), amount, customerBillRequestDto.photoUrls(), null, null);
+        return new CustomerBillResponseDto(newBill.getId(), customerBillRequestDto.customerId(), newBill.getFrom(), newBill.getTo(),newBill.getPaidDate() ,customerBillRequestDto.meterId(), customerBillRequestDto.units(), amount, customerBillRequestDto.meterPhotoRequestDtoList(), null, null);
+    }
 
+    public List<CustomerBillResponseDto> getByCustomer(String doorNo, CustomerBillStatus customerBillStatus) {
+        TenantCustomerMeter customerMeter = tenantCustomerMeterRepo.findByDoorNo(doorNo);
+
+        List<CustomerBill> customerBillList = customerMeter.getCustomerBillList().stream().filter(c->c.getBillStatus() == customerBillStatus).toList();
+
+        log.info("getting all the bills of the customer based on the filter");
+        return customerBillList.stream().map(c-> new CustomerBillResponseDto(c.getId(), c.getTenantCustomerMeter().getCustomerId(), c.getFrom(), c.getTo(), c.getPaidDate(),c.getTenantCustomerMeter().getTenantMeter().getId(), c.getUnits(), c.getPrice(),null,c.getPaymentType(),c.getBillStatus())).toList();
+    }
+
+    public CustomerBillResponseDto billpaid(Long billId) {
     }
 }

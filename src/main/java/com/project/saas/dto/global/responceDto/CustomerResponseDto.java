@@ -31,7 +31,6 @@ public record CustomerResponseDto (
 
         List<Long> tenantId,
 
-        List<Long> meterId,
 
         boolean isActive
 

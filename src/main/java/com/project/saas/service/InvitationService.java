@@ -128,4 +128,9 @@ public class InvitationService {
         return inviteUser(invitationRequestDto.issuedTo(), Role.ELECTRICIAN, invitationRequestDto.message(), path);
 
     }
+
+    public String inviteCustomer(@Valid InvitationRequestDto invitationRequestDto) {
+        log.info("invite to biller is successful");
+        return inviteUser(invitationRequestDto.issuedTo(), Role.CUSTOMER, invitationRequestDto.message(), path);
+    }
 }

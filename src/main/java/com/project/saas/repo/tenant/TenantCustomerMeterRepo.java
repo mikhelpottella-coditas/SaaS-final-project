@@ -12,4 +12,6 @@ public interface TenantCustomerMeterRepo extends JpaRepository<TenantCustomerMet
     List<TenantCustomerMeter> findAllByTenantStates(TenantStates tenantStates);
 
     TenantCustomerMeter findByDoorNo(String doorNo);
+
+    List<TenantCustomerMeter> findAllByCustomerId(Long customerId);
 }

@@ -1,6 +1,7 @@
 package com.project.saas.dto.tenant.response;
 
 
+import com.project.saas.dto.tenant.request.MeterPhotoRequestDto;
 import com.project.saas.enums.CustomerBillStatus;
 import com.project.saas.enums.PaymentType;
 import jakarta.persistence.Column;
@@ -20,13 +21,15 @@ public record CustomerBillResponseDto(
 
         LocalDateTime toDate,
 
+        LocalDateTime paymentDate,
+
         Long meterId,
 
         Long units,
 
         Double price,
 
-        List<String> photoUrls,
+        List<MeterPhotoRequestDto> meterPhotoRequestDtoList,
 
         PaymentType paymentType,
 

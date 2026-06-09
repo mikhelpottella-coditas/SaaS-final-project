@@ -5,6 +5,7 @@ import com.project.saas.dto.tenant.response.MeterResponseDto;
 import com.project.saas.entity.tenant.TenantCustomerMeter;
 import com.project.saas.entity.tenant.TenantMeter;
 import com.project.saas.exception.CustomException;
+import com.project.saas.repo.tenant.TenantCustomerMeterRepo;
 import com.project.saas.repo.tenant.TenantMeterRepo;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,13 @@ public class TenantMeterService {
 
     private final TenantMeterRepo meterRepo;
     private final TenantCustomerMeterService customerMeterService;
+    private final TenantCustomerMeterRepo tenantCustomerMeterRepo;
+
+    public List<MeterResponseDto> getAll() {
+        List<TenantMeter> tenantMeterList = meterRepo.findAll();
+        log.info("tenantMeterList that belong to a state");
+        return tenantMeterList.stream().map(t->new MeterResponseDto(t.getId(), t.getType(), t.getRatePerUnit(), t.getPhotosRequired(), t.getIntervalBtwPhotos())).toList();
+    }
 
     public TenantMeter getById(Long id){
         return meterRepo.findById(id).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, " the meter not found with the given id"));
@@ -89,5 +97,19 @@ public class TenantMeterService {
         TenantMeter meter = getById(id);
         log.info("getting meter details successful by id : {}",id);
         return new MeterResponseDto(meter.getId(), meter.getType(),meter.getRatePerUnit(), meter.getPhotosRequired(), meter.getIntervalBtwPhotos());
+    }
+
+    public List<TenantCustomerMeter> getAllCustomerMetersByCustomerId(Long customerId) {
+        return tenantCustomerMeterRepo.findAllByCustomerId(customerId);
+    }
+
+    public List<MeterResponseDto> getByCustomerId(Long customerId) {
+
+        List<TenantCustomerMeter> tenantCustomerMeterList = getAllCustomerMetersByCustomerId(customerId);
+
+        List<TenantMeter> tenantMeterList = tenantCustomerMeterList.stream().map(TenantCustomerMeter::getTenantMeter).toList();
+
+        log.info("fetching all the meter details of the customer");
+        return tenantMeterList.stream().map(m-> new MeterResponseDto(m.getId(), m.getType(), m.getRatePerUnit(), m.getPhotosRequired(), m.getIntervalBtwPhotos())).toList();
     }
 }

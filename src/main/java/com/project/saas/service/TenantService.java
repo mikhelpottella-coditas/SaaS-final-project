@@ -4,16 +4,20 @@ import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.dto.global.request_dto.TenantRequestDto;
 import com.project.saas.dto.global.responceDto.TenantResponseDto;
 import com.project.saas.entity.master.*;
+import com.project.saas.enums.AvailableState;
 import com.project.saas.enums.TenantStatus;
 import com.project.saas.exception.CustomException;
-import com.project.saas.repo.global.StateRepo;
+import com.project.saas.repo.global.TenantAvailableStatesRepo;
 import com.project.saas.repo.global.TenantRepo;
+import com.project.saas.service.global.StateService;
 import com.project.saas.service.global.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.flywaydb.core.Flyway;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,21 +25,22 @@ import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TenantService {
 
 
-    private static final Logger log = LogManager.getLogger(TenantService.class);
     private final JdbcTemplate jdbcTemplate;
     private final UserService userService;
     private final DataSource dataSource;
     private final TenantRepo tenantRepo;
     private final InvitationService invitationService;
-    private final StateRepo stateRepo;
-
+    private final TenantAvailableStatesRepo tenantAvailableStatesRepo;
+    private final StateService stateService;
 
     public void createSchema(String schema) {
         jdbcTemplate.execute(
@@ -147,4 +152,18 @@ public class TenantService {
         return tenantList.stream().map(tenant -> new TenantResponseDto(tenant.getId(), tenant.getName(), tenant.getSchemaName(), tenant.getTenantStatus(), tenant.getCreatedAt(), tenant.getUpdatedAt(), tenant.getSubscriptionAmount(), tenant.getOperatingTenant().getUser().getId())).toList();
     }
 
+    public List<TenantResponseDto> getByState(Long stateId, int page, int size, String sortBy, boolean ascending, String search) {
+
+        Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable =  PageRequest.of(page, size, sort);
+
+        State state = stateService.getById(stateId);
+
+        List<TenantAvailableStates> tenantAvailableStatesList = tenantAvailableStatesRepo.findAllByAvailableState(AvailableState.valueOf(state.getName()),pageable).getContent();
+
+
+        List<Tenant> tenantList = tenantAvailableStatesList.stream().map(p->p.getTenant()).toList();
+
+        return tenantList.stream().map(p->new TenantResponseDto(p.getId(), p.getName(), p.getSchemaName(), p.getTenantStatus(), p.getCreatedAt(), p.getUpdatedAt(), p.getSubscriptionAmount(), p.getOperatingTenant().getUser().getId())).toList();
+    }
 }
