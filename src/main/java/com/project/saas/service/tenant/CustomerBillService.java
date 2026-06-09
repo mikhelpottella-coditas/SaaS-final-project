@@ -7,11 +7,14 @@ import com.project.saas.entity.tenant.TenantCustomerMeter;
 import com.project.saas.entity.tenant.TenantMeter;
 import com.project.saas.entity.tenant.TenantMeterPhoto;
 import com.project.saas.enums.CustomerBillStatus;
+import com.project.saas.enums.PaymentType;
+import com.project.saas.exception.CustomException;
 import com.project.saas.repo.tenant.CustomerBillsRepo;
 import com.project.saas.repo.tenant.TenantCustomerMeterRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -75,6 +78,16 @@ public class CustomerBillService {
         return customerBillList.stream().map(c-> new CustomerBillResponseDto(c.getId(), c.getTenantCustomerMeter().getCustomerId(), c.getFrom(), c.getTo(), c.getPaidDate(),c.getTenantCustomerMeter().getTenantMeter().getId(), c.getUnits(), c.getPrice(),null,c.getPaymentType(),c.getBillStatus())).toList();
     }
 
-    public CustomerBillResponseDto billpaid(Long billId) {
+    public String billPaid(Long billId, PaymentType paymentType) {
+        CustomerBill bill = customerBillsRepo.findById(billId).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, " bill not found with the given id"));
+
+        bill.setBillStatus(CustomerBillStatus.PAID);
+        bill.setPaidDate(LocalDateTime.now());
+        bill.setPaymentType(paymentType);
+
+        customerBillsRepo.save(bill);
+        log.info("the bill is paid successfully");
+        return "the bill is paid successfully";
+
     }
 }

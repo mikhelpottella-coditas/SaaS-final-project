@@ -6,6 +6,7 @@ import com.project.saas.dto.tenant.response.CustomerBillResponseDto;
 import com.project.saas.dto.tenant.response.MeterResponseDto;
 import com.project.saas.enums.BillStatus;
 import com.project.saas.enums.CustomerBillStatus;
+import com.project.saas.enums.PaymentType;
 import com.project.saas.service.tenant.CustomerBillService;
 import com.project.saas.service.tenant.CustomerComplaintService;
 import com.project.saas.service.tenant.TenantMeterService;
@@ -54,9 +55,15 @@ public class CrossCustomerController {
 
     // raise complaint
 
+    @PostMapping("/{doorNo}/raise-complaint/")
+    public ResponseEntity<String> raiseComplaint(@PathVariable String doorNo, @RequestParam String complaint){
+        return ResponseEntity.ok(customerComplaintService.raiseCustomerComplaint(doorNo,complaint));
+    }
+
+
     // pay bills
-    @PatchMapping("/paybill/{billId}")
-    public ResponseEntity<CustomerBillResponseDto> payBill(@PathVariable Long billId){
-        return ResponseEntity.ok(customerBillService.billpaid(billId));
+    @PatchMapping("/paybill/{billId}/payment-type/{paymentType}")
+    public ResponseEntity<String> payBill(@PathVariable Long billId,@PathVariable PaymentType paymentType){
+        return ResponseEntity.ok(customerBillService.billPaid(billId,paymentType));
     }
 }

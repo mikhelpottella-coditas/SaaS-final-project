@@ -19,9 +19,6 @@ import com.project.saas.service.global.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -125,5 +122,21 @@ public class CustomerComplaintService {
 
         log.info("getting all the complaints of a customer");
         return customerComplaintsList.stream().map(c->new ComplaintResponseDto(c.getId(), c.getTenantCustomerMeter().getId(), c.getComplaint(), c.getComplaintStatus().name(), c.getRaiseDate(), c.getAssignedElectrician())).toList();
+    }
+
+    public String raiseCustomerComplaint(String doorNo, String complaint) {
+        TenantCustomerMeter customerMeter = tenantCustomerMeterRepo.findByDoorNo(doorNo);
+
+        CustomerComplaints customerComplaints = CustomerComplaints.builder()
+                .complaint(complaint)
+                .tenantCustomerMeter(customerMeter)
+                .raiseDate(LocalDateTime.now())
+                .complaintStatus(ComplaintStatus.RAISED)
+                .build();
+
+        customerComplaintsRepo.save(customerComplaints);
+        log.info("the complaint is raised to personnel");
+
+        return "the new complaint token is raised successfully";
     }
 }
