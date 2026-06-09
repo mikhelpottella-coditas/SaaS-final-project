@@ -6,11 +6,10 @@ CREATE TABLE bills
     price             DOUBLE PRECISION                        NOT NULL,
     "from"            TIMESTAMP WITHOUT TIME ZONE             NOT NULL,
     "to"              TIMESTAMP WITHOUT TIME ZONE             NOT NULL,
+    payment_type      VARCHAR(255),
     paid_status       VARCHAR(255)                            NOT NULL,
     CONSTRAINT pk_bills PRIMARY KEY (id)
 );
-
-
 
 
 CREATE TABLE customer_complaints
@@ -38,6 +37,7 @@ CREATE TABLE customer_meter
     email            VARCHAR(255)                            NOT NULL,
     phone            VARCHAR(255)                            NOT NULL,
     address          VARCHAR(255)                            NOT NULL,
+    door_no          VARCHAR(255)                            NOT NULL,
     tenant_states_id BIGINT                                  NOT NULL,
     CONSTRAINT pk_customer_meter PRIMARY KEY (id)
 );

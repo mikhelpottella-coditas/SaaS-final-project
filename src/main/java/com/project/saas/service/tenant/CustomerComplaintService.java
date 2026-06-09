@@ -18,6 +18,9 @@ import com.project.saas.service.global.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +43,10 @@ public class CustomerComplaintService {
     private final AssignWorkService assignWorkService;
 
 
-    public List<ComplaintResponseDto> getAllComplaintsByState(Long id, ComplaintStatus filter) {
+    public List<ComplaintResponseDto>   getAllComplaintsByState(Long id, ComplaintStatus filter, int page, int size, String sortBy, boolean ascending, String search) {
+
+
+
 
         TenantStates states = tenantStateService.getById(id);
 

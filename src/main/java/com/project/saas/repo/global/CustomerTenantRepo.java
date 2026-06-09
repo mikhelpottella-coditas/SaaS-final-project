@@ -1,14 +1,14 @@
 package com.project.saas.repo.global;
 
-import com.project.saas.entity.master.Customer;
+import com.project.saas.entity.master.CustomerTenant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.net.ContentHandler;
 
 @Repository
-public interface CustomerRepo extends JpaRepository<Customer, Long> {
-    Page<Customer> findAllByArea_Id(Long areaId, Pageable pageable);
+public interface CustomerTenantRepo extends JpaRepository<CustomerTenant,Integer> {
+    Page<CustomerTenant> findAllByArea_Id(Long areaId, Pageable pageable);
 }

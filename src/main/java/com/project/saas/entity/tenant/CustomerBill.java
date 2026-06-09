@@ -1,13 +1,17 @@
 package com.project.saas.entity.tenant;
 
+import com.project.saas.dto.tenant.request.CustomerBillRequestDto;
 import com.project.saas.entity.master.Customer;
 import com.project.saas.enums.CustomerBillStatus;
+import com.project.saas.enums.PaymentType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JoinColumnOrFormula;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -38,10 +42,22 @@ public class CustomerBill {
     @Column(name = "to", nullable = false)
     private LocalDateTime to;
 
+    @Column(name = "payment_type")
+    @Enumerated(EnumType.STRING)
+    private PaymentType paymentType;
+
     @Column(name = "paid_status",nullable = false)
     @Enumerated(EnumType.STRING)
     private CustomerBillStatus billStatus;
 
+    @OneToMany(mappedBy = "bill",cascade = CascadeType.ALL)
+    private List<TenantMeterPhoto> meterPhotosList;
 
+
+    public void addPhoto(TenantMeterPhoto meterPhoto) {
+        if(meterPhotosList == null) meterPhotosList = new ArrayList<>();
+        meterPhotosList.add(meterPhoto);
+        meterPhoto.setBill(this);
+    }
 
 }

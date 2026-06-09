@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface TenantCustomerMeterRepo extends JpaRepository<TenantCustomerMeter,Long> {
     List<TenantCustomerMeter> findAllByTenantStates(TenantStates tenantStates);
+
+    TenantCustomerMeter findByDoorNo(String doorNo);
 }

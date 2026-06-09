@@ -1,13 +1,11 @@
-package com.project.saas.controller.global.salesPoint;
+package com.project.saas.controller.global;
 
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
-import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.dto.global.responceDto.TenantResponseDto;
 import com.project.saas.enums.TenantStatus;
 import com.project.saas.service.InvitationService;
 import com.project.saas.service.TenantService;
 import com.project.saas.service.global.AdminService;
-import com.project.saas.service.global.SalesPointService;
 import com.project.saas.service.global.UserCrudService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

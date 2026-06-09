@@ -26,8 +26,13 @@ public class PersonnelController {
 
     @GetMapping("/state/{id}/complaints")
     public ResponseEntity<List<ComplaintResponseDto>> getAllComplaintsByState(@PathVariable Long id,
+                                                                              @RequestParam(required = false,defaultValue = "0") int page,
+                                                                              @RequestParam(required = false,defaultValue = "5") int size,
+                                                                              @RequestParam(required = false,defaultValue = "id") String sortBy,
+                                                                              @RequestParam(required = false,defaultValue = "true") boolean ascending,
+                                                                              @RequestParam(required = false,defaultValue = "") String search,
                                                                               @RequestParam ComplaintStatus filter){
-        return ResponseEntity.ok(complaintService.getAllComplaintsByState(id,filter));
+        return ResponseEntity.ok(complaintService.getAllComplaintsByState(id,filter,page,size,sortBy,ascending,search));
     }
 
     @GetMapping("/complaint/{id}")

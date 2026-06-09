@@ -30,6 +30,9 @@ public class Customer {
     @Column(name = "address",nullable = false)
     private String address;
 
+    @Column(name = "door_no" ,nullable = false)
+    private String doorNo;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "area_id",nullable = false)
     private Area area;
