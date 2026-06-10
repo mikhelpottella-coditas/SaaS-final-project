@@ -36,7 +36,7 @@ public class Invitation {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "issuer_id", referencedColumnName = "id", nullable = false)
     private User issuedBy;
 

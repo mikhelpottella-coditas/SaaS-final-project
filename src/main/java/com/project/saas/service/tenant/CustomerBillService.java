@@ -30,7 +30,7 @@ public class CustomerBillService {
     private final TenantCustomerMeterRepo tenantCustomerMeterRepo;
 
     public CustomerBillResponseDto generateBill(CustomerBillRequestDto customerBillRequestDto) {
-
+        log.info("start generating bills");
         TenantCustomerMeter tenantCustomerMeter = tenantCustomerMeterRepo.findByDoorNo(customerBillRequestDto.doorNo());
         List<CustomerBill> customerBillList = customerBillsRepo.findAllByTenantCustomerMeter(tenantCustomerMeter);
 

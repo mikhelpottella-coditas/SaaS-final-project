@@ -1,7 +1,8 @@
 package com.project.saas.config;
 
 
-import com.project.saas.config.tenantConfig.TenantFilter;
+import com.project.saas.config.tenantConfig.AuthTenantFilter;
+import com.project.saas.config.tenantConfig.SwitchTenantFilter;
 import com.project.saas.enums.Role;
 import com.project.saas.security.JwtFilter;
 import com.project.saas.service.CustomUserService;
@@ -25,7 +26,8 @@ public class SecurityConfig {
 
     private final CustomUserService userService;
     private final JwtFilter jwtFilter;
-    private final TenantFilter tenantFilter;
+    private final AuthTenantFilter authTenantFilter;
+    private final SwitchTenantFilter switchTenantFilter;
 
 
     @Bean
@@ -46,7 +48,8 @@ public class SecurityConfig {
                                 .anyRequest().permitAll())
                 .httpBasic(Customizer.withDefaults())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(tenantFilter, JwtFilter.class)
+                .addFilterBefore(authTenantFilter, JwtFilter.class)
+                .addFilterAfter(switchTenantFilter, UsernamePasswordAuthenticationFilter.class)
                 .userDetailsService(userService);
 
         return http.build();

@@ -3,7 +3,6 @@ package com.project.saas.controller.global;
 import com.project.saas.dto.global.responceDto.TenantResponseDto;
 import com.project.saas.service.TenantService;
 import com.project.saas.service.global.CustomerTenantService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

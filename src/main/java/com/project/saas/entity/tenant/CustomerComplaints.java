@@ -20,7 +20,7 @@ public class CustomerComplaints {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "customer_meter_id",nullable = false)
     private TenantCustomerMeter tenantCustomerMeter;
 

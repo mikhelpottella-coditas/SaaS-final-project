@@ -25,6 +25,7 @@ public class SalesPointController {
     private final AdminService adminService;
     private final TenantService tenantService;
     private final TenantSubscriptionBillService billService;
+    private final UserCrudService userCrudService;
 
     @PostMapping("/invite/operational-head")
     public ResponseEntity<String> inviteOperationalHead(@Valid @RequestBody InvitationRequestDto invitationRequestDto){
@@ -43,7 +44,7 @@ public class SalesPointController {
     }
 
     @GetMapping("/tenant-under-me")
-    private ResponseEntity<List<TenantResponseDto>> getTenantUnderMe(){
+    public ResponseEntity<List<TenantResponseDto>> getTenantUnderMe(){
         return ResponseEntity.ok(tenantService.getBySalesPoint());
     }
 
@@ -63,5 +64,9 @@ public class SalesPointController {
         return ResponseEntity.ok(billService.getBills(id));
     }
 
+    @DeleteMapping("/operational-head/{id}")
+    public ResponseEntity<String> deleteOperationalHead(@PathVariable Long id){
+        return ResponseEntity.ok(userCrudService.deleteById(id));
+    }
 
 }

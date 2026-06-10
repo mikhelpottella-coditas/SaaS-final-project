@@ -20,8 +20,8 @@ public class UserCrudService {
     private final UserRepository userRepository;
 
 
-    public User getById(Long billerId) {
-        return userRepository.findById(billerId).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, " the user user trying to assess is not found"));
+    public User getById(Long id) {
+        return userRepository.findById(id).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, " the user user trying to assess is not found"));
     }
 
     public String updateProfile(UserRequestDto userRequestDto)  {
@@ -51,4 +51,18 @@ public class UserCrudService {
     }
 
 
+    public void delete(User cityHead) throws Exception {
+        userRepository.delete(cityHead);
+    }
+
+    public String deleteById(Long id) {
+        User user = getById(id);
+
+        try {
+            userRepository.delete(user);
+        }catch (Exception e){
+            throw  new CustomException(HttpStatus.NOT_FOUND, "the user is not possible to delete since they are dependent things in this application");
+        }
+        return "deleted successfully ";
+    }
 }

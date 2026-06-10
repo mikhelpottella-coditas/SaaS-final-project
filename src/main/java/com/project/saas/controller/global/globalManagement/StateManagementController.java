@@ -6,7 +6,6 @@ import com.project.saas.dto.global.responceDto.DistrictMangerResponseDto;
 import com.project.saas.dto.global.responceDto.TenantResponseDto;
 import com.project.saas.dto.global.responceDto.DistrictResponseDto;
 import com.project.saas.service.InvitationService;
-import com.project.saas.service.TenantService;
 import com.project.saas.service.global.DistrictService;
 import com.project.saas.service.global.ManagerUserService;
 import com.project.saas.service.global.StateService;
@@ -25,7 +24,6 @@ public class StateManagementController{
 
     private final InvitationService invitationService;
     private final UserCrudService userCrudService;
-    private final TenantService tenantService;
     private final DistrictService districtService;
     private final StateService stateService;
     private final ManagerUserService managerUserService;
@@ -41,6 +39,11 @@ public class StateManagementController{
     @PostMapping("/create/district")
     public ResponseEntity<String> createDistrict(@Valid @RequestBody DistrictRequestDto districtRequestDto){
         return ResponseEntity.ok(districtService.createDistrict(districtRequestDto));
+    }
+
+    @DeleteMapping("/district/{id}")
+    public ResponseEntity<String> deleteDistrict(@PathVariable Long id){
+        return ResponseEntity.ok(districtService.deleteDistrict(id));
     }
 
     @GetMapping("/districts")
@@ -118,7 +121,10 @@ public class StateManagementController{
     }
 
 
-
+    @DeleteMapping("/district-manager/{id}")
+    public ResponseEntity<String> deleteDistrictHead(@PathVariable Long id){
+        return ResponseEntity.ok(userCrudService.deleteById(id));
+    }
 
 
 

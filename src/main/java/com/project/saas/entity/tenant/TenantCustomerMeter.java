@@ -1,8 +1,6 @@
 package com.project.saas.entity.tenant;
 
 
-import com.project.saas.entity.master.Customer;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,7 +19,7 @@ public class TenantCustomerMeter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "meter_id")
     private TenantMeter tenantMeter;
 
@@ -48,14 +46,14 @@ public class TenantCustomerMeter {
     @Column(name = "door_no" ,nullable = false)
     private String doorNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(nullable = false)
     private TenantStates  tenantStates;
 
-    @OneToMany(mappedBy = "tenantCustomerMeter", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tenantCustomerMeter")
     private List<CustomerBill> customerBillList;
 
-    @OneToMany(mappedBy = "tenantCustomerMeter",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "tenantCustomerMeter")
     private List<CustomerComplaints> customerComplaintsList;
 
 }

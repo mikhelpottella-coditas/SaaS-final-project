@@ -42,10 +42,7 @@ public class CustomerComplaintService {
     private final TenantCustomerMeterRepo tenantCustomerMeterRepo;
 
 
-    public List<ComplaintResponseDto>   getAllComplaintsByState(Long id, ComplaintStatus filter, int page, int size, String sortBy, boolean ascending, String search) {
-
-
-
+    public List<ComplaintResponseDto>   getAllComplaintsByState(Long id, ComplaintStatus filter) {
 
         TenantStates states = tenantStateService.getById(id);
 

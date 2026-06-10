@@ -1,8 +1,8 @@
 package com.project.saas.controller;
 
+import com.project.saas.annotation.TenantValid;
 import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.dto.global.responceDto.UserResponseDto;
-import com.project.saas.service.global.UserCrudService;
 import com.project.saas.service.tenant.TenantUserCurdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/tenant/user")
 @Slf4j
+@TenantValid
 public class TenantUserCrudController {
 
     private final TenantUserCurdService userCrudService;

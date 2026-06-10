@@ -12,6 +12,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
 
+/**
+ * this is multi tenant schema provider which is used by hibernate internally to switch the schema
+ */
+
 @Component
 @RequiredArgsConstructor
 public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectionProvider<String>, HibernatePropertiesCustomizer {
@@ -31,7 +35,6 @@ public class SchemaMultiTenantConnectionProvider implements MultiTenantConnectio
     public Connection getConnection(String tenantIdentifier) throws SQLException {
         Connection connection = getAnyConnection();
         try {
-            System.out.println("from connection provider: " + tenantIdentifier);
             connection.setSchema(tenantIdentifier);
         } catch (SQLException exception) {
             throw new SQLException("There is an SQL exception occurred.");

@@ -15,6 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * this is auth controller for the whole application side the authorization is maintained here.
+ */
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("global/auth")
@@ -26,12 +30,14 @@ public class AuthController {
     private final RefreshTokenService refreshTokenService;
     private final TenantUserService tenantUserService;
 
+    @Operation(summary = "this is to register a user for development purpose only. seeding the user")
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@Valid @RequestBody UserRequestDto user){
         log.info(TenantContext.getTenant());
         return ResponseEntity.ok(tenantUserService.save(user));
     }
 
+    @Operation(summary ="seeding purpose, on global side")
     @PostMapping("/global/register")
     public ResponseEntity<String> globalRegisterUser(@Valid @RequestBody UserRequestDto user){
         log.info(TenantContext.getTenant());
@@ -52,18 +58,21 @@ public class AuthController {
 
 
 
+    @Operation(summary = "to generate a new access token using the refresh token")
     @PostMapping("/refresh-token/{refreshToken}")
     public String refresh(@PathVariable String refreshToken) {
         return refreshTokenService.refresh(refreshToken);
     }
 
 
+    @Operation(summary = "change the password")
     @PutMapping("/change-password")
     public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequestDto changePasswordRequestDto) {
         return ResponseEntity.ok(userService.changePassword(changePasswordRequestDto));
     }
 
 
+    @Operation(summary = "register into the application ")
     @PostMapping("/register/{invitation}")
     public ResponseEntity<String> registerWithInvitation(@Valid @RequestBody UserRequestDto user,@PathVariable String invitation){
         return  ResponseEntity.status(201).body(userRegisterService.saveUser(user,invitation));

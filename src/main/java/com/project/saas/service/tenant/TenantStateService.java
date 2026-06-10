@@ -89,4 +89,17 @@ public class TenantStateService {
     public TenantStates getById(Long id) {
         return tenantStateRepo.findById(id).orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "the state is not available"));
     }
+
+
+
+    public String deleteStateById(Long id) {
+        TenantStates states = getById(id);
+        try {
+            tenantStateRepo.delete(states);
+        }
+        catch (Exception e) {
+            throw new CustomException(HttpStatus.BAD_REQUEST, "the state is not possible to delete, since there are dependent things in this application");
+        }
+        return "deleted the state : " + id;
+    }
 }

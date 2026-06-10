@@ -34,7 +34,7 @@ public class TenantInvitationService {
 
     private final JavaMailSender javaMailSender;
     private final TenantUserService tenantUserService;
-    private final String path = "/tenant/auth/register/";
+    private final  String  path = "/tenant/auth/register/";
 
     public String inviteUser(String issuedTo, Role role, String message, String path) {
 

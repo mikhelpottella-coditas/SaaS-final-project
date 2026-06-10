@@ -48,7 +48,7 @@ public class User implements UserDetails{
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "tenant_id",referencedColumnName = "id")
     private Tenant tenant;
 
@@ -61,14 +61,14 @@ public class User implements UserDetails{
     @OneToOne(mappedBy = "biller")
     private Area billerAreas;
 
-    @OneToMany(mappedBy = "managerUser",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "managerUser")
     private List<Cities> managerCities;
 
-    @OneToMany(mappedBy = "managerUser",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "managerUser")
     private List<District> managerDistrict;
 
 
-    @OneToMany(mappedBy = "managerUser",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "managerUser")
     private List<State> managerState;
 
 

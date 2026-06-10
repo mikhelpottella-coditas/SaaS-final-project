@@ -3,9 +3,12 @@ package com.project.saas.service.global;
 import com.project.saas.dto.global.responceDto.CustomerResponseDto;
 import com.project.saas.entity.master.Customer;
 import com.project.saas.entity.master.CustomerTenant;
+import com.project.saas.entity.master.Tenant;
+import com.project.saas.entity.master.User;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.CustomerRepo;
 import com.project.saas.repo.global.CustomerTenantRepo;
+import com.project.saas.service.TenantService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +28,7 @@ public class CustomerService {
     private final CustomerRepo customerRepo;
     private final UserService userService;
     private final CustomerTenantRepo customerTenantRepo;
+    private final TenantService tenantService;
 
     public void save(Customer c) {
         customerRepo.save(c);
@@ -75,5 +79,20 @@ public class CustomerService {
 
         log.info("customer details are provided with the given id : {}", id);
         return new CustomerResponseDto(customer.getId(), customer.getUser().getFirstName(), customer.getUser().getLastName(), customer.getUser().getEmail(), customer.getUser().getPhone(), customer.getUser().getCreatedAt(), customer.getUser().getUpdatedAt(), customer.getAddress(),areaIds , customer.getCrm().getId(),tenantIds,true);
+    }
+
+    public List<CustomerResponseDto> getByTenant(Long id) {
+        Tenant tenant = tenantService.getById(id);
+        List<Customer> customerList = tenant.getCustomerTenantList().stream().map(c->c.getCustomer()).toList();
+
+        List<CustomerResponseDto> customerResponseDtoList = new ArrayList<>();
+
+        customerList.forEach(customer->{
+            User user = customer.getUser();
+            List<Long> areaList = customer.getCustomerTenantList()==null?null: customer.getCustomerTenantList().stream().map(c->c.getArea().getId()).toList();
+            customerResponseDtoList.add(new CustomerResponseDto(customer.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getCreatedAt(), user.getUpdatedAt(), customer.getAddress(),areaList , customer.getCrm().getId(),null,true));
+        });
+        log.info("customers of a particular tenant");
+        return customerResponseDtoList;
     }
 }

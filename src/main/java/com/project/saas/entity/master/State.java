@@ -23,11 +23,11 @@ public class State {
     @Column(name = "code",nullable = false)
     private String code;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "manager_user_id")
     private User managerUser;
 
-    @OneToMany(mappedBy = "state",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "state")
     private List<District> districtList;
 
 

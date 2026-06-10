@@ -26,7 +26,7 @@ public class TenantSubscriptionBillService {
     private final TenantService tenantService;
 
     public String generateBill(Long tenantId) {
-
+        log.info("start generating bill");
         Tenant tenant = tenantService.getById(tenantId);
 
 

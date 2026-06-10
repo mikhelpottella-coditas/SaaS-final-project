@@ -1,5 +1,6 @@
 package com.project.saas.controller;
 
+import com.project.saas.annotation.TenantValid;
 import com.project.saas.dto.tenant.response.ComplaintResponseDto;
 import com.project.saas.dto.tenant.response.CustomerBillResponseDto;
 import com.project.saas.dto.tenant.response.MeterResponseDto;
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@TenantValid
 @RequestMapping("/tenant/customer")
 public class CrossCustomerController {
     private final TenantMeterService tenantMeterService;

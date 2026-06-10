@@ -1,5 +1,6 @@
 package com.project.saas.controller.tenant.management;
 
+import com.project.saas.annotation.TenantValid;
 import com.project.saas.dto.global.request_dto.AssignStateRequestDto;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.dto.tenant.response.ManagerResponseDto;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/tenant/m2")
+@TenantValid
 public class M2ManagementController {
 
     private final TenantInvitationService invitationService;

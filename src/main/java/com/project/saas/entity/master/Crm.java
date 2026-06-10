@@ -18,14 +18,14 @@ public class Crm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "cities_id")
     private Cities cities;
 
-    @OneToMany(mappedBy = "crm",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "crm")
     private List<Customer> customer;
 }

@@ -1,11 +1,10 @@
 package com.project.saas.controller.tenant.management;
 
-import com.project.saas.dto.global.responceDto.ElectricianResponseDto;
+import com.project.saas.annotation.TenantValid;
 import com.project.saas.dto.tenant.response.ComplaintResponseDto;
 import com.project.saas.enums.ComplaintStatus;
 import com.project.saas.service.tenant.CustomerComplaintService;
 import com.project.saas.service.tenant.PersonnelService;
-import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/tenant/personnel")
+@TenantValid
 public class PersonnelController {
 
 
@@ -26,13 +26,8 @@ public class PersonnelController {
 
     @GetMapping("/state/{id}/complaints")
     public ResponseEntity<List<ComplaintResponseDto>> getAllComplaintsByState(@PathVariable Long id,
-                                                                              @RequestParam(required = false,defaultValue = "0") int page,
-                                                                              @RequestParam(required = false,defaultValue = "5") int size,
-                                                                              @RequestParam(required = false,defaultValue = "id") String sortBy,
-                                                                              @RequestParam(required = false,defaultValue = "true") boolean ascending,
-                                                                              @RequestParam(required = false,defaultValue = "") String search,
-                                                                              @RequestParam ComplaintStatus filter){
-        return ResponseEntity.ok(complaintService.getAllComplaintsByState(id,filter,page,size,sortBy,ascending,search));
+                                                                           @RequestParam ComplaintStatus filter){
+        return ResponseEntity.ok(complaintService.getAllComplaintsByState(id,filter));
     }
 
     @GetMapping("/complaint/{id}")

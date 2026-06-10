@@ -30,7 +30,7 @@ public class GlobalManagementService {
 
         List<User> userList = userService.getByRole(Role.MANAGEMENT_STAFF,pageable);
         List<UserResponseDto> responseList = new ArrayList<>();
-        userList.forEach((user) -> {
+        userList.forEach(user -> {
             UserResponseDto dto = new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getCreatedAt(), user.getUpdatedAt());
             responseList.add(dto);
         });

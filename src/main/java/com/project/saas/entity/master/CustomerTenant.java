@@ -1,6 +1,5 @@
 package com.project.saas.entity.master;
 
-import jakarta.mail.Address;
 import jakarta.persistence.*;
 import lombok.*;
 

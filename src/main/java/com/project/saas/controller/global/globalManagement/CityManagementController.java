@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * this class contains the controller of the city manager which are only accessible by him and his higher authority
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/global/city-manager")
@@ -31,6 +34,7 @@ public class CityManagementController {
 
 
     // the service area controllers
+    @Operation(summary = "")
     @PostMapping("/create/service-area")
     public ResponseEntity<String> createServiceArea(@Valid @RequestBody ServiceAreaRequestDto areaRequestDto){
         return ResponseEntity.ok(areaService.createArea(areaRequestDto));
@@ -190,6 +194,10 @@ public class CityManagementController {
     public ResponseEntity<CrmResponseDto> getCrmById(@PathVariable Long id){
         return  ResponseEntity.ok(crmService.getCrmById(id));
     }
+
+
+
+
 
 // city controller
 

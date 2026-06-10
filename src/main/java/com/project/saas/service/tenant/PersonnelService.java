@@ -35,7 +35,7 @@ public class PersonnelService {
 
         List<TenantUser> userList = tenantUserRepo.getByRole(Role.PERSONNEL, pageable);
         List<ManagerResponseDto> responseList = new ArrayList<>();
-        userList.forEach((user) -> {
+        userList.forEach(user -> {
             List<Long> state = user.getTenantStateManagerPersonnel() == null ? null : user.getTenantStateManagerPersonnel().stream().map(m -> m.getId()).toList();
             ManagerResponseDto dto = new ManagerResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getCreatedAt(), user.getUpdatedAt(), state, state != null);
             responseList.add(dto);
@@ -65,7 +65,7 @@ public class PersonnelService {
 
         List<TenantStateManager> tenantStatePersonnel = manager.getTenantStateManagerPersonnel();
 
-        tenantStatePersonnel.forEach((tenantStateManager) -> {
+        tenantStatePersonnel.forEach(tenantStateManager -> {
             tenantStateManager.setPersonnel(null);
             tenantStateManagerService.save(tenantStateManager);
         });

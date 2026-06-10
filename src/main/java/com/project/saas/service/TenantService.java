@@ -133,11 +133,13 @@ public class TenantService {
     }
 
     public List<TenantResponseDto> getAll() {
+        log.info("fetching all the tenants");
         List<Tenant> tenants = tenantRepo.findAll();
         return tenants.stream().map(tenant -> new TenantResponseDto(tenant.getId(), tenant.getName(), tenant.getSchemaName(), tenant.getTenantStatus(), tenant.getCreatedAt(), tenant.getUpdatedAt(), tenant.getSubscriptionAmount(), tenant.getOperatingTenant().getUser().getId())).toList();
     }
 
     public TenantResponseDto getTenantRequestDtoById(Long id) {
+        log.info("fetching the tenant by id : {}",id);
         Tenant tenant = getById(id);
         return new TenantResponseDto(tenant.getId(), tenant.getName(),
                 tenant.getSchemaName(), tenant.getTenantStatus(),
@@ -147,13 +149,14 @@ public class TenantService {
     }
 
     public List<TenantResponseDto> getBySalesPoint() {
+        log.info("fetching all the salesPoint");
         User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()-> new CustomException(HttpStatus.UNAUTHORIZED, "the user is not authorized"));
         List<Tenant> tenantList = tenantRepo.findTenantByOperatingTenant_SalesPoint_Id(user.getId());
         return tenantList.stream().map(tenant -> new TenantResponseDto(tenant.getId(), tenant.getName(), tenant.getSchemaName(), tenant.getTenantStatus(), tenant.getCreatedAt(), tenant.getUpdatedAt(), tenant.getSubscriptionAmount(), tenant.getOperatingTenant().getUser().getId())).toList();
     }
 
     public List<TenantResponseDto> getByState(Long stateId, int page, int size, String sortBy, boolean ascending, String search) {
-
+        log.info("start getting all the tenants in a state");
         Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable =  PageRequest.of(page, size, sort);
 
@@ -163,7 +166,9 @@ public class TenantService {
 
 
         List<Tenant> tenantList = tenantAvailableStatesList.stream().map(p->p.getTenant()).toList();
-
-        return tenantList.stream().map(p->new TenantResponseDto(p.getId(), p.getName(), p.getSchemaName(), p.getTenantStatus(), p.getCreatedAt(), p.getUpdatedAt(), p.getSubscriptionAmount(), p.getOperatingTenant().getUser().getId())).toList();
+        log.info("fetching all the tenants of a state by state id: {}",stateId);
+        List<TenantResponseDto> list =  tenantList.stream().map(p->new TenantResponseDto(p.getId(), p.getName(), p.getSchemaName(), p.getTenantStatus(), p.getCreatedAt(), p.getUpdatedAt(), p.getSubscriptionAmount(), p.getOperatingTenant().getUser().getId())).toList();
+        if(search.isEmpty()) return list;
+        return list.stream().filter(t->t.name().contains(search)).toList();
     }
 }

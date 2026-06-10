@@ -1,6 +1,5 @@
 package com.project.saas.dto.tenant.request;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 
 public record MeterRequestDto(

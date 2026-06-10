@@ -1,6 +1,5 @@
 package com.project.saas.entity.tenant;
 
-import com.project.saas.entity.master.State;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,8 +1,5 @@
 package com.project.saas.dto.global.responceDto;
 
-import com.project.saas.entity.master.*;
-import com.project.saas.enums.Role;
-import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.List;

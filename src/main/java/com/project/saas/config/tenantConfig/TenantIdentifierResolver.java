@@ -7,11 +7,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+/**
+ *  this is the main class which is responsible for switching the schema based on the tread local that we are setting
+ */
+
 @Component
 public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver<String>, HibernatePropertiesCustomizer {
     @Override
     public String resolveCurrentTenantIdentifier() {
-        System.out.println(TenantContext.getTenant());
         return TenantContext.getTenant() == null ? "public" : TenantContext.getTenant();
     }
 

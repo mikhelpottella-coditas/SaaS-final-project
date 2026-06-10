@@ -93,7 +93,7 @@ public class ManagerUserService {
 
 
     public List<StateResponseDto> getAllStates(int page, int size, String sortBy, boolean ascending, String search) {
-
+        log.info("start fetching the state details");
         Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 
@@ -108,6 +108,7 @@ public class ManagerUserService {
         });
 
         if(search.isEmpty())return stateResponseDtoList;
+        log.info("fetching the state details by on filter bases");
 
         return stateResponseDtoList.stream().filter(s->s.name().contains(search)).toList();
 

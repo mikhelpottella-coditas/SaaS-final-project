@@ -112,25 +112,25 @@ public class InvitationService {
     }
 
     public String inviteBiller(@Valid InvitationRequestDto invitationRequestDto) {
-        log.info("invite to biller is successful");
+        log.info("invitation to biller is successful");
         return inviteUser(invitationRequestDto.issuedTo(), Role.BILLER, invitationRequestDto.message(), path);
 
     }
 
     public String inviteCrm(@Valid InvitationRequestDto invitationRequestDto) {
-        log.info("invite to biller is successful");
+        log.info("invite to crm is successful");
         return inviteUser(invitationRequestDto.issuedTo(), Role.CMR, invitationRequestDto.message(), path);
 
     }
 
     public String inviteElectrician(@Valid InvitationRequestDto invitationRequestDto) {
-        log.info("invite to biller is successful");
+        log.info("invite to electrician is successful");
         return inviteUser(invitationRequestDto.issuedTo(), Role.ELECTRICIAN, invitationRequestDto.message(), path);
 
     }
 
     public String inviteCustomer(@Valid InvitationRequestDto invitationRequestDto) {
-        log.info("invite to biller is successful");
+        log.info("invite to customer is successful");
         return inviteUser(invitationRequestDto.issuedTo(), Role.CUSTOMER, invitationRequestDto.message(), path);
     }
 }

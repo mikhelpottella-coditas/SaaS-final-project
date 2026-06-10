@@ -1,13 +1,12 @@
 package com.project.saas.controller.tenant.admin;
 
+import com.project.saas.annotation.TenantValid;
 import com.project.saas.dto.global.request_dto.AssignStateRequestDto;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.dto.global.request_dto.StateRequestDto;
-import com.project.saas.dto.global.responceDto.UserResponseDto;
 import com.project.saas.dto.tenant.request.MeterRequestDto;
 import com.project.saas.dto.tenant.response.ManagerResponseDto;
 import com.project.saas.dto.tenant.response.MeterResponseDto;
-import com.project.saas.entity.tenant.TenantStates;
 import com.project.saas.service.tenant.TenantInvitationService;
 import com.project.saas.service.tenant.TenantManagementService;
 import com.project.saas.service.tenant.TenantMeterService;
@@ -23,6 +22,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/tenant/admin")
 @RequiredArgsConstructor
+@TenantValid
 public class AdminController {
 
     private final TenantMeterService meterService;
@@ -58,6 +58,9 @@ public class AdminController {
     public ResponseEntity<String> deleteMeter(@PathVariable Long id) {
         return ResponseEntity.status(200).body(meterService.deleteMeter(id));
     }
+
+
+
 
 
     @GetMapping("/meters")
@@ -124,5 +127,10 @@ public class AdminController {
         return ResponseEntity.ok(tenantStateService.assignState(assignStateRequestDto));
     }
 
+
+    @DeleteMapping("/state/{id}")
+    public ResponseEntity<String> deleteState(@PathVariable Long id){
+        return ResponseEntity.ok(tenantStateService.deleteStateById(id));
+    }
 
 }

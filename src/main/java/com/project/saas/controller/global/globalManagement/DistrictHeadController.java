@@ -17,9 +17,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * this class contains the controller of the district manager which are only accessible by him and his higher authority
+ */
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/global/district-head")
+@RequestMapping("/global/district-manager")
 public class DistrictHeadController {
 
     private final InvitationService invitationService;
@@ -124,6 +128,19 @@ public class DistrictHeadController {
     @GetMapping("/cities/{id}")
     public ResponseEntity<CityResponseDto> getCityById(@PathVariable Long id){
         return ResponseEntity.ok(cityService.getCityById(id));
+    }
+
+
+    @DeleteMapping("/cities/{id}")
+    public ResponseEntity<String > deleteCityById(@PathVariable Long id){
+        return ResponseEntity.ok(cityService.deleteCityById(id));
+    }
+
+
+
+    @DeleteMapping("/city-head/{headId}")
+    public ResponseEntity<String> deleteCityHeadById(@PathVariable Long headId){
+        return ResponseEntity.ok(districtService.deleteCityHeadById(headId));
     }
 
 }

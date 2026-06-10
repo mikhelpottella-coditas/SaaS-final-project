@@ -25,7 +25,9 @@ public class TenantUserCurdService {
 
 
     public UserResponseDto getProfile() {
-        TenantUser user = tenantUserRepo.findTenantUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        String name = SecurityContextHolder.getContext().getAuthentication()==null?null:SecurityContextHolder.getContext().getAuthentication().getName();
+        if(name == null) throw new CustomException(HttpStatus.UNAUTHORIZED,"you are not authorized");
+        TenantUser user = tenantUserRepo.findTenantUserByEmail(name);
         if(user==null) throw  new CustomException(HttpStatus.NOT_FOUND, "the user is not found to update");
         return new UserResponseDto(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getCreatedAt(), user.getUpdatedAt());
     }

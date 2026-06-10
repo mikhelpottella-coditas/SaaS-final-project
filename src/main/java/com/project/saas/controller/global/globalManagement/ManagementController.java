@@ -4,14 +4,9 @@ package com.project.saas.controller.global.globalManagement;
 import com.project.saas.dto.global.request_dto.StateRequestDto;
 import com.project.saas.dto.global.request_dto.AssignStateRequestDto;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
-import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.dto.global.responceDto.*;
 import com.project.saas.service.InvitationService;
-import com.project.saas.service.TenantService;
-import com.project.saas.service.global.ManagerUserService;
-import com.project.saas.service.global.StateManagerService;
-import com.project.saas.service.global.StateService;
-import com.project.saas.service.global.UserCrudService;
+import com.project.saas.service.global.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * this class contains the controller of the management which are only accessible by him and his higher authority
+ */
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/global/management")
@@ -29,9 +27,6 @@ public class ManagementController {
     private final UserCrudService userCrudService;
     private final StateManagerService stateManagerService;
     private final StateService stateService;
-    private final TenantService tenantService;
-
-
 
 
     @PostMapping("/createState")
@@ -82,14 +77,31 @@ public class ManagementController {
         return ResponseEntity.ok(stateService.getStateById(id));
     }
 
+    @DeleteMapping("/state/{id}")
+    public ResponseEntity<String> deleteStateById(@PathVariable Long id){
+        return ResponseEntity.ok(stateService.deleteStateById(id));
+    }
+
 
     @PostMapping("/invite/sales-point")
     public ResponseEntity<String> inviteSalesPoint(@Valid @RequestBody InvitationRequestDto invitationRequestDto){
         return ResponseEntity.ok(invitationService.inviteSalesPoint(invitationRequestDto));
     }
 
+    @DeleteMapping("/sales-point/{id}")
+    public ResponseEntity<String> deleteSalesPointById(@PathVariable Long id){
+        return ResponseEntity.ok(userCrudService.deleteById(id));
+    }
+
     @PostMapping("/invite/state-manager")
     public ResponseEntity<String> inviteStateManger(@Valid @RequestBody InvitationRequestDto invitationRequestDto){
         return ResponseEntity.ok(invitationService.inviteStateManager(invitationRequestDto));
     }
+
+    @DeleteMapping("/state-manager/{id}")
+    public ResponseEntity<String> deleteStateManagerById(@PathVariable Long id){
+        return ResponseEntity.ok(userCrudService.deleteById(id));
+    }
+
+
 }

@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity<Map> ValidationExceptionHandler(MethodArgumentNotValidException ex){
+    ResponseEntity<Map> validationExceptionHandler(MethodArgumentNotValidException ex){
         logger.warn("Validation error");
         Map<String,String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(e->
@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RuntimeException.class)
-    ResponseEntity<ErrorResponse> RuntimeExceptionHandler(RuntimeException ex){
+    ResponseEntity<ErrorResponse> runtimeExceptionHandler(RuntimeException ex){
         logger.error("Runtime exception occurred: {}", ex.getMessage(), ex);
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
                 ex.getMessage(), LocalDateTime.now(),

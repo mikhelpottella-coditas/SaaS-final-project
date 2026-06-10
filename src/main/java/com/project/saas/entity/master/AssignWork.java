@@ -21,11 +21,11 @@ public class AssignWork {
     private Long id;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "assigned_electrician_id", referencedColumnName = "id", nullable = false)
     private User assignedElectrician;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "customers_id", referencedColumnName = "id", nullable = false)
     private Customer customer;
 

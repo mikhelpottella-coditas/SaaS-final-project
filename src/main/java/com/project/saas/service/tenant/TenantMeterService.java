@@ -86,9 +86,13 @@ public class TenantMeterService {
 
 
         log.info("Starting all meters for tenant");
-        List<TenantMeter> meterList = (List<TenantMeter>) meterRepo.findAll(pageable);
+        List<TenantMeter> meterList =  meterRepo.findAll(pageable).getContent();
         log.info("getting all meter details successful");
-        return meterList.stream().map(meter-> new MeterResponseDto(meter.getId(), meter.getType(), meter.getRatePerUnit(), meter.getPhotosRequired(), meter.getIntervalBtwPhotos())).toList();
+        List<MeterResponseDto> meterResponseDtoList =  meterList.stream().map(meter-> new MeterResponseDto(meter.getId(), meter.getType(), meter.getRatePerUnit(), meter.getPhotosRequired(), meter.getIntervalBtwPhotos())).toList();
+
+        if(search.isEmpty()) return meterResponseDtoList;
+
+        return meterResponseDtoList.stream().filter(m->m.type().contains(search)).toList();
     }
 
     public MeterResponseDto getMeterById(Long id) {

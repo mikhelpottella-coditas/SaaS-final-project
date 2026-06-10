@@ -23,19 +23,19 @@ public class Area {
     @Column(name = "code",nullable = false)
     private String code;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne()
     @JoinColumn(name = "electrician_id")
     private User electrician;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "city_id",nullable = false)
     private Cities city;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne()
     @JoinColumn(name = "biller_id")
     private User biller;
 
-    @OneToMany(mappedBy = "area", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "area")
     private List<Customer> customerList;
 
 }

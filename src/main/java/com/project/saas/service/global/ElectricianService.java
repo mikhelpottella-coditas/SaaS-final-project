@@ -104,6 +104,7 @@ public class ElectricianService {
     }
 
     public List<ElectricianResponseDto> getAllByArea(Long Id, int page, int size, String sortBy, boolean ascending, String search) {
+        log.info("start fetching the details of the electrics by area");
         Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
         Pageable pageable = PageRequest.of(page, size, sort);
 

@@ -40,9 +40,8 @@ public class AssignWorkService {
 
         List<AssignWorkResponseDto> assignWorkResponseDtoList = new ArrayList<>();
 
-        assignWorkList.forEach(assignWork -> {
-            assignWorkResponseDtoList.add(new AssignWorkResponseDto(assignWork.getId(), assignWork.getAssignedElectrician().getId(), assignWork.getCustomer().getId(), assignWork.getWorkType(), assignWork.getWorkDescription(), assignWork.getComplaintStatus(), assignWork.getAssignedAt()));
-        });
+        assignWorkList.forEach(assignWork -> assignWorkResponseDtoList.add(new AssignWorkResponseDto(assignWork.getId(), assignWork.getAssignedElectrician().getId(), assignWork.getCustomer().getId(), assignWork.getWorkType(), assignWork.getWorkDescription(), assignWork.getComplaintStatus(), assignWork.getAssignedAt())));
+
 
         log.info("fetching the work of electrician with id : {}",empId);
         if(search.isEmpty()){ return assignWorkResponseDtoList;}
@@ -56,7 +55,7 @@ public class AssignWorkService {
 
     public AssignWorkResponseDto getWorkById(Long taskId) {
 
-        AssignWork assignWork = assignWorkRepo.findById(taskId).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND,"task id not found"));
+        AssignWork assignWork = assignWorkRepo.findById(taskId).orElseThrow(()->new CustomException(HttpStatus.NOT_FOUND,"task id not found with the given id"));
 
         log.info("getting the work of electrician with task id : {}",taskId);
         return new AssignWorkResponseDto(assignWork.getId(), assignWork.getAssignedElectrician().getId(), assignWork.getCustomer().getId(), assignWork.getWorkType(),assignWork.getWorkDescription() ,assignWork.getComplaintStatus() , assignWork.getAssignedAt());

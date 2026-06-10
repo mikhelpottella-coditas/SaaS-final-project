@@ -35,6 +35,7 @@ public class DistrictService {
     private final CityRepo cityRepo;
     private final UserRepository userRepository;
     private final ManagerUserService managerUserService;
+    private final UserCrudService userCrudService;
 
 
     public String createDistrict(DistrictRequestDto districtRequestDto) {
@@ -139,6 +140,7 @@ public class DistrictService {
 
     public DistrictMangerResponseDto getDistrictHeadById(Long id) {
 
+        log.info("start fetching the district head by id : {}",id);
         User districtHead = userService.findById(id);
 
         if (districtHead.getRole() != Role.DISTRICT_MANAGEMENT_STAFF)
@@ -146,6 +148,7 @@ public class DistrictService {
 
         List<Long> districtIds = districtHead.getManagerDistrict() == null ? null : districtHead.getManagerDistrict().stream().map(District::getId).toList();
 
+        log.info("fetching the district head by id : {}",id);
         return new DistrictMangerResponseDto(districtHead.getId(), districtHead.getFirstName(), districtHead.getLastName(), districtHead.getEmail(), districtHead.getPhone(), districtHead.getCreatedAt(), districtHead.getUpdatedAt(), districtIds, districtIds != null);
 
 
@@ -208,5 +211,28 @@ public class DistrictService {
     }
 
 
+    public String deleteCityHeadById(Long headId) {
 
+        User cityHead = userCrudService.getById(headId);
+
+        try{
+            userCrudService.delete(cityHead);
+        } catch(Exception e){
+            throw  new CustomException(HttpStatus.BAD_REQUEST, "not possible to delete city head. since they are dependent workers and cities of him/her");
+        }
+
+        return "deleted succesfully"   ;
+
+    }
+
+    public String deleteDistrict(Long id) {
+        District district = districtRepo.findById(id).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND,"the District is not found with the given id : "+id));
+        try {
+            districtRepo.delete(district);
+        }
+        catch (Exception e){
+            throw new CustomException(HttpStatus.BAD_REQUEST, "not possible to delete district with the given id : "+id);
+        }
+        return "deleted successfully";
+    }
 }

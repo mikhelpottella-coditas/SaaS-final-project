@@ -3,8 +3,6 @@ package com.project.saas.entity.master;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -33,11 +31,11 @@ public class Customer {
     @Column(name = "door_no" ,nullable = false)
     private String doorNo;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "area_id",nullable = false)
     private Area area;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     private Crm crm;
 
     @OneToMany(mappedBy = "customer")

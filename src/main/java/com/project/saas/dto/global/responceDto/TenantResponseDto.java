@@ -1,8 +1,6 @@
 package com.project.saas.dto.global.responceDto;
 
-import com.project.saas.entity.master.OperatingTenant;
 import com.project.saas.enums.TenantStatus;
-import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 

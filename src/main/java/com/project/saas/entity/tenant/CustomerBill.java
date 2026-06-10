@@ -1,14 +1,10 @@
 package com.project.saas.entity.tenant;
 
-import com.project.saas.dto.tenant.request.CustomerBillRequestDto;
-import com.project.saas.entity.master.Customer;
 import com.project.saas.enums.CustomerBillStatus;
 import com.project.saas.enums.PaymentType;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JoinColumnOrFormula;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +22,7 @@ public class CustomerBill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "customer_meter_id")
     private TenantCustomerMeter  tenantCustomerMeter;
 

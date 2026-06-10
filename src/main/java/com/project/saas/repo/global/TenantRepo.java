@@ -16,4 +16,6 @@ public interface TenantRepo extends JpaRepository<Tenant, Long> {
     Optional<Tenant> findTenantByName(String tenant);
 
     List<Tenant> findTenantByOperatingTenant_SalesPoint_Id(Long id);
+
+    Optional<Tenant> findBySchemaName(String name);
 }

@@ -2,10 +2,12 @@ package com.project.saas.controller.global;
 
 import com.project.saas.dto.global.request_dto.CustomerTenantRequestDto;
 import com.project.saas.dto.global.request_dto.MailRequestDto;
+import com.project.saas.dto.global.responceDto.CustomerResponseDto;
 import com.project.saas.dto.global.responceDto.ElectricianResponseDto;
 import com.project.saas.dto.tenant.request.TenantCustomerMeterRequestDto;
 import com.project.saas.dto.tenant.response.MeterResponseDto;
 import com.project.saas.service.MailSenderService;
+import com.project.saas.service.global.CustomerService;
 import com.project.saas.service.global.ElectricianService;
 import com.project.saas.service.tenant.TenantCustomerMeterService;
 import com.project.saas.service.tenant.TenantMeterService;
@@ -28,6 +30,7 @@ public class CrossControllers {
     private final TenantMeterService tenantMeterService;
     private final TenantCustomerMeterService tenantCustomerMeterService;
     private final MailSenderService mailSenderService;
+    private final CustomerService customerService;
 
 
     // used by personnel
@@ -44,6 +47,12 @@ public class CrossControllers {
             @RequestParam(required = false,defaultValue = "") String search
     ){
         return ResponseEntity.ok(electricianService.getAllByArea(areaId,page,size,sortBy,ascending,search));
+    }
+
+
+    @GetMapping("/tenant/{id}/customers")
+    public ResponseEntity<List<CustomerResponseDto>> getCustomerByTenantId(@PathVariable Long id){
+        return ResponseEntity.ok(customerService.getByTenant(id));
     }
 
 

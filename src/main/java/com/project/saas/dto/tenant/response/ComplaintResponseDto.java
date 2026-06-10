@@ -1,8 +1,5 @@
 package com.project.saas.dto.tenant.response;
 
-import com.project.saas.entity.tenant.TenantCustomerMeter;
-import com.project.saas.enums.ComplaintStatus;
-import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 

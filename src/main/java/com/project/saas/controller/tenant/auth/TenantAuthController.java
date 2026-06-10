@@ -1,5 +1,6 @@
 package com.project.saas.controller.tenant.auth;
 
+import com.project.saas.annotation.TenantValid;
 import com.project.saas.config.tenantConfig.TenantContext;
 import com.project.saas.dto.global.request_dto.LoginRequestDto;
 import com.project.saas.dto.global.request_dto.UserRequestDto;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/tenant/auth")
 @Slf4j
+@TenantValid
 public class TenantAuthController {
 
     private final TenantUserService tenantUserService;
