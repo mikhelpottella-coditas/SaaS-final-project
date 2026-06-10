@@ -1,9 +1,11 @@
 package com.project.saas.controller.global;
 
 import com.project.saas.dto.global.request_dto.CustomerTenantRequestDto;
+import com.project.saas.dto.global.request_dto.MailRequestDto;
 import com.project.saas.dto.global.responceDto.ElectricianResponseDto;
 import com.project.saas.dto.tenant.request.TenantCustomerMeterRequestDto;
 import com.project.saas.dto.tenant.response.MeterResponseDto;
+import com.project.saas.service.MailSenderService;
 import com.project.saas.service.global.ElectricianService;
 import com.project.saas.service.tenant.TenantCustomerMeterService;
 import com.project.saas.service.tenant.TenantMeterService;
@@ -25,6 +27,7 @@ public class CrossControllers {
     private final ElectricianService electricianService;
     private final TenantMeterService tenantMeterService;
     private final TenantCustomerMeterService tenantCustomerMeterService;
+    private final MailSenderService mailSenderService;
 
 
     // used by personnel
@@ -49,11 +52,17 @@ public class CrossControllers {
         return ResponseEntity.ok(tenantMeterService.getAll());
     }
 
+
     @PostMapping("/onborad/customer")
     public ResponseEntity<String > onBoardCustomer(@Valid @RequestBody TenantCustomerMeterRequestDto tenantCustomerMeterRequestDto){
         return ResponseEntity.status(201).body(tenantCustomerMeterService.register(tenantCustomerMeterRequestDto));
     }
 
 
+    @Operation(summary = "this is used by any one who are authenticated to send mail")
+    @PostMapping("/mail-sender")
+    public ResponseEntity<String> mailSender(@Valid @RequestBody MailRequestDto dto){
+        return ResponseEntity.status(201).body(mailSenderService.sendMail(dto));
+    }
 
 }
