@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class TenantAuthController {
 
     private final TenantUserService tenantUserService;
+    private final TenantUserRegisterService tenantUserRegisterService;
     private final TenantUserRegisterService registerService;
 
     @PostMapping("/register/admin/{invitation}")
@@ -25,10 +26,10 @@ public class TenantAuthController {
         return  ResponseEntity.status(201).body(registerService.saveAdmin(user,invitation));
     }
 
-    @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody UserRequestDto user){
+    @PostMapping("/register/{invitation}")
+    public ResponseEntity<String> registerUser(@Valid @RequestBody UserRequestDto user,@PathVariable String invitation){
         log.info(TenantContext.getTenant());
-        return ResponseEntity.ok(tenantUserService.save(user));
+        return ResponseEntity.ok(tenantUserRegisterService.register(user,invitation));
     }
 
     @PostMapping("/login")

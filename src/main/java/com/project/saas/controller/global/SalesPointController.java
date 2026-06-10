@@ -1,11 +1,13 @@
 package com.project.saas.controller.global;
 
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
+import com.project.saas.dto.global.responceDto.SubscriptionBillsResponseDto;
 import com.project.saas.dto.global.responceDto.TenantResponseDto;
 import com.project.saas.enums.TenantStatus;
 import com.project.saas.service.InvitationService;
 import com.project.saas.service.TenantService;
 import com.project.saas.service.global.AdminService;
+import com.project.saas.service.global.TenantSubscriptionBillService;
 import com.project.saas.service.global.UserCrudService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +24,7 @@ public class SalesPointController {
     private final InvitationService invitationService;
     private final AdminService adminService;
     private final TenantService tenantService;
-    private final UserCrudService userCrudService;
-
+    private final TenantSubscriptionBillService billService;
 
     @PostMapping("/invite/operational-head")
     public ResponseEntity<String> inviteOperationalHead(@Valid @RequestBody InvitationRequestDto invitationRequestDto){
@@ -52,8 +53,15 @@ public class SalesPointController {
     }
 
 
+    @PostMapping("/tenant/{tenantId}/generateBill")
+    public ResponseEntity<String> generateBill(@PathVariable Long tenantId){
+        return ResponseEntity.ok(billService.generateBill(tenantId));
+    }
 
-
+    @GetMapping("/tenant/{id}/get-bills")
+    public ResponseEntity<List<SubscriptionBillsResponseDto>> getBills(@PathVariable Long id){
+        return ResponseEntity.ok(billService.getBills(id));
+    }
 
 
 }

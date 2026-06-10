@@ -85,16 +85,6 @@ public class TenantUserService {
 
     }
 
-    public TenantUser getTenantUserById(Long id) {
-        TenantContext.setTenant("tata");
-
-        TenantUser tenantUser = tenantUserRepo.findById(id).orElse(null);
-
-        TenantContext.clear();
-
-        return tenantUser;
-
-    }
 
     public Optional<TenantUser> findByUsername(String name) {
         return Optional.ofNullable(tenantUserRepo.findTenantUserByEmail(name));

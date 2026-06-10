@@ -27,8 +27,8 @@ public class TenantSubscriptionBill {
     @Enumerated(EnumType.STRING)
     private BillStatus billStatus;
 
-    @Column(name = "amount_paid",nullable = false)
-    private Double amountPaid;
+    @Column(name = "amount",nullable = false)
+    private Double amount;
 
     @Column(name = "paid_date",nullable = false)
     private LocalDate paidDate;

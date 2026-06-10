@@ -4,11 +4,14 @@ import com.project.saas.dto.tenant.request.TenantCustomerMeterRequestDto;
 import com.project.saas.entity.tenant.TenantCustomerMeter;
 import com.project.saas.entity.tenant.TenantMeter;
 import com.project.saas.entity.tenant.TenantStates;
+import com.project.saas.exception.CustomException;
 import com.project.saas.repo.tenant.TenantCustomerMeterRepo;
+import com.project.saas.repo.tenant.TenantMeterRepo;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,7 +23,7 @@ import java.util.List;
 public class TenantCustomerMeterService {
 
     private final TenantCustomerMeterRepo tenantCustomerMeterRepo;
-    private final TenantMeterService tenantMeterService;
+    private final TenantMeterRepo tenantMeterRepo;
     private final TenantStateService tenantStateService;
 
     public void save(TenantCustomerMeter cmt) {
@@ -31,9 +34,13 @@ public class TenantCustomerMeterService {
         return tenantCustomerMeterRepo.findAllByTenantStates(states);
     }
 
+    public List<TenantCustomerMeter> getAllCustomerMetersByCustomerId(Long customerId) {
+        return tenantCustomerMeterRepo.findAllByCustomerId(customerId);
+    }
+
     public String register(@Valid TenantCustomerMeterRequestDto tenantCustomerMeterRequestDto) {
 
-        TenantMeter meter = tenantMeterService.getById(tenantCustomerMeterRequestDto.tenantMeterId());
+        TenantMeter meter = tenantMeterRepo.findById(tenantCustomerMeterRequestDto.tenantMeterId()).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "meter not found"));
         TenantStates states = tenantStateService.getById(tenantCustomerMeterRequestDto.tenantStatesId());
         TenantCustomerMeter tenantCustomerMeter = TenantCustomerMeter.builder()
                 .tenantMeter(meter)

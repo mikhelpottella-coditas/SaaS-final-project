@@ -3,14 +3,18 @@ package com.project.saas.controller.global;
 
 import com.project.saas.dto.global.request_dto.TenantRequestDto;
 import com.project.saas.dto.global.request_dto.UserRequestDto;
+import com.project.saas.dto.global.responceDto.SubscriptionBillsResponseDto;
 import com.project.saas.service.TenantService;
 import com.project.saas.service.global.SalesPointService;
+import com.project.saas.service.global.TenantSubscriptionBillService;
 import com.project.saas.service.global.UserCrudService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,8 +23,7 @@ public class OperationHeadController {
 
     private final TenantService tenantService;
     private final UserCrudService userCrudService;
-
-
+    private final TenantSubscriptionBillService tenantSubscriptionBillService;
 
 
     @PostMapping("/tenant/register")
@@ -44,5 +47,16 @@ public class OperationHeadController {
     }
 
 
+    @GetMapping("/tenant/{id}/get-bills")
+    public ResponseEntity<List<SubscriptionBillsResponseDto>> getBills(@PathVariable Long id){
+        return ResponseEntity.ok(tenantSubscriptionBillService.getBills(id));
+    }
+
+
+
+    @PatchMapping("/tenant/pay-bills/{billId}")
+    public ResponseEntity<String> payBills(@PathVariable Long billId){
+        return ResponseEntity.ok(tenantSubscriptionBillService.payBill(billId));
+    }
 
 }

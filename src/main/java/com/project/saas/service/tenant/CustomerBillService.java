@@ -34,15 +34,15 @@ public class CustomerBillService {
         TenantCustomerMeter tenantCustomerMeter = tenantCustomerMeterRepo.findByDoorNo(customerBillRequestDto.doorNo());
         List<CustomerBill> customerBillList = customerBillsRepo.findAllByTenantCustomerMeter(tenantCustomerMeter);
 
-        CustomerBill customerBill = customerBillList.get(customerBillList.size() - 1);
         TenantMeter tenantMeter = tenantCustomerMeter.getTenantMeter();
 
         LocalDateTime from;
-        Double amount = 0.0;
-        if (customerBill == null) {
+        double amount;
+        if (customerBillList == null) {
             amount = customerBillRequestDto.units() * tenantMeter.getRatePerUnit();
             from = LocalDateTime.now();
         } else {
+            CustomerBill customerBill = customerBillList.get(customerBillList.size() - 1);
             Long units = customerBillRequestDto.units() - customerBill.getUnits();
             from = customerBill.getTo();
             amount = units * tenantMeter.getRatePerUnit();
@@ -60,7 +60,7 @@ public class CustomerBillService {
 
         customerBillRequestDto.meterPhotoRequestDtoList().forEach(photo -> {
             TenantMeterPhoto meterPhoto = TenantMeterPhoto.builder().photoUrl(photo.photoUrl()).reference(photo.reference()).captureTime(photo.captureTime()).build();
-            customerBill.addPhoto(meterPhoto);
+            newBill.addPhoto(meterPhoto);
         });
 
         customerBillsRepo.save(newBill);

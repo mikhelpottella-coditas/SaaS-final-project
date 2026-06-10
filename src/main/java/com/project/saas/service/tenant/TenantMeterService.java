@@ -25,7 +25,6 @@ public class TenantMeterService {
 
     private final TenantMeterRepo meterRepo;
     private final TenantCustomerMeterService customerMeterService;
-    private final TenantCustomerMeterRepo tenantCustomerMeterRepo;
 
     public List<MeterResponseDto> getAll() {
         List<TenantMeter> tenantMeterList = meterRepo.findAll();
@@ -99,13 +98,11 @@ public class TenantMeterService {
         return new MeterResponseDto(meter.getId(), meter.getType(),meter.getRatePerUnit(), meter.getPhotosRequired(), meter.getIntervalBtwPhotos());
     }
 
-    public List<TenantCustomerMeter> getAllCustomerMetersByCustomerId(Long customerId) {
-        return tenantCustomerMeterRepo.findAllByCustomerId(customerId);
-    }
+
 
     public List<MeterResponseDto> getByCustomerId(Long customerId) {
 
-        List<TenantCustomerMeter> tenantCustomerMeterList = getAllCustomerMetersByCustomerId(customerId);
+        List<TenantCustomerMeter> tenantCustomerMeterList = customerMeterService.getAllCustomerMetersByCustomerId(customerId);
 
         List<TenantMeter> tenantMeterList = tenantCustomerMeterList.stream().map(TenantCustomerMeter::getTenantMeter).toList();
 

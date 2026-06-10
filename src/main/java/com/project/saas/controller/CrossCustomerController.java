@@ -1,20 +1,16 @@
 package com.project.saas.controller;
 
-import com.project.saas.dto.global.responceDto.BillerResponseDto;
 import com.project.saas.dto.tenant.response.ComplaintResponseDto;
 import com.project.saas.dto.tenant.response.CustomerBillResponseDto;
 import com.project.saas.dto.tenant.response.MeterResponseDto;
-import com.project.saas.enums.BillStatus;
 import com.project.saas.enums.CustomerBillStatus;
 import com.project.saas.enums.PaymentType;
 import com.project.saas.service.tenant.CustomerBillService;
 import com.project.saas.service.tenant.CustomerComplaintService;
 import com.project.saas.service.tenant.TenantMeterService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,14 +35,14 @@ public class CrossCustomerController {
 
     // get all bills
 
-    @GetMapping("/{doorNo}")
+    @GetMapping("/{doorNo}/complaints")
     public ResponseEntity<List<ComplaintResponseDto>> getComplaints(@PathVariable String doorNo){
         return ResponseEntity.ok(customerComplaintService.getByCustomer(doorNo));
     }
 
 
     //see all bills
-    @GetMapping("/{doorNo}")
+    @GetMapping("/{doorNo}/bills")
     public ResponseEntity<List<CustomerBillResponseDto>> getBills(@PathVariable String doorNo,
                                                                   @RequestParam(defaultValue = "UNPAID", required = false)CustomerBillStatus customerBillStatus){
         return ResponseEntity.ok(customerBillService.getByCustomer(doorNo,customerBillStatus));
@@ -67,3 +63,4 @@ public class CrossCustomerController {
         return ResponseEntity.ok(customerBillService.billPaid(billId,paymentType));
     }
 }
+
