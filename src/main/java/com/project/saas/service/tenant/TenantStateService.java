@@ -78,9 +78,9 @@ public class TenantStateService {
         if (tenantStateManagerRepo.existsByState(state)) tenantStateManager = tenantStateManagerRepo.findByState(state);
         else tenantStateManager = TenantStateManager.builder().state(state).build();
 
-        log.info("check the personnel this is state head or not");
+        log.info("check the user  is personnel or not");
         if (!personnel.getRole().equals(Role.PERSONNEL))
-            throw new CustomException(HttpStatus.FORBIDDEN, "the personnel is not a state head");
+            throw new CustomException(HttpStatus.FORBIDDEN, "this is not a personnel");
         tenantStateManager.setPersonnel(personnel);
         tenantStateManagerRepo.save(tenantStateManager);
         return "assigned the manager : " + personnel.getFirstName() + " to the state : " + assignStateRequestDto.name();

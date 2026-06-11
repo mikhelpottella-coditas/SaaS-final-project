@@ -37,7 +37,7 @@ public class TenantUserService {
 
 
 
-    public String save(@Valid UserRequestDto userDto) {
+    public String save(@Valid UserRequestDto userDto, Role role) {
         try {
             System.out.println(dataSource.getConnection().getSchema());
         } catch (SQLException e) {
@@ -50,7 +50,7 @@ public class TenantUserService {
                 .firstName(userDto.firstName())
                 .lastName(userDto.lastName())
                 .phone(userDto.phone())
-                .role(Role.TENANT_ADMIN)
+                .role(role)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();

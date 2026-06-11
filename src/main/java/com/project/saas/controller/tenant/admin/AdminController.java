@@ -54,15 +54,14 @@ public class AdminController {
 
 
 
+    @Operation(summary = "delete a particular meter by id")
     @DeleteMapping("/meter/{id}")
     public ResponseEntity<String> deleteMeter(@PathVariable Long id) {
         return ResponseEntity.status(200).body(meterService.deleteMeter(id));
     }
 
 
-
-
-
+    @Operation(summary = "get all the meters with pagination")
     @GetMapping("/meters")
     public ResponseEntity<List<MeterResponseDto>> getMeters(
             @RequestParam(required = false,defaultValue = "0") int page,
@@ -74,6 +73,7 @@ public class AdminController {
         return ResponseEntity.ok(meterService.getAllMeters(page,size,sortBy,ascending,search));
     }
 
+    @Operation(summary = "get a meter by the id" )
     @GetMapping("/meters/{id}")
     public ResponseEntity<MeterResponseDto> getMeter(@PathVariable Long id){
         return ResponseEntity.ok(meterService.getMeterById(id));
@@ -84,11 +84,13 @@ public class AdminController {
     // management staff controller
 
 
+    @Operation(summary = "send invitation to the m1 manager")
     @PostMapping("/invite/management")
     public ResponseEntity<String> inviteManagement(@RequestBody InvitationRequestDto invitationRequestDto){
         return ResponseEntity.ok(invitationService.inviteManagement(invitationRequestDto));
     }
 
+    @Operation(summary = "get all the m1 management staff with pagination ")
     @GetMapping("/management")
     public ResponseEntity<List<ManagerResponseDto>> getAllManagement(@RequestParam(required = false,defaultValue = "0") int page,
                                                                      @RequestParam(required = false,defaultValue = "5") int size,
@@ -98,12 +100,14 @@ public class AdminController {
         return ResponseEntity.ok(managementService.getAllManagement(page,size,sortBy,ascending,search));
     }
 
+    @Operation(summary = "get m1 manager by the id")
     @GetMapping("/management/{id}")
     public ResponseEntity<ManagerResponseDto> getManagement(@PathVariable("id") Long id){
         return ResponseEntity.ok(managementService.getManagementById(id));
     }
 
 
+    @Operation(summary = "delete m1 manager by the id")
     @DeleteMapping("/management/{id}")
     public ResponseEntity<String> deleteManagement(@PathVariable("id") Long id){
         return ResponseEntity.ok(managementService.deleteById(id));
@@ -112,22 +116,26 @@ public class AdminController {
 
     // state controllers
 
+    @Operation(summary = "create state BPO ")
     @PostMapping("/createState")
     public ResponseEntity<String> createState(@RequestBody StateRequestDto stateRequestDto){
         return ResponseEntity.ok(tenantStateService.createState(stateRequestDto));
     }
 
+    @Operation(summary = "assign m1 manger to the state Bpo")
     @PostMapping("/assign-m1-state")
     public ResponseEntity<String> assignState(@RequestBody AssignStateRequestDto assignStateRequestDto){
         return ResponseEntity.ok(tenantStateService.assignState(assignStateRequestDto));
     }
 
+    @Operation(summary = "reassign m1 manager to the state BPO")
     @PostMapping("/reassign-m1/state-manager")
     public ResponseEntity<String> updateStateHead(@RequestBody AssignStateRequestDto assignStateRequestDto){
         return ResponseEntity.ok(tenantStateService.assignState(assignStateRequestDto));
     }
 
 
+    @Operation(summary = "get the state BPO by id")
     @DeleteMapping("/state/{id}")
     public ResponseEntity<String> deleteState(@PathVariable Long id){
         return ResponseEntity.ok(tenantStateService.deleteStateById(id));

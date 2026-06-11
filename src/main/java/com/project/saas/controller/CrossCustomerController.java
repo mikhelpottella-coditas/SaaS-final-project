@@ -9,6 +9,7 @@ import com.project.saas.enums.PaymentType;
 import com.project.saas.service.tenant.CustomerBillService;
 import com.project.saas.service.tenant.CustomerComplaintService;
 import com.project.saas.service.tenant.TenantMeterService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,7 @@ public class CrossCustomerController {
 
     // get all meters to a tenant
 
+    @Operation(summary = "get meter of the customers")
     @GetMapping("/{customerId}/meters")
     public ResponseEntity<List<MeterResponseDto>> getMeters(@PathVariable Long customerId){
         return ResponseEntity.ok(tenantMeterService.getByCustomerId(customerId));
@@ -37,6 +39,7 @@ public class CrossCustomerController {
 
     // get all bills
 
+    @Operation(summary = "get the complaint raised")
     @GetMapping("/{doorNo}/complaints")
     public ResponseEntity<List<ComplaintResponseDto>> getComplaints(@PathVariable String doorNo){
         return ResponseEntity.ok(customerComplaintService.getByCustomer(doorNo));
@@ -44,6 +47,7 @@ public class CrossCustomerController {
 
 
     //see all bills
+    @Operation(summary = "getting bills of the customer by there door number ")
     @GetMapping("/{doorNo}/bills")
     public ResponseEntity<List<CustomerBillResponseDto>> getBills(@PathVariable String doorNo,
                                                                   @RequestParam(defaultValue = "UNPAID", required = false)CustomerBillStatus customerBillStatus){
@@ -53,6 +57,7 @@ public class CrossCustomerController {
 
     // raise complaint
 
+    @Operation(summary = "raise a complaint")
     @PostMapping("/{doorNo}/raise-complaint/")
     public ResponseEntity<String> raiseComplaint(@PathVariable String doorNo, @RequestParam String complaint){
         return ResponseEntity.ok(customerComplaintService.raiseCustomerComplaint(doorNo,complaint));
@@ -60,6 +65,7 @@ public class CrossCustomerController {
 
 
     // pay bills
+    @Operation(summary = "pay the bill of the tenant meter as a customer")
     @PatchMapping("/paybill/{billId}/payment-type/{paymentType}")
     public ResponseEntity<String> payBill(@PathVariable Long billId,@PathVariable PaymentType paymentType){
         return ResponseEntity.ok(customerBillService.billPaid(billId,paymentType));

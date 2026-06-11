@@ -31,6 +31,7 @@ public class TenantManagementService {
     private final TenantUserRepo tenantUserRepo;
     private final TenantUserCurdService tenantUserCrudService;
     private final TenantStateManagerService tenantStateManagerService;
+    private final TenantRefreshTokenService tenantRefreshTokenService;
 
 
     public List<ManagerResponseDto> getAllManagement(int page, int size, String sortBy, boolean ascending, String search) {
@@ -63,6 +64,9 @@ public class TenantManagementService {
     public String deleteById(Long id) {
         log.info("deleting the management staff");
         TenantUser manager = tenantUserCrudService.getById(id);
+
+
+
         if (!manager.getRole().equals(Role.M1_MANAGER))
             throw new CustomException(HttpStatus.BAD_REQUEST, "management staff not found with the given id");
 
@@ -72,6 +76,8 @@ public class TenantManagementService {
             tenantStateManager.setM1Manager(null);
             tenantStateManagerService.save(tenantStateManager);
         });
+
+        tenantRefreshTokenService.deleteToken(manager);
 
         tenantUserRepo.delete(manager);
 

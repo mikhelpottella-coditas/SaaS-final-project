@@ -71,14 +71,14 @@ public class UserService {
     }
 
 
-    public String save(@Valid UserRequestDto userDto) {
+    public String save(@Valid UserRequestDto userDto, Role role) {
         User user =  User.builder()
                 .email(userDto.email())
                 .password(passwordEncoder.encode(userDto.password()))
                 .firstName(userDto.firstName())
                 .lastName(userDto.lastName())
                 .phone(userDto.phone())
-                .role(Role.SALES_POINT)
+                .role(role)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();

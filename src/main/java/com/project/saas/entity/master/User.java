@@ -39,7 +39,8 @@ public class User implements UserDetails{
     @Column(name = "phone", nullable = false,unique = true)
     private String phone;
 
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
 
     @Column(name = "created_at")
@@ -48,27 +49,27 @@ public class User implements UserDetails{
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tenant_id",referencedColumnName = "id")
     private Tenant tenant;
 
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     private Crm crm;
 
-    @OneToOne(mappedBy = "electrician")
+    @OneToOne(mappedBy = "electrician",fetch = FetchType.LAZY)
     private Area electrianAreas;
 
-    @OneToOne(mappedBy = "biller")
+    @OneToOne(mappedBy = "biller",fetch = FetchType.LAZY)
     private Area billerAreas;
 
-    @OneToMany(mappedBy = "managerUser")
+    @OneToMany(mappedBy = "managerUser",fetch = FetchType.LAZY)
     private List<Cities> managerCities;
 
-    @OneToMany(mappedBy = "managerUser")
+    @OneToMany(mappedBy = "managerUser",fetch = FetchType.LAZY)
     private List<District> managerDistrict;
 
 
-    @OneToMany(mappedBy = "managerUser")
+    @OneToMany(mappedBy = "managerUser",fetch = FetchType.LAZY)
     private List<State> managerState;
 
 

@@ -30,6 +30,7 @@ public class M2ManagementService {
     private final TenantStateManagerService tenantStateManagerService;
     private final TenantUserCurdService tenantUserCurdService;
     private final TenantUserService tenantUserService;
+    private final TenantRefreshTokenService tenantRefreshTokenService;
 
 
     public List<ManagerResponseDto> getAllM2Management(int page, int size, String sortBy, boolean ascending, String search) {
@@ -71,6 +72,8 @@ public class M2ManagementService {
             tenantStateManager.setM2Manager(null);
             tenantStateManagerService.save(tenantStateManager);
         });
+
+        tenantRefreshTokenService.deleteToken(manager);
 
         tenantUserRepo.delete(manager);
 

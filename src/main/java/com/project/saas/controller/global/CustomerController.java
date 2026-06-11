@@ -3,6 +3,8 @@ package com.project.saas.controller.global;
 import com.project.saas.dto.global.responceDto.TenantResponseDto;
 import com.project.saas.service.TenantService;
 import com.project.saas.service.global.CustomerTenantService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.models.annotations.OpenAPI30;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ public class CustomerController {
 
     // get all tenants
 
+    @Operation(summary = "get all the tenants to a customer")
     @GetMapping("{customerId}/tenants")
     public ResponseEntity<List<TenantResponseDto>> getCustomerTenants(@PathVariable Long customerId){
         return ResponseEntity.ok(customerTenantService.getByCustomer(customerId));

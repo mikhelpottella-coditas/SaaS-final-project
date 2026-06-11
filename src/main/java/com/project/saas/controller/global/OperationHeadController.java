@@ -45,6 +45,7 @@ public class OperationHeadController {
     }
 
 
+    @Operation(summary = "get all the bills of the tenant by the tenant id")
     @GetMapping("/tenant/{id}/get-bills")
     public ResponseEntity<List<SubscriptionBillsResponseDto>> getBills(@PathVariable Long id){
         return ResponseEntity.ok(tenantSubscriptionBillService.getBills(id));
@@ -52,6 +53,7 @@ public class OperationHeadController {
 
 
 
+    @Operation(summary = "pay the bill of a tenant")
     @PatchMapping("/tenant/pay-bills/{billId}")
     public ResponseEntity<String> payBills(@PathVariable Long billId){
         return ResponseEntity.ok(tenantSubscriptionBillService.payBill(billId));

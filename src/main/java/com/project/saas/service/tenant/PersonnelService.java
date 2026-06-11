@@ -25,6 +25,7 @@ public class PersonnelService {
     private final TenantUserRepo tenantUserRepo;
     private final TenantStateManagerService tenantStateManagerService;
     private final TenantUserCurdService tenantUserCurdService;
+    private final TenantRefreshTokenService tenantRefreshTokenService;
 
 
     public List<ManagerResponseDto> getAllPersonnel(int page, int size, String sortBy, boolean ascending, String search) {
@@ -69,6 +70,8 @@ public class PersonnelService {
             tenantStateManager.setPersonnel(null);
             tenantStateManagerService.save(tenantStateManager);
         });
+
+        tenantRefreshTokenService.deleteToken(manager);
 
         tenantUserRepo.delete(manager);
 

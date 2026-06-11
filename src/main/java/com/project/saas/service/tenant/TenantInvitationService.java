@@ -67,13 +67,13 @@ public class TenantInvitationService {
 
     public Boolean validate(String email, String token) {
         if (token.isEmpty()) throw new CustomException(HttpStatus.BAD_REQUEST, "please share the invitation code");
-        Invitation invite = tenantInvitationRepo.findByInvitationToken(token);
+        TenantInvitation invite = tenantInvitationRepo.findByInvitationToken(token);
         log.info("validating the user token ");
         return email.equals(invite.getIssuedTo());
     }
 
 
-    public Invitation getInvite(String invitation) {
+    public TenantInvitation getInvite(String invitation) {
         return tenantInvitationRepo.findByInvitationToken(invitation);
     }
 

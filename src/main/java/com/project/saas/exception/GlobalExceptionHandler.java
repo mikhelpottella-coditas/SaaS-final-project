@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponse> customExceptionHandler(CustomException ex){
+    public ResponseEntity<ErrorResponse> customExceptionHandler(CustomException ex) {
         logger.error("Custom exception occurred");
         ErrorResponse error = new ErrorResponse(ex.getStatusCode(),
                 ex.getMessage(), LocalDateTime.now(),
@@ -29,16 +29,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity<Map> validationExceptionHandler(MethodArgumentNotValidException ex){
+    ResponseEntity<Map> validationExceptionHandler(MethodArgumentNotValidException ex) {
         logger.warn("Validation error");
-        Map<String,String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(e->
-                errors.put(e.getField(),e.getDefaultMessage()));
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(e ->
+                errors.put(e.getField(), e.getDefaultMessage()));
         return ResponseEntity.status(ex.getStatusCode()).body(errors);
     }
 
     @ExceptionHandler(RuntimeException.class)
-    ResponseEntity<ErrorResponse> runtimeExceptionHandler(RuntimeException ex){
+    ResponseEntity<ErrorResponse> runtimeExceptionHandler(RuntimeException ex) {
         logger.error("Runtime exception occurred: {}", ex.getMessage(), ex);
         ErrorResponse errorResponse = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR,
                 ex.getMessage(), LocalDateTime.now(),

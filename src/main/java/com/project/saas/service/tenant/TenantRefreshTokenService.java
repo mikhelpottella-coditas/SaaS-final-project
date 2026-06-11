@@ -47,4 +47,12 @@ public class TenantRefreshTokenService {
     }
 
 
+    public void deleteToken(TenantUser user) {
+        TenantRefreshToken refreshToken = tenantRefreshTokenRepo.findByTenantUser(user).orElse(null);
+
+        if(refreshToken!=null){
+            tenantRefreshTokenRepo.delete(refreshToken);
+        }
+
+    }
 }

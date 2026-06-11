@@ -50,18 +50,21 @@ public class CrossControllers {
     }
 
 
+    @Operation(summary = "get all the customers belongs to a tenant")
     @GetMapping("/tenant/{id}/customers")
     public ResponseEntity<List<CustomerResponseDto>> getCustomerByTenantId(@PathVariable Long id){
         return ResponseEntity.ok(customerService.getByTenant(id));
     }
 
 
+    @Operation(summary = "get all the meters of a tenant")
     @GetMapping("/meters")
     public ResponseEntity<List<MeterResponseDto>> getMeters(){
         return ResponseEntity.ok(tenantMeterService.getAll());
     }
 
 
+    @Operation(summary = "onboard a customer to a meter in a tenant")
     @PostMapping("/onborad/customer")
     public ResponseEntity<String > onBoardCustomer(@Valid @RequestBody TenantCustomerMeterRequestDto tenantCustomerMeterRequestDto){
         return ResponseEntity.status(201).body(tenantCustomerMeterService.register(tenantCustomerMeterRequestDto));

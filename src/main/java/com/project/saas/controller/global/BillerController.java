@@ -5,6 +5,7 @@ import com.project.saas.dto.tenant.request.CustomerBillRequestDto;
 import com.project.saas.dto.tenant.response.CustomerBillResponseDto;
 import com.project.saas.service.global.CustomerService;
 import com.project.saas.service.tenant.CustomerBillService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,7 @@ public class BillerController {
     private final CustomerService customerService;
 
 
+    @Operation(summary = "get all the customers to a particular area by id")
     @GetMapping("/area/{areaId}/customers")
     public ResponseEntity<List<CustomerResponseDto>> getCustomersByArea(@PathVariable Long areaId,
                                                                         @RequestParam(required = false,defaultValue = "0") int page,
@@ -30,12 +32,14 @@ public class BillerController {
         return ResponseEntity.ok(customerService.getByArea(areaId,page,size,sortBy,ascending,search));
     }
 
+    @Operation(summary = "get customer by id")
     @GetMapping("/customer/{id}")
     public ResponseEntity<CustomerResponseDto> getCustomerById(@PathVariable Long id){
         return ResponseEntity.ok(customerService.getByCustomerId(id));
     }
 
 
+    @Operation(summary = "generate bill to a customer by there door no.")
     @PostMapping("/generate-bill")
     public ResponseEntity<CustomerBillResponseDto> generateBill(@RequestBody CustomerBillRequestDto customerBillRequestDto){
         return ResponseEntity.status(201).body(customerBillService.generateBill(customerBillRequestDto));

@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TenantInvitationRepo extends JpaRepository<TenantInvitation,Long> {
-    Invitation findByInvitationToken(String token);
+    TenantInvitation findByInvitationToken(String token);
 }

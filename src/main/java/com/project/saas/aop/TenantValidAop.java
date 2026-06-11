@@ -4,11 +4,13 @@ package com.project.saas.aop;
 import com.project.saas.config.tenantConfig.TenantContext;
 import com.project.saas.entity.master.Tenant;
 import com.project.saas.enums.TenantStatus;
+import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.TenantRepo;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 @Aspect
@@ -31,7 +33,7 @@ public class TenantValidAop {
         } else if (tenant.getTenantStatus() == TenantStatus.ACTIVE) {
             return joinPoint.proceed();
         }else {
-            throw new RuntimeException("please pay the bills");
+            throw new CustomException(HttpStatus.BAD_REQUEST,"please pay the bills");
         }
     }
 }

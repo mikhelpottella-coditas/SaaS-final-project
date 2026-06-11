@@ -6,14 +6,12 @@ CREATE TABLE users
     email      VARCHAR(255)                            NOT NULL,
     password   VARCHAR(255)                            NOT NULL,
     phone      VARCHAR(255)                            NOT NULL,
-    role       SMALLINT,
+    role       VARCHAR(255)                            NOT NULL,
     created_at TIMESTAMP WITHOUT TIME ZONE,
     updated_at TIMESTAMP WITHOUT TIME ZONE,
     tenant_id  BIGINT,
     CONSTRAINT pk_users PRIMARY KEY (id)
 );
-
-
 
 CREATE TABLE assign_work
 (
@@ -299,6 +297,7 @@ ALTER TABLE invitation
 
 ALTER TABLE invitation
     ADD CONSTRAINT FK_INVITATION_ON_ISSUER FOREIGN KEY (issuer_id) REFERENCES users (id);
+
 
 
 ALTER TABLE users

@@ -6,6 +6,7 @@ import com.project.saas.dto.global.responceDto.TenantResponseDto;
 import com.project.saas.service.InvitationService;
 import com.project.saas.service.TenantService;
 import com.project.saas.service.global.CustomerTenantService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ public class CrmController {
     private final InvitationService invitationService;
     private final CustomerTenantService customerTenantService;
 
+    @Operation(summary = "get all the tenants in a particular state")
     @GetMapping("state/{stateId}/tenants")
     public ResponseEntity<List<TenantResponseDto>> tenantByState(@PathVariable Long stateId,
                                                         @RequestParam(required = false,defaultValue = "0") int page,
@@ -32,12 +34,14 @@ public class CrmController {
         return ResponseEntity.ok(tenantService.getByState(stateId,page,size,sortBy,ascending,search));
     }
 
+    @Operation(summary = "send a invitation to the customer")
     @PostMapping("/invite/customer")
     public ResponseEntity<String> inviteCityManager(@Valid @RequestBody InvitationRequestDto invitationRequestDto){
         return ResponseEntity.ok(invitationService.inviteCustomer(invitationRequestDto));
     }
 
 
+    @Operation(summary = "onboard a customer to a tenant")
     @PostMapping("/onboard/customer")
     public ResponseEntity<String> onBoardCustomer(@Valid @RequestBody CustomerTenantRequestDto customerTenantRequestDto){
         return  ResponseEntity.status(201).body(customerTenantService.onBoardCustomer(customerTenantRequestDto));

@@ -4,6 +4,7 @@ import com.project.saas.config.tenantConfig.TenantContext;
 import com.project.saas.dto.global.request_dto.ChangePasswordRequestDto;
 import com.project.saas.dto.global.request_dto.LoginRequestDto;
 import com.project.saas.dto.global.request_dto.UserRequestDto;
+import com.project.saas.enums.Role;
 import com.project.saas.service.global.RefreshTokenService;
 import com.project.saas.service.global.UserRegisterService;
 import com.project.saas.service.global.UserService;
@@ -32,16 +33,16 @@ public class AuthController {
 
     @Operation(summary = "this is to register a user for development purpose only. seeding the user")
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@Valid @RequestBody UserRequestDto user){
+    public ResponseEntity<String> registerUser(@Valid @RequestBody UserRequestDto user, @RequestParam Role role){
         log.info(TenantContext.getTenant());
-        return ResponseEntity.ok(tenantUserService.save(user));
+        return ResponseEntity.ok(tenantUserService.save(user,role));
     }
 
     @Operation(summary ="seeding purpose, on global side")
     @PostMapping("/global/register")
-    public ResponseEntity<String> globalRegisterUser(@Valid @RequestBody UserRequestDto user){
+    public ResponseEntity<String> globalRegisterUser(@Valid @RequestBody UserRequestDto user,@RequestParam Role role){
         log.info(TenantContext.getTenant());
-        return ResponseEntity.ok(userService.save(user));
+        return ResponseEntity.ok(userService.save(user,role));
     }
 
 

@@ -7,6 +7,7 @@ import com.project.saas.dto.tenant.response.ManagerResponseDto;
 import com.project.saas.service.tenant.PersonnelService;
 import com.project.saas.service.tenant.TenantInvitationService;
 import com.project.saas.service.tenant.TenantStateService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +26,13 @@ public class M2ManagementController {
 
     // controllers for m2 management
 
+    @Operation(summary = "send invitation to the personnel")
     @PostMapping("/invite/personnel")
     public ResponseEntity<String> invitePersonnel(@RequestBody InvitationRequestDto invitationRequestDto){
         return ResponseEntity.ok(invitationService.invitePersonnel(invitationRequestDto));
     }
 
+    @Operation(summary = "get all the personnel with pagination")
     @GetMapping("/personnel")
     public ResponseEntity<List<ManagerResponseDto>> getAllPersonnel(@RequestParam(required = false,defaultValue = "0") int page,
                                                                      @RequestParam(required = false,defaultValue = "5") int size,
@@ -39,12 +42,14 @@ public class M2ManagementController {
         return ResponseEntity.ok(personnelService.getAllPersonnel(page,size,sortBy,ascending,search));
     }
 
+    @Operation(summary = "get the personnel by the id")
     @GetMapping("/personnel/{id}")
     public ResponseEntity<ManagerResponseDto> getPersonnel(@PathVariable("id") Long id){
         return ResponseEntity.ok(personnelService.getPersonnelById(id));
     }
 
 
+    @Operation(summary = "delete personnel by the id")
     @DeleteMapping("/personnel/{id}")
     public ResponseEntity<String> deletePersonnel(@PathVariable("id") Long id){
         return ResponseEntity.ok(personnelService.deleteById(id));
@@ -55,12 +60,14 @@ public class M2ManagementController {
 // assigning the personnel manager to their states
 
 
-    @PostMapping("/assign-m2-state")
+    @Operation(summary = "assign personnel to the state")
+    @PostMapping("/assign-personnel-state")
     public ResponseEntity<String> assignState(@RequestBody AssignStateRequestDto assignStateRequestDto){
         return ResponseEntity.ok(tenantStateService.assignStatePersonnel(assignStateRequestDto));
     }
 
-    @PostMapping("/reassign-m2/state-manager")
+    @Operation(summary = "reassign personnel to the state")
+    @PostMapping("/reassign-personnel/state-manager")
     public ResponseEntity<String> updateStateHead(@RequestBody AssignStateRequestDto assignStateRequestDto){
         return ResponseEntity.ok(tenantStateService.assignStatePersonnel(assignStateRequestDto));
     }
