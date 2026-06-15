@@ -5,10 +5,12 @@ import com.project.saas.dto.global.responceDto.CityMangerResponseDto;
 import com.project.saas.dto.global.responceDto.DistrictMangerResponseDto;
 import com.project.saas.dto.global.responceDto.DistrictResponseDto;
 import com.project.saas.dto.global.responceDto.UserResponseDto;
-import com.project.saas.entity.master.*;
+import com.project.saas.entity.master.Cities;
+import com.project.saas.entity.master.District;
+import com.project.saas.entity.master.State;
+import com.project.saas.entity.master.User;
 import com.project.saas.enums.Role;
 import com.project.saas.exception.CustomException;
-import com.project.saas.repo.global.CityRepo;
 import com.project.saas.repo.global.DistrictRepo;
 import com.project.saas.repo.global.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,19 +34,18 @@ public class DistrictService {
     private final DistrictRepo districtRepo;
     private final UserService userService;
     private final StateService stateService;
-    private final CityRepo cityRepo;
     private final UserRepository userRepository;
     private final ManagerUserService managerUserService;
     private final UserCrudService userCrudService;
 
 
     public String createDistrict(DistrictRequestDto districtRequestDto) {
-        User manager = userService.findByUsername(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName()).orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "invalid request"));
         log.info("trying the fetch the state of the user");
-        State state = manager.getManagerState().stream().filter(s -> s.getId().equals(districtRequestDto.stateId())).findFirst().orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "the state does not exist under your authority "));
+//        State state = manager.getManagerState().stream().filter(s -> s.getId().equals(districtRequestDto.stateId())).findFirst().orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "the state does not exist under your authority "));
 
+        State state = stateService.getById(districtRequestDto.stateId());
         log.info("if the district wih the same name already there then throw the error");
-        if (!districtRepo.existsDistrictByName(districtRequestDto.districtName()))
+        if ((districtRepo.existsDistrictByName(districtRequestDto.districtName())))
             throw new CustomException(HttpStatus.BAD_REQUEST, "the district is already exists with that name");
 
         District district = District.builder()
@@ -155,11 +156,14 @@ public class DistrictService {
     }
 
 
-    public String assignDistrictHead(Long districtId, Long headId, Long stateId) {
-        User manager = userService.findByUsername(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName()).orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "invalid request"));
-        manager.getManagerState().stream().filter(s -> s.getId().equals(stateId)).findFirst().orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "the state is under you authority"));
+    public String assignDistrictHead(Long districtId, Long headId) {
+//        User manager = userService.findByUsername(Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName()).orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "invalid request"));
+//        manager.getManagerState().stream().filter(s -> s.getId().equals(stateId)).findFirst().orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "the state is under you authority"));
+
         District district = districtRepo.findById(districtId).orElseThrow(() -> new CustomException(HttpStatus.BAD_REQUEST, "the district is not available"));
         User districtHead = userService.findById(headId);
+        if(districtHead.getRole()!=Role.DISTRICT_MANAGEMENT_STAFF) throw new CustomException(HttpStatus.BAD_REQUEST, "the is provided is not district manager");
+
         district.setManagerUser(districtHead);
         districtRepo.save(district);
         log.info("the district head : {} is assigned to the district : {}", districtHead.getFirstName(), district.getName());

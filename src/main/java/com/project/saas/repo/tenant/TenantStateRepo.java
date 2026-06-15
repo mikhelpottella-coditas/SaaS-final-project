@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface TenantStateRepo extends JpaRepository<TenantStates, Long> {
     boolean existsByName(String name);
 
-    Optional<TenantStates> findTenantStatesByName(@NotBlank(message = "please give the name of the city") String name);
+    Optional<TenantStates> findTenantStatesByName(String name);
 }

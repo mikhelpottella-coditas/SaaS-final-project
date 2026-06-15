@@ -7,7 +7,6 @@ import com.project.saas.entity.master.State;
 import com.project.saas.entity.master.User;
 import com.project.saas.enums.Role;
 import com.project.saas.repo.global.StateRepo;
-import com.project.saas.repo.global.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +23,6 @@ import java.util.List;
 public class ManagerUserService {
 
 
-    private final UserRepository userRepository;
 
     private final UserService userService;
     private final StateRepo stateRepo;
@@ -111,6 +109,20 @@ public class ManagerUserService {
         log.info("fetching the state details by on filter bases");
 
         return stateResponseDtoList.stream().filter(s->s.name().contains(search)).toList();
+
+    }
+
+    public List<UserResponseDto> getAllSalesPoint(int page, int size, String sortBy, boolean ascending, String search) {
+
+        log.info("getting all the user who belong to the particular role District manager");
+        List<User> userList = getAllUsers(page, size, sortBy, ascending, Role.SALES_POINT);
+
+        List<UserResponseDto> userResponceDtoList = new ArrayList<>();
+        userList.forEach(u-> userResponceDtoList.add( new UserResponseDto(u.getId(), u.getFirstName(), u.getLastName(), u.getEmail(), u.getPhone(), u.getCreatedAt(), u.getUpdatedAt())));
+        log.info("return the data of the district heads");
+        if (search.isEmpty())return userResponceDtoList;
+        return userResponceDtoList.stream().filter(s->s.firstName().contains(search)).toList();
+
 
     }
 }

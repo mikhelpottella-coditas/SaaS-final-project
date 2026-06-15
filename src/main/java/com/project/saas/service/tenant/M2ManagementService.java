@@ -1,7 +1,6 @@
 
 package com.project.saas.service.tenant;
 
-import com.project.saas.dto.global.responceDto.UserResponseDto;
 import com.project.saas.dto.tenant.response.ManagerResponseDto;
 import com.project.saas.entity.tenant.TenantStateManager;
 import com.project.saas.entity.tenant.TenantUser;
@@ -29,7 +28,6 @@ public class M2ManagementService {
     private final TenantUserRepo tenantUserRepo;
     private final TenantStateManagerService tenantStateManagerService;
     private final TenantUserCurdService tenantUserCurdService;
-    private final TenantUserService tenantUserService;
     private final TenantRefreshTokenService tenantRefreshTokenService;
 
 

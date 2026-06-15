@@ -24,7 +24,6 @@ public class UserRegisterService {
     private final UserRepository userRepository;
     private final InvitationService invitationService;
     private final PasswordEncoder passwordEncoder;
-    private final TenantService tenantService;
 
     public User userBuilder(UserRequestDto userDto) {
         return User.builder()
@@ -53,4 +52,6 @@ public class UserRegisterService {
         log.info("registration successful with the name : {}", userDto.firstName());
         return "registration successful";
     }
+
+
 }

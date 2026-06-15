@@ -16,4 +16,6 @@ public interface CityRepo extends JpaRepository<Cities, Long> {
     Optional<Cities> findCitiesByManagerUser_Id(Long managerUserId);
 
     Page<Cities> findAllByDistrict(District district, Pageable pageable);
+
+    boolean existsCitiesByName(String name);
 }

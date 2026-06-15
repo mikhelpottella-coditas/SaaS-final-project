@@ -7,6 +7,7 @@ import com.project.saas.dto.global.request_dto.StateRequestDto;
 import com.project.saas.dto.tenant.request.MeterRequestDto;
 import com.project.saas.dto.tenant.response.ManagerResponseDto;
 import com.project.saas.dto.tenant.response.MeterResponseDto;
+import com.project.saas.dto.tenant.response.StateResponseDto;
 import com.project.saas.service.tenant.TenantInvitationService;
 import com.project.saas.service.tenant.TenantManagementService;
 import com.project.saas.service.tenant.TenantMeterService;
@@ -48,10 +49,9 @@ public class AdminController {
             description = "this api takes Meter details as a request and then save the meter details and return you the saved details with the id"
     )
     @PatchMapping("/meters/{id}")
-    public ResponseEntity<MeterResponseDto> updateMeter(@PathVariable Long id,@Valid @RequestBody MeterRequestDto meterRequestDto) {
-        return ResponseEntity.status(200).body(meterService.updateMeter(id,meterRequestDto));
+    public ResponseEntity<MeterResponseDto> updateMeter(@PathVariable Long id, @Valid @RequestBody MeterRequestDto meterRequestDto) {
+        return ResponseEntity.status(200).body(meterService.updateMeter(id, meterRequestDto));
     }
-
 
 
     @Operation(summary = "delete a particular meter by id")
@@ -64,21 +64,20 @@ public class AdminController {
     @Operation(summary = "get all the meters with pagination")
     @GetMapping("/meters")
     public ResponseEntity<List<MeterResponseDto>> getMeters(
-            @RequestParam(required = false,defaultValue = "0") int page,
-            @RequestParam(required = false,defaultValue = "5") int size,
-            @RequestParam(required = false,defaultValue = "id") String sortBy,
-            @RequestParam(required = false,defaultValue = "true") boolean ascending,
-            @RequestParam(required = false,defaultValue = "") String search
-    ){
-        return ResponseEntity.ok(meterService.getAllMeters(page,size,sortBy,ascending,search));
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "5") int size,
+            @RequestParam(required = false, defaultValue = "id") String sortBy,
+            @RequestParam(required = false, defaultValue = "true") boolean ascending,
+            @RequestParam(required = false, defaultValue = "") String search
+    ) {
+        return ResponseEntity.ok(meterService.getAllMeters(page, size, sortBy, ascending, search));
     }
 
-    @Operation(summary = "get a meter by the id" )
+    @Operation(summary = "get a meter by the id")
     @GetMapping("/meters/{id}")
-    public ResponseEntity<MeterResponseDto> getMeter(@PathVariable Long id){
+    public ResponseEntity<MeterResponseDto> getMeter(@PathVariable Long id) {
         return ResponseEntity.ok(meterService.getMeterById(id));
     }
-
 
 
     // management staff controller
@@ -86,30 +85,30 @@ public class AdminController {
 
     @Operation(summary = "send invitation to the m1 manager")
     @PostMapping("/invite/management")
-    public ResponseEntity<String> inviteManagement(@RequestBody InvitationRequestDto invitationRequestDto){
+    public ResponseEntity<String> inviteManagement(@RequestBody InvitationRequestDto invitationRequestDto) {
         return ResponseEntity.ok(invitationService.inviteManagement(invitationRequestDto));
     }
 
     @Operation(summary = "get all the m1 management staff with pagination ")
     @GetMapping("/management")
-    public ResponseEntity<List<ManagerResponseDto>> getAllManagement(@RequestParam(required = false,defaultValue = "0") int page,
-                                                                     @RequestParam(required = false,defaultValue = "5") int size,
-                                                                     @RequestParam(required = false,defaultValue = "id") String sortBy,
-                                                                     @RequestParam(required = false,defaultValue = "true") boolean ascending,
-                                                                     @RequestParam(required = false,defaultValue = "") String search ){
-        return ResponseEntity.ok(managementService.getAllManagement(page,size,sortBy,ascending,search));
+    public ResponseEntity<List<ManagerResponseDto>> getAllManagement(@RequestParam(required = false, defaultValue = "0") int page,
+                                                                     @RequestParam(required = false, defaultValue = "5") int size,
+                                                                     @RequestParam(required = false, defaultValue = "id") String sortBy,
+                                                                     @RequestParam(required = false, defaultValue = "true") boolean ascending,
+                                                                     @RequestParam(required = false, defaultValue = "") String search) {
+        return ResponseEntity.ok(managementService.getAllManagement(page, size, sortBy, ascending, search));
     }
 
     @Operation(summary = "get m1 manager by the id")
     @GetMapping("/management/{id}")
-    public ResponseEntity<ManagerResponseDto> getManagement(@PathVariable("id") Long id){
+    public ResponseEntity<ManagerResponseDto> getManagement(@PathVariable("id") Long id) {
         return ResponseEntity.ok(managementService.getManagementById(id));
     }
 
 
     @Operation(summary = "delete m1 manager by the id")
     @DeleteMapping("/management/{id}")
-    public ResponseEntity<String> deleteManagement(@PathVariable("id") Long id){
+    public ResponseEntity<String> deleteManagement(@PathVariable("id") Long id) {
         return ResponseEntity.ok(managementService.deleteById(id));
     }
 
@@ -118,26 +117,44 @@ public class AdminController {
 
     @Operation(summary = "create state BPO ")
     @PostMapping("/createState")
-    public ResponseEntity<String> createState(@RequestBody StateRequestDto stateRequestDto){
+    public ResponseEntity<String> createState(@RequestBody StateRequestDto stateRequestDto) {
         return ResponseEntity.ok(tenantStateService.createState(stateRequestDto));
     }
 
     @Operation(summary = "assign m1 manger to the state Bpo")
     @PostMapping("/assign-m1-state")
-    public ResponseEntity<String> assignState(@RequestBody AssignStateRequestDto assignStateRequestDto){
+    public ResponseEntity<String> assignState(@RequestBody AssignStateRequestDto assignStateRequestDto) {
         return ResponseEntity.ok(tenantStateService.assignState(assignStateRequestDto));
     }
 
     @Operation(summary = "reassign m1 manager to the state BPO")
     @PostMapping("/reassign-m1/state-manager")
-    public ResponseEntity<String> updateStateHead(@RequestBody AssignStateRequestDto assignStateRequestDto){
+    public ResponseEntity<String> updateStateHead(@RequestBody AssignStateRequestDto assignStateRequestDto) {
         return ResponseEntity.ok(tenantStateService.assignState(assignStateRequestDto));
     }
 
 
-    @Operation(summary = "get the state BPO by id")
+    @Operation(summary = "get all the state BPOs")
+    @GetMapping("/state-bpo")
+    public ResponseEntity<List<StateResponseDto>> getAllBpos(
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "5") int size,
+            @RequestParam(required = false, defaultValue = "id") String sortBy,
+            @RequestParam(required = false, defaultValue = "true") boolean ascending,
+            @RequestParam(required = false, defaultValue = "") String search
+    ) {
+        return ResponseEntity.ok(tenantStateService.getAllBpos(page, size, sortBy, ascending, search));
+    }
+
+    @Operation(summary = "get the state BPOs by id")
+    @GetMapping("/state-bpo/{stateId}")
+    public ResponseEntity<StateResponseDto> getBpoById(@PathVariable Long stateId) {
+        return ResponseEntity.ok(tenantStateService.getBposById(stateId));
+    }
+
+    @Operation(summary = "delete the state BPO by id")
     @DeleteMapping("/state/{id}")
-    public ResponseEntity<String> deleteState(@PathVariable Long id){
+    public ResponseEntity<String> deleteState(@PathVariable Long id) {
         return ResponseEntity.ok(tenantStateService.deleteStateById(id));
     }
 

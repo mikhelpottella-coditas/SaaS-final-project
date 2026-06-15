@@ -2,6 +2,7 @@ package com.project.saas.service.tenant;
 
 import com.project.saas.dto.global.request_dto.UserRequestDto;
 import com.project.saas.dto.global.responceDto.UserResponseDto;
+import com.project.saas.entity.tenant.TenantRefreshToken;
 import com.project.saas.entity.tenant.TenantUser;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.tenant.TenantUserRepo;
@@ -11,12 +12,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class TenantUserCurdService {
 
     private final TenantUserRepo tenantUserRepo;
+    private final TenantRefreshTokenService refreshTokenService;
+    private final TenantUserRepo userRepo;
 
 
     public TenantUser getById(Long id){
@@ -52,4 +57,16 @@ public class TenantUserCurdService {
 
 
     }
+
+
+
+    public String logout() {
+        TenantUser user = userRepo.findTenantUserByEmail(SecurityContextHolder.getContext().getAuthentication().getName());
+        if (user == null) throw new CustomException(HttpStatus.NOT_FOUND, "the user is not found to update");
+
+        List<TenantRefreshToken> refreshTokenList = refreshTokenService.getToken(user);
+
+        return refreshTokenService.delete(refreshTokenList);
+    }
+
 }

@@ -48,6 +48,9 @@ public class ElectricianService {
         if (area.getElectrician() != null)
             throw new CustomException(HttpStatus.BAD_REQUEST, " the area already has a electrician");
         User electrician = userCrudService.getById(electricianId);
+
+        if(electrician.getRole()!=Role.ELECTRICIAN) throw new CustomException(HttpStatus.BAD_REQUEST, "the id provided is not electrician");
+
         area.setElectrician(electrician);
 
         areaService.save(area);
@@ -60,6 +63,9 @@ public class ElectricianService {
     public String reassignArea(Long electricianId, Long areaId) {
         Area area = areaService.getById(areaId);
         User electrician = userCrudService.getById(electricianId);
+
+        if(electrician.getRole()!=Role.ELECTRICIAN) throw new CustomException(HttpStatus.BAD_REQUEST, "the id provided is not electrician");
+
         area.setElectrician(electrician);
 
         areaService.save(area);
@@ -98,6 +104,8 @@ public class ElectricianService {
 
     public ElectricianResponseDto getElectricianById(Long id) {
         User electrician =  userCrudService.getById(id);
+        if(electrician.getRole()!=Role.ELECTRICIAN) throw new CustomException(HttpStatus.BAD_REQUEST, "the id provided is not m1 manager");
+
         log.info("fetching the details of the electrician with id :{}", id);
         Long areaId = electrician.getBillerAreas()==null ? null : electrician.getBillerAreas().getId();
         return new ElectricianResponseDto(electrician.getId(), electrician.getFirstName(), electrician.getLastName(), electrician.getEmail(), electrician.getPhone(), electrician.getCreatedAt(),electrician.getUpdatedAt() , areaId,areaId!=null);
@@ -116,13 +124,12 @@ public class ElectricianService {
 
         List<ElectricianResponseDto> electricianResponseDtoList = new ArrayList<>();
 
-        electricianList.stream().filter(e->e.getElectrianAreas().equals(area)).forEach(u->{
-            Long areaId = u.getBillerAreas() == null ? null : u.getBillerAreas().getId();
+        electricianList.stream().filter(e->e.getElectrianAreas()!=null).filter(e->e.getElectrianAreas().equals(area)).forEach(u->{
             electricianResponseDtoList.add(new ElectricianResponseDto(
                     u.getId(), u.getFirstName(),
                     u.getLastName(), u.getEmail(),
                     u.getPhone(), u.getCreatedAt(),
-                    u.getUpdatedAt(), areaId,areaId!=null));
+                    u.getUpdatedAt(), area.getId(),true));
         });
 
         if(search.isEmpty()) return electricianResponseDtoList;

@@ -22,6 +22,8 @@ public record CustomerResponseDto (
 
         String address,
 
+        String doorNo,
+
         List<Long> areaId,
 
         Long crmId,

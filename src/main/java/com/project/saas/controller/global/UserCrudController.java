@@ -28,5 +28,10 @@ public class UserCrudController {
     }
 
 
+    @Operation(summary = "to delete the refresh token by logging out")
+    @DeleteMapping("/logout")
+    public ResponseEntity<String> logout(){
+        return ResponseEntity.ok(userCrudService.logout());
+    }
 
 }

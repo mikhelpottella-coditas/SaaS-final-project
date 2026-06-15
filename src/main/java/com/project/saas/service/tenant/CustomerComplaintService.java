@@ -104,16 +104,16 @@ public class CustomerComplaintService {
     }
 
 
-    public ComplaintResponseDto raiseComplaint(Long id) {
+    public ComplaintResponseDto updateComplaint(Long id, ComplaintStatus complaintStatus) {
         CustomerComplaints customerComplaints = getById(id);
-        customerComplaints.setComplaintStatus(ComplaintStatus.RAISED_TO_M2);
-        log.info("the complaint is raised to m2 manager : {}",id);
+        customerComplaints.setComplaintStatus(complaintStatus);
+        log.info("the complaint is updated to : {}",complaintStatus);
         return new ComplaintResponseDto(customerComplaints.getId(), customerComplaints.getTenantCustomerMeter().getId(), customerComplaints.getComplaint(), customerComplaints.getComplaintStatus().name(), customerComplaints.getRaiseDate(), customerComplaints.getAssignedElectrician());
     }
 
     public List<ComplaintResponseDto> getByCustomer(String doorNo) {
 
-        TenantCustomerMeter customerMeter = tenantCustomerMeterRepo.findByDoorNo(doorNo);
+        TenantCustomerMeter customerMeter = tenantCustomerMeterRepo.findByDoorNo(doorNo).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "the customer not found"));
 
         List<CustomerComplaints> customerComplaintsList = customerMeter.getCustomerComplaintsList();
 
@@ -122,13 +122,16 @@ public class CustomerComplaintService {
     }
 
     public String raiseCustomerComplaint(String doorNo, String complaint) {
-        TenantCustomerMeter customerMeter = tenantCustomerMeterRepo.findByDoorNo(doorNo);
+        TenantCustomerMeter customerMeter = tenantCustomerMeterRepo.findByDoorNo(doorNo).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "the customer not found"));
+
+
 
         CustomerComplaints customerComplaints = CustomerComplaints.builder()
-                .complaint(complaint)
                 .tenantCustomerMeter(customerMeter)
-                .raiseDate(LocalDateTime.now())
+                .complaint(complaint)
                 .complaintStatus(ComplaintStatus.RAISED)
+                .raiseDate(LocalDateTime.now())
+                .assignedElectrician(null)
                 .build();
 
         customerComplaintsRepo.save(customerComplaints);

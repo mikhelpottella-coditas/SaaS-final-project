@@ -1,10 +1,9 @@
 package com.project.saas.service.global;
 
+import com.project.saas.dto.global.request_dto.AddAddressRequestDto;
 import com.project.saas.dto.global.responceDto.CustomerResponseDto;
-import com.project.saas.entity.master.Customer;
-import com.project.saas.entity.master.CustomerTenant;
-import com.project.saas.entity.master.Tenant;
-import com.project.saas.entity.master.User;
+import com.project.saas.entity.master.*;
+import com.project.saas.enums.Role;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.CustomerRepo;
 import com.project.saas.repo.global.CustomerTenantRepo;
@@ -26,9 +25,10 @@ import java.util.List;
 public class CustomerService {
 
     private final CustomerRepo customerRepo;
-    private final UserService userService;
     private final CustomerTenantRepo customerTenantRepo;
     private final TenantService tenantService;
+    private final UserService userService;
+    private final AreaService areaService;
 
     public void save(Customer c) {
         customerRepo.save(c);
@@ -58,7 +58,7 @@ public class CustomerService {
 
 
 
-            CustomerResponseDto customerResponseDto = new CustomerResponseDto(customer.getId(), customer.getUser().getFirstName(), customer.getUser().getLastName(), customer.getUser().getEmail(), customer.getUser().getPhone(), customer.getUser().getCreatedAt(), customer.getUser().getUpdatedAt(), customer.getAddress(),areaIds , customer.getCrm().getId(),tenantIds,customerTenant.isActive());
+            CustomerResponseDto customerResponseDto = new CustomerResponseDto(customer.getId(), customer.getUser().getFirstName(), customer.getUser().getLastName(), customer.getUser().getEmail(), customer.getUser().getPhone(), customer.getUser().getCreatedAt(), customer.getUser().getUpdatedAt(), customer.getAddress(),customer.getDoorNo(),areaIds , customer.getCrm().getId(),tenantIds,customerTenant.isActive());
             customerResponseDtoList.add(customerResponseDto);
         });
 
@@ -78,7 +78,7 @@ public class CustomerService {
         List<Long> tenantIds = customer.getCustomerTenantList().stream().map(c->c.getTenant().getId()).toList();
 
         log.info("customer details are provided with the given id : {}", id);
-        return new CustomerResponseDto(customer.getId(), customer.getUser().getFirstName(), customer.getUser().getLastName(), customer.getUser().getEmail(), customer.getUser().getPhone(), customer.getUser().getCreatedAt(), customer.getUser().getUpdatedAt(), customer.getAddress(),areaIds , customer.getCrm().getId(),tenantIds,true);
+        return new CustomerResponseDto(customer.getId(), customer.getUser().getFirstName(), customer.getUser().getLastName(), customer.getUser().getEmail(), customer.getUser().getPhone(), customer.getUser().getCreatedAt(), customer.getUser().getUpdatedAt(), customer.getAddress(),customer.getDoorNo(),areaIds , customer.getCrm().getId(),tenantIds,true);
     }
 
     public List<CustomerResponseDto> getByTenant(Long id) {
@@ -89,10 +89,32 @@ public class CustomerService {
 
         customerList.forEach(customer->{
             User user = customer.getUser();
+            Long crmId = customer.getCrm()==null?null:customer.getCrm().getId();
             List<Long> areaList = customer.getCustomerTenantList()==null?null: customer.getCustomerTenantList().stream().map(c->c.getArea().getId()).toList();
-            customerResponseDtoList.add(new CustomerResponseDto(customer.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getCreatedAt(), user.getUpdatedAt(), customer.getAddress(),areaList , customer.getCrm().getId(),null,true));
+            customerResponseDtoList.add(new CustomerResponseDto(customer.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getPhone(), user.getCreatedAt(), user.getUpdatedAt(), customer.getAddress(),customer.getDoorNo(),areaList , crmId,null,true));
         });
         log.info("customers of a particular tenant");
         return customerResponseDtoList;
+    }
+
+    public String addAddress(Long userId, AddAddressRequestDto addAddressRequestDto) {
+
+        User user = userService.findById(userId);
+        Area area = areaService.getById(addAddressRequestDto.areaId());
+
+        if(user.getRole()!= Role.CUSTOMER) throw new CustomException(HttpStatus.BAD_REQUEST, " the user in a customer");
+
+        Customer customer = Customer.builder()
+                .user(user)
+                .doorNo(addAddressRequestDto.doorNo())
+                .address(addAddressRequestDto.address())
+                .area(area)
+                .build();
+
+
+        customerRepo.save(customer);
+        log.info("saving the customer with the address");
+        return "new address is added successfully";
+
     }
 }

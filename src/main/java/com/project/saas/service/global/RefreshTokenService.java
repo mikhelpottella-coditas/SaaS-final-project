@@ -3,14 +3,17 @@ package com.project.saas.service.global;
 import com.project.saas.config.tenantConfig.TenantContext;
 import com.project.saas.entity.master.RefreshToken;
 import com.project.saas.entity.master.User;
+import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.RefreshTokenRepository;
 import com.project.saas.security.JwtUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -45,5 +48,14 @@ public class RefreshTokenService {
         String newAccess = jwtUtil.generateToken(token.getUser().getEmail(),tenant );
         log.info("refreshing the token with the id : {}",newAccess);
         return "access token: "+newAccess;
+    }
+
+    public List<RefreshToken> getToken(User user) {
+        return refreshTokenRepository.findAllByUser(user).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, " no token found to delete"));
+    }
+
+    public String delete(List<RefreshToken> refreshTokenList) {
+        refreshTokenRepository.deleteAll(refreshTokenList);
+        return "the logout successful";
     }
 }

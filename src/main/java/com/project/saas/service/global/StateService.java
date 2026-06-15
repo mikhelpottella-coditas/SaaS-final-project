@@ -60,9 +60,10 @@ public class StateService {
 
     }
 
-    public List<TenantResponseDto> availableTenant() {
-        User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()-> new CustomException(HttpStatus.UNAUTHORIZED, "the user is not authorized"));
-        State state = stateRepo.findStateByManagerUser_Id(user.getId()).orElseThrow(()-> new CustomException(HttpStatus.BAD_REQUEST,"you are not allowed!"));
+    public List<TenantResponseDto> availableTenant(Long id) {
+//        User user = userService.findByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()-> new CustomException(HttpStatus.UNAUTHORIZED, "the user is not authorized"));
+//        State state = stateRepo.findStateByManagerUser_Id(user.getId()).orElseThrow(()-> new CustomException(HttpStatus.BAD_REQUEST,"you are not allowed!"));
+        State state = getById(id);
         List<TenantAvailableStates> tenantAvailableStatesList = availableStatesRepo.findAllByAvailableState(AvailableState.valueOf(state.getName())).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "the tenant are not there in that state"));
         log.info("fetching the all the tenants of the states availability");
         return tenantAvailableStatesList.stream().map(TenantAvailableStates::getTenant).map(tenant -> new TenantResponseDto(tenant.getId(), tenant.getName(), tenant.getSchemaName(), tenant.getTenantStatus(), tenant.getCreatedAt(), tenant.getUpdatedAt(), tenant.getSubscriptionAmount(), tenant.getOperatingTenant().getUser().getId())).toList();
@@ -81,14 +82,14 @@ public class StateService {
 
 
     public StateResponseDto getStateById(Long id) {
-        State state = getByStateHead(id);
+        State state = getById(id);
         Long managerId = state.getManagerUser()==null?null:state.getManagerUser().getId();
         List<Long> districtIds = state.getDistrictList()==null?null:state.getDistrictList().stream().map(District::getId).toList();
         return new StateResponseDto(state.getId(), state.getName(), managerId, districtIds);
     }
 
     public String deleteStateById(Long id) {
-        State state = getByStateHead(id);
+        State state = getById(id);
 
         try {
             stateRepo.delete(state);

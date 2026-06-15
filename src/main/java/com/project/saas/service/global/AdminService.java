@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class AdminService {
 
-    private final UserRepository userRepository;
-    private final UserService userService;
     private final TenantService tenantService;
-    private final PasswordEncoder passwordEncoder;
 
 
 

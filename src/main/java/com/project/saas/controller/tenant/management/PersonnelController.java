@@ -47,9 +47,9 @@ public class PersonnelController {
 
 
     @Operation(summary = "raise the complaint to m2 manager by any issue")
-    @PatchMapping("/complaint/{id}/raise")
-    public ResponseEntity<ComplaintResponseDto> raiseComplaint(@PathVariable Long id){
-        return ResponseEntity.ok(complaintService.raiseComplaint(id));
+    @PatchMapping("/complaint/{id}/{status}")
+    public ResponseEntity<ComplaintResponseDto> updateComplaint(@PathVariable Long id,@PathVariable ComplaintStatus status){
+        return ResponseEntity.ok(complaintService.updateComplaint(id,status));
     }
 
 }

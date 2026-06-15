@@ -1,6 +1,7 @@
 package com.project.saas.service.tenant;
 
 import com.project.saas.config.tenantConfig.TenantContext;
+import com.project.saas.entity.master.RefreshToken;
 import com.project.saas.entity.tenant.TenantRefreshToken;
 import com.project.saas.entity.tenant.TenantUser;
 import com.project.saas.exception.CustomException;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -53,6 +55,17 @@ public class TenantRefreshTokenService {
         if(refreshToken!=null){
             tenantRefreshTokenRepo.delete(refreshToken);
         }
+
+    }
+
+    public List<TenantRefreshToken> getToken(TenantUser user) {
+        return tenantRefreshTokenRepo.findAllByTenantUser(user).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND,"user already logged out"));
+    }
+
+    public String delete(List<TenantRefreshToken> refreshTokenList) {
+        tenantRefreshTokenRepo.deleteAll(refreshTokenList);
+
+        return "logout successful";
 
     }
 }

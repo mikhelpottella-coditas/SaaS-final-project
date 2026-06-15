@@ -20,7 +20,7 @@ import java.util.List;
 @Slf4j
 public class GlobalManagementService {
 
-    private UserService userService;
+    private final UserService userService;
 
 
     public List<UserResponseDto> getAllManagement(int page, int size, String sortBy, boolean ascending, String search) {

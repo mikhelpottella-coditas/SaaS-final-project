@@ -1,6 +1,8 @@
 package com.project.saas.controller.global.globalManagement;
 
 import com.project.saas.dto.global.request_dto.AssignStateRequestDto;
+import com.project.saas.dto.global.request_dto.CityRequestDto;
+import com.project.saas.dto.global.request_dto.DistrictRequestDto;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.dto.global.responceDto.CityMangerResponseDto;
 import com.project.saas.dto.global.responceDto.CityResponseDto;
@@ -28,12 +30,18 @@ import java.util.List;
 public class DistrictHeadController {
 
     private final InvitationService invitationService;
-    private final UserCrudService userCrudService;
     private final DistrictService districtService;
     private final ManagerUserService managerUserService;
 
-    private final UserService userService;
     private final CityService cityService;
+
+    // create city
+    @Operation(summary = "create a new city in a state")
+    @PostMapping("/create/city")
+    public ResponseEntity<String> createDistrict(@Valid @RequestBody CityRequestDto cityRequestDto){
+        return ResponseEntity.ok(cityService.createCity(cityRequestDto));
+    }
+
 
 // city manager based endpoints
     @Operation(summary = "send invitation tot he city head")

@@ -31,9 +31,9 @@ public class StateManagementController{
 
 
     @Operation(summary = "get all the tenants (providers) available")
-    @GetMapping("/available-tenants")
-    public ResponseEntity<List<TenantResponseDto>> availableStates(){
-        return ResponseEntity.ok(stateService.availableTenant());
+    @GetMapping("/available-tenants/{stateId}")
+    public ResponseEntity<List<TenantResponseDto>> availableStates(@PathVariable Long stateId){
+        return ResponseEntity.ok(stateService.availableTenant(stateId));
     }
 
     // district based controllers
@@ -94,9 +94,9 @@ public class StateManagementController{
 
 
     @Operation(summary = "assign district to a district manager")
-    @PatchMapping("/assign-district/{stateId}/{districtId}/district-head/{headId}")
-    public ResponseEntity<String> assignDistrictHead( @PathVariable Long stateId,@PathVariable Long districtId,@PathVariable Long headId){
-        return ResponseEntity.ok(districtService.assignDistrictHead(stateId,districtId,headId));
+    @PatchMapping("/assign-district/{districtId}/district-head/{headId}")
+    public ResponseEntity<String> assignDistrictHead( @PathVariable Long districtId,@PathVariable Long headId){
+        return ResponseEntity.ok(districtService.assignDistrictHead(districtId,headId));
     }
 
 

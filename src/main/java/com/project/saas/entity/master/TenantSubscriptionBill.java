@@ -27,10 +27,10 @@ public class TenantSubscriptionBill {
     @Enumerated(EnumType.STRING)
     private BillStatus billStatus;
 
-    @Column(name = "amount",nullable = false)
+    @Column(name = "amount_paid",nullable = false)
     private Double amount;
 
-    @Column(name = "paid_date",nullable = false)
+    @Column(name = "paid_date")
     private LocalDate paidDate;
 
     @Column(name = "start_date",nullable = false)

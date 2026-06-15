@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +25,7 @@ public class TenantUserRegisterService {
     private final TenantUserRepo userRepo;
     private final TenantInvitationService invitationService;
     private final InvitationService globalInvitationService;
+    private final PasswordEncoder passwordEncoder;
 
     public String saveAdmin(@Valid UserRequestDto user) {
 
@@ -55,7 +57,7 @@ public class TenantUserRegisterService {
         TenantUser user = TenantUser.builder()
                 .firstName(userDto.firstName())
                 .lastName(userDto.lastName())
-                .password(userDto.password())
+                .password(passwordEncoder.encode(userDto.password()))
                 .email(userDto.email())
                 .phone(userDto.phone())
                 .createdAt(LocalDateTime.now())

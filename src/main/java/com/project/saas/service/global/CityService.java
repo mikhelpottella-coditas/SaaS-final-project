@@ -1,6 +1,8 @@
 package com.project.saas.service.global;
 
 import com.project.saas.dto.global.request_dto.AssignStateRequestDto;
+import com.project.saas.dto.global.request_dto.CityRequestDto;
+import com.project.saas.dto.global.request_dto.DistrictRequestDto;
 import com.project.saas.dto.global.responceDto.CityMangerResponseDto;
 import com.project.saas.dto.global.responceDto.CityResponseDto;
 import com.project.saas.entity.master.*;
@@ -9,6 +11,7 @@ import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.CityRepo;
 import com.project.saas.repo.global.DistrictRepo;
 import com.project.saas.repo.global.UserRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -30,6 +33,7 @@ public class CityService {
     private final UserService userService;
     private final DistrictRepo districtRepo;
     private final UserRepository userRepository;
+    private final DistrictService districtService;
 
 
     public String assignCityHead(AssignStateRequestDto assignStateRequestDto) {
@@ -37,6 +41,7 @@ public class CityService {
         if (cities.getManagerUser() != null)
             throw new CustomException(HttpStatus.BAD_REQUEST, "the city is already assigned");
         User user = userService.findById(assignStateRequestDto.managerId());
+        if(user.getRole()!=Role.CITY_MANAGEMENT_STAFF) throw new CustomException(HttpStatus.BAD_REQUEST, "the id provided is not city manager");
 
         cities.setManagerUser(user);
         cityRepo.save(cities);
@@ -178,4 +183,23 @@ public class CityService {
 
     }
 
+    public String createCity( CityRequestDto cityRequestDto) {
+        log.info("trying the fetch the state of the user");
+//        State state = manager.getManagerState().stream().filter(s -> s.getId().equals(districtRequestDto.stateId())).findFirst().orElseThrow(() -> new CustomException(HttpStatus.NOT_FOUND, "the state does not exist under your authority "));
+
+        District district = districtRepo.findById(cityRequestDto.districtId()).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "the district not found with the given id"));
+        log.info("if the district wih the same name already there then throw the error");
+        if (cityRepo.existsCitiesByName((cityRequestDto.cityName()))) throw new CustomException(HttpStatus.BAD_REQUEST, "the district is already exists with that name");
+
+        Cities cities = Cities.builder()
+                .district(district)
+                .name(cityRequestDto.cityName())
+                .code(cityRequestDto.code())
+                .build();
+
+        cityRepo.save(cities);
+
+        return "new district is created added successfully in state :" + district.getName();
+
+    }
 }

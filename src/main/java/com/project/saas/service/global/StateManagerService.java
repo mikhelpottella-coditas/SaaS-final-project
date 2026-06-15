@@ -2,6 +2,7 @@ package com.project.saas.service.global;
 
 
 import com.project.saas.dto.global.responceDto.StateManagerResponseDto;
+import com.project.saas.dto.global.responceDto.UserResponseDto;
 import com.project.saas.entity.master.State;
 import com.project.saas.entity.master.User;
 import com.project.saas.enums.Role;
@@ -19,7 +20,6 @@ import java.util.List;
 @Slf4j
 public class StateManagerService {
 
-    private final UserService userService;
     private final UserRepository userRepository;
 
 
@@ -33,5 +33,12 @@ public class StateManagerService {
         log.info("returning the state manager");
         return new StateManagerResponseDto(user.getId(), user.getFirstName(),user.getLastName(),user.getEmail(), user.getPhone(), user.getCreatedAt(),user.getUpdatedAt(),ids,ids!=null);
 
+    }
+
+    public UserResponseDto getSalesPointById(Long id) {
+        User user = userRepository.findById(id).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "the sales point not for found with the given id : "+id));
+        if(!user.getRole().equals(Role.SALES_POINT)) throw new CustomException(HttpStatus.NOT_FOUND, "the sales point not for found with the given id : "+id);
+        log.info("returning the sales point");
+        return new UserResponseDto(user.getId(), user.getFirstName(),user.getLastName(),user.getEmail(), user.getPhone(), user.getCreatedAt(),user.getUpdatedAt());
     }
 }

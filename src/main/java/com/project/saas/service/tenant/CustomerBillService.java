@@ -31,7 +31,7 @@ public class CustomerBillService {
 
     public CustomerBillResponseDto generateBill(CustomerBillRequestDto customerBillRequestDto) {
         log.info("start generating bills");
-        TenantCustomerMeter tenantCustomerMeter = tenantCustomerMeterRepo.findByDoorNo(customerBillRequestDto.doorNo());
+        TenantCustomerMeter tenantCustomerMeter = tenantCustomerMeterRepo.findByDoorNo(customerBillRequestDto.doorNo()).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "the customer not found"));
         List<CustomerBill> customerBillList = customerBillsRepo.findAllByTenantCustomerMeter(tenantCustomerMeter);
 
         TenantMeter tenantMeter = tenantCustomerMeter.getTenantMeter();
@@ -70,7 +70,7 @@ public class CustomerBillService {
     }
 
     public List<CustomerBillResponseDto> getByCustomer(String doorNo, CustomerBillStatus customerBillStatus) {
-        TenantCustomerMeter customerMeter = tenantCustomerMeterRepo.findByDoorNo(doorNo);
+        TenantCustomerMeter customerMeter = tenantCustomerMeterRepo.findByDoorNo(doorNo).orElseThrow(()-> new CustomException(HttpStatus.NOT_FOUND, "the customer not found"));
 
         List<CustomerBill> customerBillList = customerMeter.getCustomerBillList().stream().filter(c->c.getBillStatus() == customerBillStatus).toList();
 

@@ -31,7 +31,7 @@ public class ManagementController {
 
 
     @Operation(summary = "create state by passing request body")
-    @PostMapping("/createState")
+    @PostMapping("/create-state")
     public ResponseEntity<String> createState(@RequestBody StateRequestDto stateRequestDto){
         return ResponseEntity.ok(stateService.createState(stateRequestDto));
     }
@@ -60,11 +60,31 @@ public class ManagementController {
         return ResponseEntity.ok(managerUserService.getAllStateManagers(page,size,sortBy,ascending,search));
     }
 
+    @Operation(summary = "get all the salespoint with pagination")
+    @GetMapping("/sales-point")
+    public ResponseEntity<List<UserResponseDto>>  getAllSalesPoint(
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "5") int size,
+            @RequestParam(required = false, defaultValue = "id") String sortBy,
+            @RequestParam(required = false, defaultValue = "true") boolean ascending,
+            @RequestParam(required = false,defaultValue = "")  String search
+    ){
+        return ResponseEntity.ok(managerUserService.getAllSalesPoint(page,size,sortBy,ascending,search));
+    }
+
+    @Operation(summary = "get the sales point by the id")
+    @GetMapping("/sales-point/{id}")
+    public ResponseEntity<UserResponseDto> getSalesPointById(@PathVariable Long id){
+        return ResponseEntity.ok(stateManagerService.getSalesPointById(id));
+    }
+
     @Operation(summary = "get the state manager by the id")
     @GetMapping("/state-manager/{id}")
     public ResponseEntity<StateManagerResponseDto> getStateManagerById(@PathVariable Long id){
         return ResponseEntity.ok(stateManagerService.getManagerById(id));
     }
+
+
 
 
     @Operation(summary = "get all the states with the pagination")

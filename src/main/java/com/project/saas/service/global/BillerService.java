@@ -50,6 +50,7 @@ public class BillerService {
         if (area.getBiller() != null)
             throw new CustomException(HttpStatus.BAD_REQUEST, " the area already has a biller");
         User biller = userCrudService.getById(billerId);
+        if(biller.getRole()!=Role.BILLER) throw new CustomException(HttpStatus.BAD_REQUEST, "the id provided is not biller");
         area.setBiller(biller);
 
         areaService.save(area);
@@ -61,6 +62,8 @@ public class BillerService {
     public String reassignArea(Long billerId, Long areaId) {
         Area area = areaService.getById(areaId);
         User biller = userCrudService.getById(billerId);
+        if(biller.getRole()!=Role.BILLER) throw new CustomException(HttpStatus.BAD_REQUEST, "the id provided is not biller");
+
         area.setBiller(biller);
 
         areaService.save(area);
@@ -93,6 +96,8 @@ public class BillerService {
 
     public BillerResponseDto getBillerById(Long id) {
         User biller =  userCrudService.getById(id);
+        if(biller.getRole()!=Role.BILLER) throw new CustomException(HttpStatus.BAD_REQUEST, "the id provided is not biller");
+
         log.info("fetching the details of the biller with id :{}", id);
         Long areaId = biller.getBillerAreas()==null ? null : biller.getBillerAreas().getId();
         return new BillerResponseDto(biller.getId(), biller.getFirstName(), biller.getLastName(), biller.getEmail(), biller.getPhone(), biller.getCreatedAt(),biller.getUpdatedAt() , areaId,areaId!=null);

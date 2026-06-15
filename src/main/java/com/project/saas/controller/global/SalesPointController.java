@@ -3,6 +3,7 @@ package com.project.saas.controller.global;
 import com.project.saas.dto.global.request_dto.InvitationRequestDto;
 import com.project.saas.dto.global.responceDto.SubscriptionBillsResponseDto;
 import com.project.saas.dto.global.responceDto.TenantResponseDto;
+import com.project.saas.dto.global.responceDto.UserResponseDto;
 import com.project.saas.enums.TenantStatus;
 import com.project.saas.service.InvitationService;
 import com.project.saas.service.TenantService;
@@ -70,6 +71,24 @@ public class SalesPointController {
     @GetMapping("/tenant/{id}/get-bills")
     public ResponseEntity<List<SubscriptionBillsResponseDto>> getBills(@PathVariable Long id){
         return ResponseEntity.ok(billService.getBills(id));
+    }
+
+    @Operation(summary = "get all the operation head with pagination")
+    @GetMapping("/operation-head")
+    public ResponseEntity<List<UserResponseDto>>  getAllOperationHead(
+            @RequestParam(required = false, defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "5") int size,
+            @RequestParam(required = false, defaultValue = "id") String sortBy,
+            @RequestParam(required = false, defaultValue = "true") boolean ascending,
+            @RequestParam(required = false,defaultValue = "")  String search
+    ){
+        return ResponseEntity.ok(userCrudService.getAllOperationHead(page,size,sortBy,ascending,search));
+    }
+
+    @Operation(summary = "get the operation head by the id")
+    @GetMapping("/operation-head/{id}")
+    public ResponseEntity<UserResponseDto> getOperationHeadById(@PathVariable Long id){
+        return ResponseEntity.ok(userCrudService.getOperationHeadById(id));
     }
 
     @Operation(summary = "delete operation head by id")

@@ -7,8 +7,6 @@ import com.project.saas.entity.master.User;
 import com.project.saas.enums.Role;
 import com.project.saas.exception.CustomException;
 import com.project.saas.repo.global.CrmRepo;
-import com.project.saas.repo.global.CustomerRepo;
-import com.project.saas.repo.global.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -25,12 +23,8 @@ import java.util.List;
 @Slf4j
 public class CrmService {
 
-    private final AreaService areaService;
     private final UserService userService;
-    private final UserCrudService userCrudService;
-    private final UserRepository userRepository;
     private final CrmRepo crmRepo;
-    private final CustomerRepo customerRepo;
     private final CustomerService customerService;
     private final CityService cityService;
 
@@ -53,6 +47,7 @@ public class CrmService {
         Cities cities = cityService.getById(cityId);
 
         User crmUser = userService.findById(crmId);
+        if(crmUser.getRole()!=Role.CMR) throw new CustomException(HttpStatus.BAD_REQUEST, "the id provided is not crm");
 
         if (crmRepo.existsCrmByUser(crmUser))
             throw new CustomException(HttpStatus.BAD_REQUEST, " the crm is already assigned to other area");
@@ -68,6 +63,7 @@ public class CrmService {
         Cities cities = cityService.getById(cityId);
 
         User crmUser = userService.findById(crmId);
+        if(crmUser.getRole()!=Role.CMR) throw new CustomException(HttpStatus.BAD_REQUEST, "the id provided is not crm");
 
         Crm crm = Crm.builder().cities(cities).user(crmUser).build();
 
@@ -102,6 +98,7 @@ public class CrmService {
 
     public CrmResponseDto getCrmById(Long id) {
         User crmUser = userService.findById(id);
+        if(crmUser.getRole()!=Role.CMR) throw new CustomException(HttpStatus.BAD_REQUEST, "the id provided is not crm");
 
         Long cityId  = crmUser.getCrm()==null?null:crmUser.getCrm().getCities().getId();
 

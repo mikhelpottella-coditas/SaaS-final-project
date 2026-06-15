@@ -7,6 +7,7 @@ import com.project.saas.dto.global.responceDto.BillerResponseDto;
 import com.project.saas.dto.global.responceDto.CityMangerResponseDto;
 import com.project.saas.dto.global.responceDto.CrmResponseDto;
 import com.project.saas.dto.global.responceDto.ElectricianResponseDto;
+import com.project.saas.enums.Role;
 import com.project.saas.service.InvitationService;
 import com.project.saas.service.global.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +29,7 @@ public class CityManagementController {
     private final InvitationService invitationService;
     private final AreaService areaService;
     private final BillerService billerService;
+    private final UserCrudService userCrudService;
     private final ElectricianService electricianService;
     private final CrmService crmService;
     private final DistrictService districtService;
@@ -132,6 +134,18 @@ public class CityManagementController {
 
     // fetching billers
 
+    @Operation(summary = "get all the workers with pagination")
+    @GetMapping("/workers")
+    public ResponseEntity<List<BillerResponseDto>> getStaff(
+            @RequestParam(required = false,defaultValue = "0") int page,
+            @RequestParam(required = false,defaultValue = "5") int size,
+            @RequestParam(required = false,defaultValue = "id") String sortBy,
+            @RequestParam(required = false,defaultValue = "true") boolean ascending,
+            @RequestParam(required = false,defaultValue = "") String search,
+            @RequestParam Role role
+            ){
+        return ResponseEntity.ok(userCrudService.getAllWorkers(page,size,sortBy,ascending,search,role));
+    }
 
     @Operation(summary = "get all the billers with pagination")
     @GetMapping("/billers")
