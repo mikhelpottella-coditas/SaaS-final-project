@@ -35,13 +35,6 @@ public class SalesPointController {
         return ResponseEntity.ok(invitationService.inviteOperationHead(invitationRequestDto));
     }
 
-    @Operation(summary = "change the status of the tenant ")
-    @PutMapping("/{tenantName}/{status}")
-    public ResponseEntity<String> activateTenant(@PathVariable String tenantName,@PathVariable TenantStatus status) {
-        return ResponseEntity.ok(adminService.activateTenant(tenantName,status));
-    }
-
-
     @Operation(summary = "get all the tenants")
     @GetMapping("/all/tenant")
     public ResponseEntity<List<TenantResponseDto>> getAllTenants(){
@@ -72,6 +65,16 @@ public class SalesPointController {
     public ResponseEntity<List<SubscriptionBillsResponseDto>> getBills(@PathVariable Long id){
         return ResponseEntity.ok(billService.getBills(id));
     }
+
+
+
+    @Operation(summary = "change the status of the tenant ")
+    @PutMapping("/{tenantName}/{status}")
+    public ResponseEntity<String> activateTenant(@PathVariable String tenantName,@PathVariable TenantStatus status) {
+        return ResponseEntity.ok(adminService.activateTenant(tenantName,status));
+    }
+
+
 
     @Operation(summary = "get all the operation head with pagination")
     @GetMapping("/operation-head")
